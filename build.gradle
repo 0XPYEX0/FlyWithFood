@@ -1,0 +1,41 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'org.spongepowered.plugin' version '0.9.0'
+}
+
+group = 'me.xpyex'
+version = '1.2.0'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+    compile 'com.alibaba:fastjson:1.2.76'
+    compileOnly 'org.spongepowered:spongeapi:7.3.0'
+    annotationProcessor 'org.spongepowered:spongeapi:7.3.0'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

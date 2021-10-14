@@ -1,0 +1,10 @@
+name: FlyWithFood
+version: @version@
+main: me.xpyex.plugin.flywithfood.bukkit.FlyWithFood
+authors: [ XPYEX ]
+description: FlyWithFood
+commands:
+  FlyWithFood:
+    aliases:
+      - fwf
+      - fly
