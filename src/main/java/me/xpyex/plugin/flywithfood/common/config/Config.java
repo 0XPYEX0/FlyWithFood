@@ -2,14 +2,15 @@ package me.xpyex.plugin.flywithfood.common.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
+
+import me.xpyex.plugin.flywithfood.common.version.Versions;
 
 public class Config {
     public static JSONObject getNewConfig() {
         JSONObject outJson = new JSONObject();
         outJson.put("FoodCost", 4);
         outJson.put("FoodDisable", 6);
-        outJson.put("ConfigVersion", VersionUtil.getPluginConfigVersion());
+        outJson.put("ConfigVersion", Versions.configVersion);
 
         JSONObject rawMsgConfig = new JSONObject();
         rawMsgConfig.put("Enable", true);
