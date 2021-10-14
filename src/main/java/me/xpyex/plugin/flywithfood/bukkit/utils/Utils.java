@@ -45,7 +45,11 @@ public class Utils {
                     HandleConfig.enableTitle = false;
                     return;
                 }
-                ((Player) target).sendTitle(getColorfulMsg(titles[0]), titles.length == 2 ? getColorfulMsg(titles[1]) : "", 10, 70, 20);
+                if (HandleConfig.isOldVer) {
+                    ((Player) target).sendTitle(getColorfulMsg(titles[0]), titles.length == 2 ? getColorfulMsg(titles[1]) : "");
+                } else {
+                    ((Player) target).sendTitle(getColorfulMsg(titles[0]), titles.length == 2 ? getColorfulMsg(titles[1]) : "", 10, 70, 20);
+                }
             }
         }
     }
