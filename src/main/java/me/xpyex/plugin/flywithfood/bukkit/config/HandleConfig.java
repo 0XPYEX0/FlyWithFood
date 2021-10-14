@@ -57,11 +57,6 @@ public class HandleConfig {
             in.close();
             config = JSON.parseObject(configText.toString());
 
-            if (config == null) {
-                FlyWithFood.logger.warning("加载配置文件出错! 错误信息: config == null");
-                return false;
-            }
-
             enableRawMsg = config.getJSONObject("Languages").getJSONObject("RawMsg").getBoolean("Enable");
             enableTitle = config.getJSONObject("Languages").getJSONObject("TitleMsg").getBoolean("Enable");
             enableAction = config.getJSONObject("Languages").getJSONObject("ActionMsg").getBoolean("Enable");
