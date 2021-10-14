@@ -4,8 +4,10 @@ import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.common.colormsg.ColorMsg;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
+
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

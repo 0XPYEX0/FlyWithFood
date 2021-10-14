@@ -25,6 +25,7 @@ public final class FlyWithFood extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         logger = getLogger();
+        logger.info("感谢使用FlyWithFood. 本插件在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
         Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);
         if (!HandleConfig.loadConfig()) {
