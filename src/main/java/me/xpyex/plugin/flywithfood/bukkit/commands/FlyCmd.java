@@ -97,16 +97,6 @@ public class FlyCmd implements CommandExecutor {
         checkArgs.add("toggle");
         if (checkArgs.contains(args[0].toLowerCase())) {  //如果是调整飞行模式
             Player target = Bukkit.getPlayerExact(args[1]); //获取目标玩家
-            if (HandleConfig.functionWL && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(target.getLocation().getWorld().getName())) {
-                FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.DisableInThisWorld, args[0]);
-                Bukkit.getPluginManager().callEvent(event);
-                if (sender != target) {
-                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
-                    return true;
-                }
-                Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
-                return true;
-            }
             if ((!(sender instanceof Player)) && args[1].equals(sender.getName())) { //sender不是玩家，且对象是sender的时候
                 Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
                 return true;
@@ -123,6 +113,16 @@ public class FlyCmd implements CommandExecutor {
                     Bukkit.getPluginManager().callEvent(event);
                 }
                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
+                return true;
+            }
+            if (HandleConfig.functionWL && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(target.getLocation().getWorld().getName())) {
+                FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.DisableInThisWorld, args[0]);
+                Bukkit.getPluginManager().callEvent(event);
+                if (sender != target) {
+                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                    return true;
+                }
+                Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
                 return true;
             }
             if (args[0].equalsIgnoreCase("on")) {
