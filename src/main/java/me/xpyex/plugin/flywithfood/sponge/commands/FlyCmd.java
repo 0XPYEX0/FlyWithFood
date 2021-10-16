@@ -1,13 +1,10 @@
 package me.xpyex.plugin.flywithfood.sponge.commands;
 
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
-import me.xpyex.plugin.flywithfood.common.types.DenyReason;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 
-import org.bukkit.Bukkit;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
