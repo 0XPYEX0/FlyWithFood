@@ -3,7 +3,6 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
-import me.xpyex.plugin.flywithfood.bukkit.events.HandleEvent;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
@@ -13,14 +12,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashSet;
 import java.util.logging.Logger;
 
 public final class FlyWithFood extends JavaPlugin {
     public static FlyWithFood INSTANCE;
     public static Logger logger;
-    public static HashSet<Player> antiFallDamage = new HashSet<>();
 
     @Override
     public void onEnable() {
@@ -28,7 +26,6 @@ public final class FlyWithFood extends JavaPlugin {
         logger = getLogger();
         logger.info("感谢使用FlyWithFood. 本插件在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
-        Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);
         if (!HandleConfig.loadConfig()) {
             logger.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
             logger.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
@@ -106,7 +103,20 @@ public final class FlyWithFood extends JavaPlugin {
                         player.setFlying(false);
                     });
                     Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    antiFallDamage.add(player);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (!player.isOnline()) {
+                                cancel();
+                                return;
+                            }
+                            if (player.isOnGround()) {
+                                cancel();
+                                return;
+                            }
+                            player.setFallDistance(0f);
+                        }
+                    }.runTaskTimer(INSTANCE, 4L, 4L);
                 }
             }
         }, 0L, 20L);

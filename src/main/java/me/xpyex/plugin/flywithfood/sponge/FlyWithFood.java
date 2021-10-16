@@ -23,8 +23,8 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
-import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @Plugin(
         id = "flywithfood-sponge",
@@ -37,14 +37,12 @@ import java.util.concurrent.TimeUnit;
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
-    public static HashSet<Player> antiFallDamage = new HashSet<>();
     public static Logger logger;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         INSTANCE = this;
         logger = LoggerFactory.getLogger("FlyWithFood");
-        //Sponge.getCommandManager().register(INSTANCE, new FlyCmd(), "flywithfood", "fly", "fwf");
         FlyCmd.registerCmd();
         if (!HandleConfig.loadConfig()) {
             logger.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
@@ -71,18 +69,6 @@ public class FlyWithFood {
     @Listener
     public void onServerStop(GameStoppingServerEvent event) {
         cancelTasks();
-    }
-
-    @Listener
-    public void onDamage(DamageEntityEvent event) {
-        if (event.getTargetEntity().getType() == EntityTypes.PLAYER) {
-            if (event.getSource() == DamageSources.FALLING) {
-                if (antiFallDamage.contains((Player) event.getTargetEntity())) {
-                    event.setCancelled(true);
-                    antiFallDamage.remove((Player) event.getTargetEntity());
-                }
-            }
-        }
     }
 
     public static void cancelTasks() {
@@ -114,7 +100,6 @@ public class FlyWithFood {
                 if (player.hasPermission("fly.nohunger")) {
                     continue;
                 }
-                Sponge.getServer().getBroadcastChannel().send(Text.of("测试5"));
                 //if (player.hasPotionEffect(PotionEffectType.SATURATION)) {
                 if (Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION)) {
                     player.offer(Keys.CAN_FLY, false);
@@ -122,21 +107,43 @@ public class FlyWithFood {
                     Utils.sendFWFMsg(player, FWFMsgType.HasEffect);
                     continue;
                 }
-                Sponge.getServer().getBroadcastChannel().send(Text.of("测试6"));
                 int nowFood = player.foodLevel().get();
                 player.offer(Keys.FOOD_LEVEL, Math.max((nowFood - cost), 0));
                 if ((nowFood - cost) < disable) {
                     player.offer(Keys.CAN_FLY, false);
                     player.offer(Keys.IS_FLYING, false);
                     Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    antiFallDamage.add(player);
+                    Scheduler.execute(() ->
+                            new CancellingTimerTask(player)
+                    )
+                            .delayTicks(4)
+                            .intervalTicks(4)
+                            .submit(INSTANCE);
                     continue;
                 }
-                Sponge.getServer().getBroadcastChannel().send(Text.of("测试7"));
             }
         })
                 .interval(1, TimeUnit.SECONDS)
                 .delay(0, TimeUnit.SECONDS)
                 .submit(INSTANCE);
+    }
+}
+
+class CancellingTimerTask implements Consumer<Task> {
+    private final Player player;
+    public CancellingTimerTask(Player player) {
+        this.player = player;
+    }
+    @Override
+    public void accept(Task task) {
+        if (!player.isOnline()) {
+            task.cancel();
+            return;
+        }
+        if (player.isOnGround()) {
+            task.cancel();
+            return;
+        }
+        player.offer(Keys.FALL_DISTANCE, 0f);
     }
 }
