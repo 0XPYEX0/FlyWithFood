@@ -1,10 +1,13 @@
 package me.xpyex.plugin.flywithfood.sponge.commands;
 
+import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
+import me.xpyex.plugin.flywithfood.common.types.DenyReason;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 
+import org.bukkit.Bukkit;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -108,6 +111,14 @@ public class FlyCmd {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
                             }
+                            if (HandleConfig.functionWL && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(target.getWorld().getName())) {
+                                if (sender != target) {
+                                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                                    return CommandResult.success();
+                                }
+                                Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
+                                return CommandResult.success();
+                            }
                             if (Utils.hasPotionEffect(target, PotionEffectTypes.SATURATION)) {
                                 if (!target.hasPermission("fly.nohunger")) {
                                     if (sender != target) {
@@ -154,6 +165,14 @@ public class FlyCmd {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
                             }
+                            if (HandleConfig.functionWL && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(target.getWorld().getName())) {
+                                if (sender != target) {
+                                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                                    return CommandResult.success();
+                                }
+                                Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
+                                return CommandResult.success();
+                            }
                             target.offer(Keys.IS_FLYING, false);
                             target.offer(Keys.CAN_FLY, false);
                             Utils.sendFWFMsg(target, FWFMsgType.DisableFly);
@@ -181,6 +200,14 @@ public class FlyCmd {
                             }
                             if ((!sender.hasPermission("fly.other") && target != sender) || (!sender.hasPermission("fly.fly") && target == sender)) {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
+                                return CommandResult.success();
+                            }
+                            if (HandleConfig.functionWL && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(target.getWorld().getName())) {
+                                if (sender != target) {
+                                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                                    return CommandResult.success();
+                                }
+                                Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
                                 return CommandResult.success();
                             }
                             if (target.get(Keys.CAN_FLY).orElse(false)) {
