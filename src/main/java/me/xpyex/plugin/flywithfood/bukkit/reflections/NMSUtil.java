@@ -10,7 +10,8 @@ import java.lang.reflect.Method;
 public class NMSUtil {
     /*
      * 代码来源ActionBarAPI，为了兼容旧版本
-     * 其开源地址为 https://github.com/connorlinfoot/ActionBarAPI
+     * 其开源地址: https://github.com/connorlinfoot/ActionBarAPI
+     * 其SpigotMC页面地址: https://www.spigotmc.org/resources/actionbarapi-1-8-1-14-2.1315/
      * 非常感谢这位作者
      */
     public static void sendActionBar(Player player, String text) {
