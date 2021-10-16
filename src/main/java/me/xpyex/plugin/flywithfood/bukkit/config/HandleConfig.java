@@ -70,7 +70,7 @@ public class HandleConfig {
                         Player.class.getMethod("sendTitle", String.class, String.class);
                         isOldVer = true;
                     } catch (Throwable ignored2) {
-                        FlyWithFood.logger.warning("你的服务器不支持直接Title信息!");
+                        FlyWithFood.logger.warning("你的服务器不支持发送Title信息!");
                         FlyWithFood.logger.warning("请在配置文件禁用Title信息");
                         enableTitle = false;
                     }
