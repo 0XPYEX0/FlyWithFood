@@ -4,6 +4,7 @@ import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.events.HandleEvent;
+import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
@@ -42,13 +43,18 @@ public final class FlyWithFood extends JavaPlugin {
                 return;
             }
         }
+        NMSAll.nmsVer = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        logger.info("当前服务端NMS版本: " + NMSAll.nmsVer); //v1_8_R3
+
+        if (NMSAll.nmsVer.equalsIgnoreCase("v1_8_R1") || NMSAll.nmsVer.startsWith("v1_7_")) {
+            NMSAll.isOldVer = true;
+        }
 
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
         logger.info("成功加载配置文件");
         logger.info("已成功加载!");
-        // Plugin startup logic
 
     }
 
@@ -56,7 +62,6 @@ public final class FlyWithFood extends JavaPlugin {
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(INSTANCE);
         logger.info("已卸载");
-        // Plugin shutdown logic
     }
 
     public static void startCheck() {

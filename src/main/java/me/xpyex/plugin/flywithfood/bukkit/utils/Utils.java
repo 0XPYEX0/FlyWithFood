@@ -2,6 +2,8 @@ package me.xpyex.plugin.flywithfood.bukkit.utils;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
+import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
+import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSUtil;
 import me.xpyex.plugin.flywithfood.common.colormsg.ColorMsg;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 
@@ -35,7 +37,11 @@ public class Utils {
         if (HandleConfig.enableAction) {
             String actionDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("ActionMsg").getString(msgType.getValue());
             if (!actionDisableMsg.isEmpty()) {
-                ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getColorfulMsg(actionDisableMsg)));
+                if (NMSAll.shouldUseNMSAction) {
+                    NMSUtil.sendActionBar((Player) target, getColorfulMsg(actionDisableMsg));
+                } else {
+                    ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getColorfulMsg(actionDisableMsg)));
+                }
             }
         }
         if (HandleConfig.enableTitle) {

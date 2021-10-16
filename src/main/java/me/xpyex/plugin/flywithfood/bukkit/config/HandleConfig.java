@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFReloadConfigEvent;
+import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.config.Config;
 
@@ -60,27 +61,31 @@ public class HandleConfig {
             enableRawMsg = config.getJSONObject("Languages").getJSONObject("RawMsg").getBoolean("Enable");
             enableTitle = config.getJSONObject("Languages").getJSONObject("TitleMsg").getBoolean("Enable");
             enableAction = config.getJSONObject("Languages").getJSONObject("ActionMsg").getBoolean("Enable");
-            try {
-                Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
-                new String("检查是否支持Title信息的方法(非常粗暴");
-            } catch (Throwable ignored) {
+            if (enableTitle) {
                 try {
-                    Player.class.getMethod("sendTitle", String.class, String.class);
-                    isOldVer = true;
-                } catch (Throwable ignored2) {
-                    FlyWithFood.logger.warning("你的服务器不支持发送Title信息!");
-                    FlyWithFood.logger.warning("请在配置中禁用Title信息!");
-                    enableTitle = false;
+                    Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
+                    new String("检查是否支持Title信息的方法(非常粗暴");
+                } catch (Throwable ignored) {
+                    try {
+                        Player.class.getMethod("sendTitle", String.class, String.class);
+                        isOldVer = true;
+                    } catch (Throwable ignored2) {
+                        FlyWithFood.logger.warning("你的服务器不支持直接Title信息!");
+                        FlyWithFood.logger.warning("请在配置文件禁用Title信息");
+                        enableTitle = false;
+                    }
                 }
             }
-            try {
-                ChatMessageType.valueOf("ACTION_BAR");
-                TextComponent.fromLegacyText("检查是否支持ActionBar的方法(非常粗暴");
-                Player.Spigot.class.getMethod("sendMessage", ChatMessageType.class, BaseComponent.class);
-            } catch (Throwable ignored) {
-                FlyWithFood.logger.warning("你的服务器不支持发送Action信息!");
-                FlyWithFood.logger.warning("请在配置中禁用Action信息!");
-                enableAction = false;
+            if (enableAction) {
+                try {
+                    ChatMessageType.valueOf("ACTION_BAR");
+                    TextComponent.fromLegacyText("检查是否支持ActionBar的方法(非常粗暴");
+                    Player.Spigot.class.getMethod("sendMessage", ChatMessageType.class, BaseComponent.class);
+                } catch (Throwable ignored) {
+                    FlyWithFood.logger.warning("你的服务器不支持直接发送Action信息!");
+                    FlyWithFood.logger.warning("将尝试调用NMS以发送Action信息");
+                    NMSAll.shouldUseNMSAction = true;
+                }
             }
             FlyWithFood.startCheck();
         } catch (Exception e) {
