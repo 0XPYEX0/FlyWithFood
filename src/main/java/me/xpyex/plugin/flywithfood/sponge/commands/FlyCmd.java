@@ -219,6 +219,10 @@ public class FlyCmd {
                         })
                         .build(), "toggle")
                 .build();
-        Sponge.getCommandManager().register(FlyWithFood.INSTANCE, cmd, "flywithfood", "fly", "fwf");
+        Sponge.getCommandManager().register(FlyWithFood.INSTANCE,
+                cmd,
+                "FlyWithFood".toLowerCase(), //傻逼IDEA一直提示我拼写错误
+                "fly",
+                "fwf");
     }
 }
