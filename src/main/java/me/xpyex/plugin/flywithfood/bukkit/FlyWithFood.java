@@ -40,17 +40,11 @@ public final class FlyWithFood extends JavaPlugin {
                 return;
             }
         }
-        NMSAll.nmsVer = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        logger.info("当前服务端NMS版本: " + NMSAll.nmsVer); //v1_8_R3
-
-        if (NMSAll.nmsVer.equalsIgnoreCase("v1_8_R1") || NMSAll.nmsVer.startsWith("v1_7_")) {
-            NMSAll.isOldVer = true;
-        }
+        logger.info("成功加载配置文件");
 
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
-        logger.info("成功加载配置文件");
         logger.info("已成功加载!");
 
     }
@@ -107,6 +101,10 @@ public final class FlyWithFood extends JavaPlugin {
                         @Override
                         public void run() {
                             if (!player.isOnline()) {
+                                cancel();
+                                return;
+                            }
+                            if (player.getAllowFlight()) {
                                 cancel();
                                 return;
                             }

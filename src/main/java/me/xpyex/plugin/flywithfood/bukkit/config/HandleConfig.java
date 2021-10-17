@@ -85,6 +85,7 @@ public class HandleConfig {
                     FlyWithFood.logger.warning("你的服务器不支持直接发送Action信息!");
                     FlyWithFood.logger.warning("将尝试调用NMS以发送Action信息");
                     NMSAll.shouldUseNMSAction = true;
+                    FlyWithFood.logger.info("当前服务端NMS版本: " + NMSAll.nmsVer);
                 }
             }
             FlyWithFood.startCheck();

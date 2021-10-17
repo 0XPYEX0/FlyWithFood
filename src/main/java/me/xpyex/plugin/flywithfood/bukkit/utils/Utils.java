@@ -26,28 +26,28 @@ public class Utils {
             return;
         }
         if (HandleConfig.enableRawMsg) {
-            String rawDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("RawMsg").getString(msgType.getValue());
-            if (!rawDisableMsg.isEmpty()) {
-                target.sendMessage(getColorfulMsg(rawDisableMsg));
+            String rawMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("RawMsg").getString(msgType.getValue());
+            if (!rawMsg.isEmpty()) {
+                target.sendMessage(getColorfulMsg(rawMsg));
             }
         }
         if (!(target instanceof Player)) {
             return;
         }
         if (HandleConfig.enableAction) {
-            String actionDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("ActionMsg").getString(msgType.getValue());
-            if (!actionDisableMsg.isEmpty()) {
+            String actionMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("ActionMsg").getString(msgType.getValue());
+            if (!actionMsg.isEmpty()) {
                 if (NMSAll.shouldUseNMSAction) {
-                    NMSUtil.sendActionBar((Player) target, getColorfulMsg(actionDisableMsg));
+                    NMSUtil.sendActionBar((Player) target, getColorfulMsg(actionMsg));
                 } else {
-                    ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getColorfulMsg(actionDisableMsg)));
+                    ((Player) target).spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getColorfulMsg(actionMsg)));
                 }
             }
         }
         if (HandleConfig.enableTitle) {
-            String titleDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("TitleMsg").getString(msgType.getValue());
-            if (!titleDisableMsg.isEmpty()) {
-                String[] titles = titleDisableMsg.split("\\u005c\\u006e");
+            String titleMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("TitleMsg").getString(msgType.getValue());
+            if (!titleMsg.isEmpty()) {
+                String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     FlyWithFood.logger.warning("Title数量错误!最多仅有2行!");
                     HandleConfig.enableTitle = false;

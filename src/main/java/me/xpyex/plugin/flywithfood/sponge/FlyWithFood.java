@@ -110,7 +110,7 @@ public class FlyWithFood {
                     player.offer(Keys.IS_FLYING, false);
                     Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
                     Scheduler.execute(() ->
-                            new CancellingTimerTask(player)
+                            new FallDamageTimer(player)
                     )
                             .delayTicks(4)
                             .intervalTicks(4)
@@ -124,14 +124,18 @@ public class FlyWithFood {
     }
 }
 
-class CancellingTimerTask implements Consumer<Task> {
+class FallDamageTimer implements Consumer<Task> {
     private final Player player;
-    public CancellingTimerTask(Player player) {
+    public FallDamageTimer(Player player) {
         this.player = player;
     }
     @Override
     public void accept(Task task) {
         if (!player.isOnline()) {
+            task.cancel();
+            return;
+        }
+        if (player.get(Keys.CAN_FLY).orElse(false)) {
             task.cancel();
             return;
         }
