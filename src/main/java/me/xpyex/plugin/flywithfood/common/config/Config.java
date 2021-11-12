@@ -12,7 +12,6 @@ public class Config {
         outJson.put("FoodDisable", 6);
         outJson.put("CheckSeconds", 1);
         outJson.put("ConfigVersion", Versions.CONFIG_VERSION);
-        outJson.put("Language", "Chinese");
 
         JSONObject rawMsgConfig = new JSONObject();
         rawMsgConfig.put("Enable", true);
@@ -38,33 +37,10 @@ public class Config {
         actionMsgConfig.put("CannotFly", "&c你的饥饿值不足，已经自动关闭飞行");
         actionMsgConfig.put("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
 
-        JSONObject helpMsgList = new JSONObject();
-        JSONArray startHelpMsg = new JSONArray();
-        startHelpMsg.add("&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
-        startHelpMsg.add("&9你目前可用的命令: ");
-        JSONArray flyHelpMsg = new JSONArray();
-        flyHelpMsg.add("&a%command% &b<on|off|toggle> &f- &e为你自己开启或关闭飞行");
-        JSONArray otherHelpMsg = new JSONArray();
-        otherHelpMsg.add("&a%command% &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行");
-        JSONArray adminHelpMsg = new JSONArray();
-        adminHelpMsg.add("&a%command% &breload &f- &e重载配置");
-        adminHelpMsg.add("&d以下为权限列表: ");
-        adminHelpMsg.add("&afly.fly &f- &e允许玩家开启或关闭飞行");
-        adminHelpMsg.add("&afly.nohunger &f- &e允许玩家飞行时不消耗饥饿值");
-        adminHelpMsg.add("&afly.other &f- &e允许玩家开启或关闭他人的飞行");
-        adminHelpMsg.add("&afly.admin &f- &e可收到权限列表");
-        JSONArray endHelpMsg = new JSONArray();
-        helpMsgList.put("Start", startHelpMsg);
-        helpMsgList.put("Fly", flyHelpMsg);
-        helpMsgList.put("Other", otherHelpMsg);
-        helpMsgList.put("Admin", adminHelpMsg);
-        helpMsgList.put("End", endHelpMsg);
-
         JSONObject languages = new JSONObject();
         languages.put("RawMsg", rawMsgConfig);
         languages.put("TitleMsg", titleMsgConfig);
         languages.put("ActionMsg", actionMsgConfig);
-        languages.put("HelpMsgList", helpMsgList);
         languages.put("NoPermission", "&c你没有权限");
         languages.put("DisableInThisWorld", "&c这个世界不允许使用这个命令");
         outJson.put("Languages", languages);
@@ -84,6 +60,8 @@ public class Config {
         NoCostFoodWhitelist.put("Enable", false);
         NoCostFoodWhitelist.put("Worlds", worlds);
         outJson.put("NoCostFoodWhitelist", NoCostFoodWhitelist);
+
+        outJson.put("HelpMsgType", 1);
 
         return outJson;
     }
