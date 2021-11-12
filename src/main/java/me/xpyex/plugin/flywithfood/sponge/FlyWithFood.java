@@ -96,7 +96,6 @@ public class FlyWithFood {
                 if (player.hasPermission("fly.nohunger")) {
                     continue;
                 }
-                //if (player.hasPotionEffect(PotionEffectType.SATURATION)) {
                 if (Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION)) {
                     player.offer(Keys.CAN_FLY, false);
                     player.offer(Keys.IS_FLYING, false);
