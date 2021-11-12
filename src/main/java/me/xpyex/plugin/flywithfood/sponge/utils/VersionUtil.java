@@ -8,6 +8,6 @@ public class VersionUtil {
         return HandleConfig.config.containsKey("ConfigVersion") ? HandleConfig.config.getInteger("ConfigVersion") : 0;
     }
     public static int getPluginConfigVersion() {
-        return Versions.configVersion;
+        return Versions.CONFIG_VERSION;
     }
 }

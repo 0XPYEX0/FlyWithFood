@@ -10,7 +10,8 @@ public class Config {
         JSONObject outJson = new JSONObject();
         outJson.put("FoodCost", 4);
         outJson.put("FoodDisable", 6);
-        outJson.put("ConfigVersion", Versions.configVersion);
+        outJson.put("CheckSeconds", 1);
+        outJson.put("ConfigVersion", Versions.CONFIG_VERSION);
 
         JSONObject rawMsgConfig = new JSONObject();
         rawMsgConfig.put("Enable", true);

@@ -104,7 +104,7 @@ public class FlyCmd {
                                 Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
                                 return CommandResult.success();
                             }
-                            if ((!sender.hasPermission("fly.other") && target != sender) || (!sender.hasPermission("fly.fly") && target == sender)) {
+                            if ((!sender.hasPermission("fly.other") && target != sender) || (!sender.hasPermission("fly.fly") && target == sender )) {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
                             }

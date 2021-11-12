@@ -20,14 +20,17 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
 
 public class HandleConfig {
     public static JSONObject config;
-    static File root = new File("plugins/" + FlyWithFood.INSTANCE.getName());
-    static File configFile = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/config.json");
-    static File howToConfigFile = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig.txt");
-    static File bakFolder = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig");
+    private final static File ROOT = new File("plugins/" + FlyWithFood.INSTANCE.getName());
+    private final static File CONFIG_FILE = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/config.json");
+    private final static File HOW_TO_CONFIG_FILE = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig.txt");
+    private final static File BAK_FOLDER = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
     public static boolean enableAction;
@@ -37,23 +40,25 @@ public class HandleConfig {
 
     public static boolean loadConfig() {
         try {
-            if (!root.exists()) {
+            if (!ROOT.exists()) {
                 FlyWithFood.logger.info("第一次加载？正在生成配置文件!");
                 createConfigFile();
                 createHowToConfigFile();
             }
-            if (!configFile.exists()) {
+            if (!CONFIG_FILE.exists()) {
                 FlyWithFood.logger.info("配置文件丢失？正在生成配置文件!");
                 createConfigFile();
             }
-            if (!howToConfigFile.exists()) {
+            if (!HOW_TO_CONFIG_FILE.exists()) {
                 FlyWithFood.logger.info("教程文件丢失？正在生成教程文件!");
                 createHowToConfigFile();
             }
-            Scanner in = new Scanner(configFile, "UTF-8");
             StringBuilder configText = new StringBuilder();
-            while (in.hasNext()) {
-                configText.append(in.next());
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(CONFIG_FILE), StandardCharsets.UTF_8));  //Scanner会分割空格，导致消息缺失部分
+            String line;
+            while ((line = in.readLine()) != null) {
+                configText.append(line);
             }
             in.close();
             config = JSON.parseObject(configText.toString());
@@ -101,12 +106,12 @@ public class HandleConfig {
     }
 
     public static void createConfigFile(JSONObject json) throws Exception {
-        if (!root.exists()) {
-            root.mkdirs();
+        if (!ROOT.exists()) {
+            ROOT.mkdirs();
         }
-        configFile.createNewFile();
+        CONFIG_FILE.createNewFile();
 
-        PrintWriter out = new PrintWriter(configFile, "UTF-8");
+        PrintWriter out = new PrintWriter(CONFIG_FILE, "UTF-8");
         out.write(JSON.toJSONString(json, true));
         out.flush();
         out.close();
@@ -114,17 +119,17 @@ public class HandleConfig {
 
     public static void updateConfigFile() {
         try {
-            if (!HandleConfig.configFile.exists()) {
+            if (!HandleConfig.CONFIG_FILE.exists()) {
                 createConfigFile();
                 return;
             }
-            if (!bakFolder.exists()) {
-                bakFolder.mkdirs();
+            if (!BAK_FOLDER.exists()) {
+                BAK_FOLDER.mkdirs();
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String time = format.format(new Date());
             File targetFile = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig/config_" + time + ".json");
-            configFile.renameTo(targetFile);
+            CONFIG_FILE.renameTo(targetFile);
             JSONObject newJO = getNewConfig();
             for (String value : config.keySet()) {
                 newJO.put(value, config.get(value));
@@ -144,12 +149,13 @@ public class HandleConfig {
     }
 
     public static void createHowToConfigFile() throws Exception {
-        howToConfigFile.createNewFile();
+        HOW_TO_CONFIG_FILE.createNewFile();
 
-        PrintWriter out = new PrintWriter(howToConfigFile, "UTF-8");
+        PrintWriter out = new PrintWriter(HOW_TO_CONFIG_FILE, "UTF-8");
         out.println("ConfigVersion: 配置文件版本，更新用，请勿自行调节！");
         out.println("FoodCost: 每秒消耗的饥饿值,每一格为2点");
         out.println("FoodDisable: 饥饿值小于该值则关闭飞行");
+        out.println("CheckSeconds: 每X秒检查一次饥饿值");
         out.println("语言文件按需调节");
         out.println("\\n表换行,仅Title信息可换行");
         out.println("RawMsg: 普通文本消息,显示在左下角聊天框");
@@ -161,6 +167,7 @@ public class HandleConfig {
         out.println("FunctionsWhitelist: Enable为是否开启功能白名单，若开启则只允许在下方列表所列世界内使用本插件功能");
         out.println("NoFoodCostWhitelist: Enable为是否开启消耗饥饿值白名单，若开启则在下方列表所列世界内不会被扣除饥饿值");
         out.println("HelpMsgType: 当执行/fly等命令时展示的样式，共2种");
+        out.flush();
         out.close();
     }
 

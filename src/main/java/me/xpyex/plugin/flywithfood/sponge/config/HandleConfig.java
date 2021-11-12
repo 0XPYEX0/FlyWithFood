@@ -18,10 +18,10 @@ import java.util.Scanner;
 
 public class HandleConfig {
     public static JSONObject config;
-    static File root = new File("config/FlyWithFood/");
-    static File configFile = new File("config/FlyWithFood/config.json");
-    static File howToConfigFile = new File("config/FlyWithFood/HowToConfig.txt");
-    static File bakFolder = new File("config/FlyWithFood/bakConfig");
+    static final File root = new File("config/FlyWithFood/");
+    static final File configFile = new File("config/FlyWithFood/config.json");
+    static final File howToConfigFile = new File("config/FlyWithFood/HowToConfig.txt");
+    static final File bakFolder = new File("config/FlyWithFood/bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
     public static boolean enableAction;

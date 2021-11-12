@@ -3,7 +3,6 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
-import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
@@ -58,6 +57,7 @@ public final class FlyWithFood extends JavaPlugin {
     public static void startCheck() {
         int cost = HandleConfig.config.getInteger("FoodCost"); //每秒消耗的饱食度,20为满,奇数即半格
         int disable = HandleConfig.config.getInteger("FoodDisable"); //饱食度消耗至多少关闭飞行
+        int howLongCheck = HandleConfig.config.getInteger("CheckSeconds");  //间隔多少秒检查一次
         Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> {
             boolean FunctionWLEnable = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
             boolean NoCostFoodWLEnable = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
@@ -100,15 +100,7 @@ public final class FlyWithFood extends JavaPlugin {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (!player.isOnline()) {
-                                cancel();
-                                return;
-                            }
-                            if (player.getAllowFlight()) {
-                                cancel();
-                                return;
-                            }
-                            if (player.isOnGround()) {
+                            if ((!player.isOnline()) || player.getAllowFlight() || player.isOnGround()) {
                                 cancel();
                                 return;
                             }
@@ -117,6 +109,6 @@ public final class FlyWithFood extends JavaPlugin {
                     }.runTaskTimer(INSTANCE, 4L, 4L);
                 }
             }
-        }, 0L, 20L);
+        }, 0L, howLongCheck * 20L);
     }
 }
