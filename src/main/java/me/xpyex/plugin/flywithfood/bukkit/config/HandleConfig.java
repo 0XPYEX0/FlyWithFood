@@ -29,7 +29,8 @@ public class HandleConfig {
     public static JSONObject config;
     private final static File ROOT = new File("plugins/" + FlyWithFood.INSTANCE.getName());
     private final static File CONFIG_FILE = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/config.json");
-    private final static File HOW_TO_CONFIG_FILE = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig.txt");
+    private final static File HOW_TO_CONFIG_FILE_CH = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig-CH.txt");
+    private final static File HOW_TO_CONFIG_FILE_EN = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig-EN.txt");
     private final static File BAK_FOLDER = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
@@ -42,15 +43,21 @@ public class HandleConfig {
         try {
             if (!ROOT.exists()) {
                 FlyWithFood.logger.info("第一次加载？正在生成配置文件!");
+                FlyWithFood.logger.info("Are you using this plugin for the first time? The configuration file is being generated for you!");
+                FlyWithFood.logger.info(" ");
                 createConfigFile();
                 createHowToConfigFile();
             }
             if (!CONFIG_FILE.exists()) {
                 FlyWithFood.logger.info("配置文件丢失？正在生成配置文件!");
+                FlyWithFood.logger.info("Lost your configuration file? The configuration file is being generated for you!");
+                FlyWithFood.logger.info(" ");
                 createConfigFile();
             }
-            if (!HOW_TO_CONFIG_FILE.exists()) {
+            if (!HOW_TO_CONFIG_FILE_CH.exists()) {
                 FlyWithFood.logger.info("教程文件丢失？正在生成教程文件!");
+                FlyWithFood.logger.info("Lost your tutorial files? The configuration file is being generated for you!");
+                FlyWithFood.logger.info(" ");
                 createHowToConfigFile();
             }
             StringBuilder configText = new StringBuilder();
@@ -77,6 +84,9 @@ public class HandleConfig {
                     } catch (Throwable ignored2) {
                         FlyWithFood.logger.warning("你的服务器不支持发送Title信息!");
                         FlyWithFood.logger.warning("请在配置文件禁用Title信息");
+                        FlyWithFood.logger.warning(" ");
+                        FlyWithFood.logger.warning("Your server does not support sending Title Messages!");
+                        FlyWithFood.logger.warning("Please disable this function in config file.");
                         enableTitle = false;
                     }
                 }
@@ -91,6 +101,10 @@ public class HandleConfig {
                     FlyWithFood.logger.warning("将尝试调用NMS以发送Action信息");
                     NMSAll.shouldUseNMSAction = true;
                     FlyWithFood.logger.info("当前服务端NMS版本: " + NMSAll.nmsVer);
+                    FlyWithFood.logger.warning(" ");
+                    FlyWithFood.logger.warning("Your server does not support sending Action Messages directly!");
+                    FlyWithFood.logger.warning("FlyWithFood will try to use NMS to send Action Messages.");
+                    FlyWithFood.logger.info("The NMS Version of your server: " + NMSAll.nmsVer);
                 }
             }
             FlyWithFood.startCheck();
@@ -149,26 +163,47 @@ public class HandleConfig {
     }
 
     public static void createHowToConfigFile() throws Exception {
-        HOW_TO_CONFIG_FILE.createNewFile();
+        {
+            HOW_TO_CONFIG_FILE_CH.createNewFile();
 
-        PrintWriter out = new PrintWriter(HOW_TO_CONFIG_FILE, "UTF-8");
-        out.println("ConfigVersion: 配置文件版本，更新用，请勿自行调节！");
-        out.println("FoodCost: 每秒消耗的饥饿值,每一格为2点");
-        out.println("FoodDisable: 饥饿值小于该值则关闭飞行");
-        out.println("CheckSeconds: 每X秒检查一次饥饿值");
-        out.println("语言文件按需调节");
-        out.println("\\n表换行,仅Title信息可换行");
-        out.println("RawMsg: 普通文本消息,显示在左下角聊天框");
-        out.println("TitleMsg: Title信息,显示在屏幕中央");
-        out.println("ActionMsg: Action信息,显示在快捷物品栏上方");
-        out.println("NoPermission: 当玩家无权执行命令时的消息");
-        out.println("DisableInThisWorld: 当FunctionsWhitelist被开启，且玩家所在世界在列表中，阻止玩家执行命令时的消息");
-        out.println("信息留空则不发送该条");
-        out.println("FunctionsWhitelist: Enable为是否开启功能白名单，若开启则只允许在下方列表所列世界内使用本插件功能");
-        out.println("NoFoodCostWhitelist: Enable为是否开启消耗饥饿值白名单，若开启则在下方列表所列世界内不会被扣除饥饿值");
-        out.println("HelpMsgType: 当执行/fly等命令时展示的样式，共2种");
-        out.flush();
-        out.close();
+            PrintWriter out = new PrintWriter(HOW_TO_CONFIG_FILE_CH, "UTF-8");
+            out.println("ConfigVersion: 配置文件版本，更新用，请勿自行调节！");
+            out.println("FoodCost: 每个周期消耗的饥饿值,每一格为2点");
+            out.println("FoodDisable: 饥饿值小于该值则关闭飞行");
+            out.println("CheckSeconds: 每X秒检查一次饥饿值");
+            out.println("语言文件按需调节");
+            out.println("\\n表换行,仅Title信息可换行");
+            out.println("RawMsg: 普通文本消息,显示在左下角聊天框");
+            out.println("TitleMsg: Title信息,显示在屏幕中央");
+            out.println("ActionMsg: Action信息,显示在快捷物品栏上方");
+            out.println("NoPermission: 当玩家无权执行命令时的消息");
+            out.println("DisableInThisWorld: 当FunctionsWhitelist被开启，且玩家所在世界在列表中，阻止玩家执行命令时的消息");
+            out.println("信息留空则不发送该条");
+            out.println("FunctionsWhitelist: Enable为是否开启功能白名单，若开启则只允许在下方列表所列世界内使用本插件功能");
+            out.println("NoFoodCostWhitelist: Enable为是否开启消耗饥饿值白名单，若开启则在下方列表所列世界内不会被扣除饥饿值");
+            out.flush();
+            out.close();
+        }
+        {
+            HOW_TO_CONFIG_FILE_EN.createNewFile();
+            PrintWriter out = new PrintWriter(HOW_TO_CONFIG_FILE_EN, "UTF-8");
+            out.println("ConfigVersion: Config File Version, DO NOT CHANGE THIS!!!");
+            out.println("FoodCost: How much saturation that players cost every period");
+            out.println("FoodDisable: If saturation of player less than this, plugin will disable his flight");
+            out.println("CheckSeconds: Check saturation of everyone per X seconds");
+            out.println("Language: 'Chinese' or 'English', which language you are using");
+            out.println(" ");
+            out.println("Languages:");
+            out.println("\\n means to next line, Only applicable in Title Messages");
+            out.println("RawMsg: Normal Text Messages, displayed in the lower left corner");
+            out.println("TitleMsg: Title Messages, display in the center of the screen");
+            out.println("ActionMsg: Action Messages, displayed above the quick inventory");
+            out.println("NoPermission: When a player does not have permission to use command, plugin will send this to him");
+            out.println("DisableInThisWorld: When 'FunctionsWhitelist' is been enabled, and a player try to use our command in the world, plugin will send this to him");
+            out.println("FunctionsWhitelist: ");
+            out.flush();
+            out.close();
+        }
     }
 
     public static boolean reloadConfig() {
