@@ -24,11 +24,8 @@ public class FlyCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (HandleConfig.config == null) {
             if (!sender.hasPermission("fly.admin")) {
-                if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
-                    Utils.autoSendMsg(sender, "&c插件载入时出错，无法使用，请联系管理员处理");
-                } else {
-                    Utils.autoSendMsg(sender, "&cThe plugin has something wrong.Please ask admin of this server for help");
-                }
+                Utils.autoSendMsg(sender, "&c插件载入时出错，无法使用，请联系管理员处理");
+                Utils.autoSendMsg(sender, "&cThere is something wrong with the plugin. Please ask admin of this server for help");
                 return true;
             }
             if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {

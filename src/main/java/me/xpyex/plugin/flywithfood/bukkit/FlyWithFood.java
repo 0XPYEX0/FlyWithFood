@@ -85,21 +85,21 @@ public final class FlyWithFood extends JavaPlugin {
             boolean NoCostFoodWLEnable = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (FunctionWLEnable && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
-                    continue;
+                    continue;  //如果这个世界并未启用插件，则没有处理的必要
                 }
                 if (NoCostFoodWLEnable && HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
+                    continue;  //如果这个世界不需要消耗饥饿值，则没有处理的必要
+                }
+                if (!player.isFlying()) {  //玩家不在飞行则没有处理他的必要
                     continue;
                 }
-                if (!player.isFlying()) {
+                if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
                     continue;
                 }
-                if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {
+                if (player.hasPermission("fly.nohunger")) {  //若玩家拥有权限无视消耗，则没有处理的必要
                     continue;
                 }
-                if (player.hasPermission("fly.nohunger")) {
-                    continue;
-                }
-                if (player.hasPotionEffect(PotionEffectType.SATURATION)) {
+                if (player.hasPotionEffect(PotionEffectType.SATURATION)) {  //若玩家拥有饱和Buff，则禁止飞行
                     Bukkit.getScheduler().runTask(INSTANCE, () -> {
                         player.setFlying(false);
                         player.setAllowFlight(false);
@@ -109,9 +109,9 @@ public final class FlyWithFood extends JavaPlugin {
                 }
                 int nowFood = player.getFoodLevel();
                 Bukkit.getScheduler().runTask(INSTANCE, () ->
-                        player.setFoodLevel(Math.max((nowFood - cost), 0))
+                        player.setFoodLevel(Math.max((nowFood - cost), 0))  //扣除饥饿值
                 );
-                if ((nowFood - cost) < disable) {
+                if ((nowFood - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(player);
                     Bukkit.getScheduler().runTask(INSTANCE, () -> {
                         Bukkit.getPluginManager().callEvent(event);
@@ -119,7 +119,7 @@ public final class FlyWithFood extends JavaPlugin {
                         player.setFlying(false);
                     });
                     Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    new BukkitRunnable() {
+                    new BukkitRunnable() {  //为玩家免疫掉落伤害
                         @Override
                         public void run() {
                             if ((!player.isOnline()) || player.getAllowFlight() || player.isOnGround()) {
