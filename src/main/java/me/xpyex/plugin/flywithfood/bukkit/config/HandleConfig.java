@@ -200,14 +200,15 @@ public class HandleConfig {
             out.println("ActionMsg: Action Messages, displayed above the quick inventory");
             out.println("NoPermission: When a player does not have permission to use command, plugin will send this to him");
             out.println("DisableInThisWorld: When 'FunctionsWhitelist' is been enabled, and a player try to use our command in the world, plugin will send this to him");
-            out.println("FunctionsWhitelist: ");
+            out.println("FunctionsWhitelist: 'Enable' is whether to enable the function whitelist, if enabled, only allow the use of this plugin function in the dimensions listed in the list below");
+            out.println("NoFoodCostWhitelist: 'Enable' is whether to enable the whitelist for consuming saturation, if enabled, saturation will not be deducted from the dimensions listed in the list below");
             out.flush();
             out.close();
         }
     }
 
     public static boolean reloadConfig() {
-        JSONObject oldConfig = (JSONObject) config.clone();
+        JSONObject oldConfig = config.clone();
         config = null;
         enableRawMsg = false;
         enableAction = false;
