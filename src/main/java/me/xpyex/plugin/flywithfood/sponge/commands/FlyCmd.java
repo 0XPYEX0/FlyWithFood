@@ -33,37 +33,37 @@ public class FlyCmd {
                     }
                     //执行/fly时帮助
 
-                for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Start")) {
-                    if (o instanceof String) {
-                        Utils.autoSendMsg(sender, ((String) o));
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Start")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o));
+                        }
                     }
-                }
-                if (sender.hasPermission("fly.fly")) {
-                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Fly")) {
+                    if (sender.hasPermission("fly.fly")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Fly")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
+                        }
+                    }
+                    if (sender.hasPermission("fly.other")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Other")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
+                        }
+                    }
+                    if (sender.hasPermission("fly.admin")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Admin")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
+                        }
+                    }
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("End")) {
                         if (o instanceof String) {
                             Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
                         }
                     }
-                }
-                if (sender.hasPermission("fly.other")) {
-                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Other")) {
-                        if (o instanceof String) {
-                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
-                        }
-                    }
-                }
-                if (sender.hasPermission("fly.admin")) {
-                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Admin")) {
-                        if (o instanceof String) {
-                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
-                        }
-                    }
-                }
-                for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("End")) {
-                    if (o instanceof String) {
-                        Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
-                    }
-                }
                     return CommandResult.success();
                 })
                 .child(CommandSpec.builder()

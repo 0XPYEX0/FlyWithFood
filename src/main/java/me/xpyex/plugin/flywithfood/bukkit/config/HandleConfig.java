@@ -154,6 +154,9 @@ public class HandleConfig {
             if (!newJO.getJSONObject("Languages").containsKey("NoPermission")) {
                 newJO.getJSONObject("Languages").put("NoPermission", "&c你没有权限");
             }
+            if (!newJO.getJSONObject("Languages").containsKey("HelpMsgList")) {
+                newJO.getJSONObject("Languages").put("HelpMsgList", getNewConfig().getJSONObject("Languages").getJSONObject("HelpMsgList"));
+            }
             newJO.put("ConfigVersion", VersionUtil.getPluginConfigVersion());
             createConfigFile(newJO);
 
