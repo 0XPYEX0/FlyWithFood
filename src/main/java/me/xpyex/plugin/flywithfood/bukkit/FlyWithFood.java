@@ -23,30 +23,49 @@ public final class FlyWithFood extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         logger = getLogger();
+        logger.info(" ");
         logger.info("感谢使用FlyWithFood.");
-        logger.info("本插件在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
-        logger.info("本插件在Gitee开源: https://gitee.com/XPYEX/FlyWithFood");
+        logger.info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
+        logger.info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");
+        logger.info(" ");
+        logger.info("Thank you for using FlyWithFood");
+        logger.info("The plugin has been open source in GitHub: https://github.com/0XPYEX0/FlyWithFood");
+        logger.info("Have a nice trip with this plugin  :)");
+        logger.info(" ");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
         if (!HandleConfig.loadConfig()) {
             logger.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
             logger.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+            logger.warning(" ");
+            logger.warning("Wrong!! The plugin loading has been terminated. Please check your config file.");
+            logger.warning("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+            logger.warning("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
             return;
         }
         if (VersionUtil.getPluginConfigVersion() != VersionUtil.getLocalConfigVersion()) {
             logger.info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
+            logger.info("The configuration file is modified in this update, and the original file is being backed up and a new file is being generated.");
+            logger.info(" ");
             HandleConfig.updateConfigFile();
             if (!HandleConfig.reloadConfig()) {
                 logger.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
                 logger.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+                logger.warning(" ");
+                logger.warning("Wrong!! The plugin loading has been terminated. Please check your config file.");
+                logger.warning("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+                logger.warning("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
                 return;
             }
         }
         logger.info("成功加载配置文件");
+        logger.info("Load config file successfully");
+        logger.info(" ");
 
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
         logger.info("已成功加载!");
+        logger.info("Plugin is loaded!!");
 
     }
 
@@ -54,6 +73,7 @@ public final class FlyWithFood extends JavaPlugin {
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(INSTANCE);
         logger.info("已卸载");
+        logger.info("Plugin is unloaded. Thanks for your using  :)");
     }
 
     public static void startCheck() {
@@ -65,21 +85,21 @@ public final class FlyWithFood extends JavaPlugin {
             boolean NoCostFoodWLEnable = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (FunctionWLEnable && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
-                    continue;  //如果这个世界并未启用插件，则没有处理的必要
+                    continue;
                 }
                 if (NoCostFoodWLEnable && HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
-                    continue;  //如果这个世界不需要消耗饥饿值，则没有处理的必要
-                }
-                if (!player.isFlying()) {  //玩家不在飞行则没有处理他的必要
                     continue;
                 }
-                if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
+                if (!player.isFlying()) {
                     continue;
                 }
-                if (player.hasPermission("fly.nohunger")) {  //若玩家拥有权限无视消耗，则没有处理的必要
+                if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {
                     continue;
                 }
-                if (player.hasPotionEffect(PotionEffectType.SATURATION)) {  //若玩家拥有饱和Buff，则禁止飞行
+                if (player.hasPermission("fly.nohunger")) {
+                    continue;
+                }
+                if (player.hasPotionEffect(PotionEffectType.SATURATION)) {
                     Bukkit.getScheduler().runTask(INSTANCE, () -> {
                         player.setFlying(false);
                         player.setAllowFlight(false);
@@ -89,9 +109,9 @@ public final class FlyWithFood extends JavaPlugin {
                 }
                 int nowFood = player.getFoodLevel();
                 Bukkit.getScheduler().runTask(INSTANCE, () ->
-                        player.setFoodLevel(Math.max((nowFood - cost), 0))  //扣除饥饿值
+                        player.setFoodLevel(Math.max((nowFood - cost), 0))
                 );
-                if ((nowFood - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
+                if ((nowFood - cost) < disable) {
                     FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(player);
                     Bukkit.getScheduler().runTask(INSTANCE, () -> {
                         Bukkit.getPluginManager().callEvent(event);
@@ -99,7 +119,7 @@ public final class FlyWithFood extends JavaPlugin {
                         player.setFlying(false);
                     });
                     Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    new BukkitRunnable() {  //为玩家免疫掉落伤害
+                    new BukkitRunnable() {
                         @Override
                         public void run() {
                             if ((!player.isOnline()) || player.getAllowFlight() || player.isOnGround()) {

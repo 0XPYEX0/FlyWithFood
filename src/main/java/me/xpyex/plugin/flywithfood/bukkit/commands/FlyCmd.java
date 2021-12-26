@@ -1,5 +1,6 @@
 package me.xpyex.plugin.flywithfood.bukkit.commands;
 
+import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
 import me.xpyex.plugin.flywithfood.common.types.DenyReason;
@@ -23,55 +24,60 @@ public class FlyCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (HandleConfig.config == null) {
             if (!sender.hasPermission("fly.admin")) {
-                Utils.autoSendMsg(sender, "&c插件载入时出错，无法使用，请联系管理员处理");
+                if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                    Utils.autoSendMsg(sender, "&c插件载入时出错，无法使用，请联系管理员处理");
+                } else {
+                    Utils.autoSendMsg(sender, "&cThe plugin has something wrong.Please ask admin of this server for help");
+                }
                 return true;
             }
-            Utils.autoSendMsg(sender, "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
-            Utils.autoSendMsg(sender, "&9你目前可用的命令: ");
-            Utils.autoSendMsg(sender, "&a/" + label + " &breload &f- &e重载配置");
+            if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                Utils.autoSendMsg(sender,
+                        "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件",
+                        "&9你目前可用的命令: ",
+                        "&a/" + label + " &breload &f- &e重载配置");
+            } else {
+                Utils.autoSendMsg(sender,
+                        "&eYou can execute &a/fly &e, &a/fwf &eor &a/flywithfood",
+                        "&9Valid commands: ",
+                        "&a/" + label + " &breload &f- &eReload config");
+            }
             return true;
         }
         if (args.length == 0) { //执行/fly时帮助
-            if (HandleConfig.config.getInteger("HelpMsgType") == 1) {
-                Utils.autoSendMsg(sender, "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
-                Utils.autoSendMsg(sender, "&9你目前可用的命令: ");
+            Bukkit.getScheduler().runTaskAsynchronously(FlyWithFood.INSTANCE, () -> {  //发送信息允许异步
+                for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Start")) {
+                    if (o instanceof String) {
+                        Utils.autoSendMsg(sender, ((String) o));
+                    }
+                }
                 if (sender.hasPermission("fly.fly")) {
-                    Utils.autoSendMsg(sender, "&a/" + label + " &b<on|off|toggle> &f- &e为你自己开启或关闭飞行");
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Fly")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/" + label));
+                        }
+                    }
                 }
                 if (sender.hasPermission("fly.other")) {
-                    Utils.autoSendMsg(sender, "&a/" + label + " &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行");
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Other")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/" + label));
+                        }
+                    }
                 }
                 if (sender.hasPermission("fly.admin")) {
-                    Utils.autoSendMsg(sender, "&a/" + label + " &breload &f- &e重载配置");
-
-                    Utils.autoSendMsg(sender, "&d以下为权限列表: ");
-                    Utils.autoSendMsg(sender, "&afly.fly &f- &e允许玩家开启或关闭飞行");
-                    Utils.autoSendMsg(sender, "&afly.nohunger &f- &e允许玩家飞行时不消耗饥饿值");
-                    Utils.autoSendMsg(sender, "&afly.other &f- &e允许玩家开启或关闭他人的飞行");
-                    Utils.autoSendMsg(sender, "&afly.admin &f- &e可收到权限列表");
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Admin")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/" + label));
+                        }
+                    }
                 }
-            } else if (HandleConfig.config.getInteger("HelpMsgType") == 2) {
-                Utils.autoSendMsg(sender, "&7你可以使用&8/Fly|Fwf|FlyWithFood&7来使用本插件");
-                Utils.autoSendMsg(sender, "&8╔══════════════════════════════");
-                if (sender.hasPermission("fly.fly")) {
-                    Utils.autoSendMsg(sender, "&8║ &7/" + label + " [ON|OFF|Toggle] &f- &8为你自己开启或关闭飞行");
+                for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("End")) {
+                    if (o instanceof String) {
+                        Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/" + label));
+                    }
                 }
-                if (sender.hasPermission("fly.other")) {
-                    Utils.autoSendMsg(sender, "&8║ &7/" + label + " [ON|OFF|Toggle] [玩家] &f- &8为指定玩家开启或关闭飞行");
-                }
-                if (sender.hasPermission("fly.admin")) {
-                    Utils.autoSendMsg(sender, "&8║ &7/" + label + " Reload &f- &8重载配置");
-                    Utils.autoSendMsg(sender, "&8╠══════════════════════════════");
-                    Utils.autoSendMsg(sender, "&8║ 权限列表: ");
-                    Utils.autoSendMsg(sender, "&8║ &7fly.fly &f- &8允许玩家开启或关闭飞行");
-                    Utils.autoSendMsg(sender, "&8║ &7fly.nohunger &f- &8允许玩家飞行时不消耗饥饿值");
-                    Utils.autoSendMsg(sender, "&8║ &7fly.other &f- &8允许玩家开启或关闭他人的飞行");
-                    Utils.autoSendMsg(sender, "&8║ &7fly.admin &f- &8可收到权限列表");
-                }
-                Utils.autoSendMsg(sender, "&8╚══════════════════════════════");
-            } else {
-                Utils.autoSendMsg(sender, "&c插件配置出现错误，请联系服务器管理员操作.错误原因: &fHelpMsgType");
-            }
+            });
             return true;
         }
         if (args.length == 1) {  //当参数数量等于1时
@@ -81,9 +87,18 @@ public class FlyCmd implements CommandExecutor {
                     return true;
                 }
                 if (HandleConfig.reloadConfig()) {
-                    Utils.autoSendMsg(sender, "&a重载成功");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        Utils.autoSendMsg(sender, "&a重载成功");
+                    } else {
+                        Utils.autoSendMsg(sender, "&aReload successfully!");
+                    }
                 } else {
-                    Utils.autoSendMsg(sender, "&c重载失败!请检查配置文件!无法解决请报告开发者.&f QQ:1723275529");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        Utils.autoSendMsg(sender, "&c重载失败!请检查配置文件!无法解决请报告开发者.&f QQ:1723275529");
+                    } else {
+                        Utils.autoSendMsg(sender, "&cFailed to reload! Please check your config file!");
+                        Utils.autoSendMsg(sender, "&cIf you can not solve this problem, please open a issue in my GitHub");
+                    }
                 }
                 return true;
             }
@@ -98,11 +113,19 @@ public class FlyCmd implements CommandExecutor {
         if (checkArgs.contains(args[0].toLowerCase())) {  //如果是调整飞行模式
             Player target = Bukkit.getPlayerExact(args[1]); //获取目标玩家
             if ((!(sender instanceof Player)) && args[1].equals(sender.getName())) { //sender不是玩家，且对象是sender的时候
-                Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
+                if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                    Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
+                } else {
+                    Utils.autoSendMsg(sender, "&cThis command only allows players to use");
+                }
                 return true;
             }
             if (target == null) {
-                Utils.autoSendMsg(sender, args[1] + " &c不在线(或不存在)");
+                if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                    Utils.autoSendMsg(sender, args[1] + " &c不在线(或不存在)");
+                } else {
+                    Utils.autoSendMsg(sender, "&cPlayer &f" + args[1] + " &cis not online");
+                }
                 return true;
             }
             if ((target != sender && !sender.hasPermission("fly.other"))
@@ -119,7 +142,11 @@ public class FlyCmd implements CommandExecutor {
                 FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.DisableInThisWorld, args[0]);
                 Bukkit.getPluginManager().callEvent(event);
                 if (sender != target) {
-                    Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
+                    } else {
+                        Utils.autoSendMsg(sender, "&cUnable to turn flight for player &f" + target.getName() + " &c because: The world is in blacklist");
+                    }
                     return true;
                 }
                 Utils.sendFWFMsg(target, FWFMsgType.DisableInThisWorld);
@@ -130,7 +157,11 @@ public class FlyCmd implements CommandExecutor {
                     FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.HasEffect, "on");
                     Bukkit.getPluginManager().callEvent(event);
                     if (target != sender) {
-                        Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
+                        if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                            Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
+                        } else {
+                            Utils.autoSendMsg(sender, "&cUnable to turn flight for player &f" + target.getName() + " &c because: The player has Saturation Effect");
+                        }
                         return true;
                     }
                     Utils.sendFWFMsg(target, FWFMsgType.HasEffect);
@@ -140,7 +171,11 @@ public class FlyCmd implements CommandExecutor {
                     FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.NotEnoughFood, "on");
                     Bukkit.getPluginManager().callEvent(event);
                     if (target != sender) {
-                        Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家饱食度不足");
+                        if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                            Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家饱食度不足");
+                        } else {
+                            Utils.autoSendMsg(sender, "&cUnable to turn flight for player &f" + target.getName() + " &c because: The saturation of player is not enough to fly");
+                        }
                         return true;
                     }
                     Utils.sendFWFMsg(target, FWFMsgType.CanNotEnable);
@@ -154,7 +189,11 @@ public class FlyCmd implements CommandExecutor {
                 target.setAllowFlight(true);
                 Utils.sendFWFMsg(target, FWFMsgType.EnableFly);
                 if (target != sender) {
-                    Utils.autoSendMsg(sender, "&9成功打开 &f" + target.getName() + " &9的飞行");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        Utils.autoSendMsg(sender, "&9成功打开 &f" + target.getName() + " &9的飞行");
+                    } else {
+                        Utils.autoSendMsg(sender, "&9Successfully turn on the flight for player" + target.getName());
+                    }
                 }
                 return true;
             }
@@ -168,7 +207,11 @@ public class FlyCmd implements CommandExecutor {
                 target.setAllowFlight(false);
                 Utils.sendFWFMsg(target, FWFMsgType.DisableFly);
                 if (target != sender) {
-                    Utils.autoSendMsg(sender, "&9成功关闭 &f" + target.getName() + " &9的飞行");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        Utils.autoSendMsg(sender, "&9成功打开 &f" + target.getName() + " &9的飞行");
+                    } else {
+                        Utils.autoSendMsg(sender, "&9Successfully turn off the flight for player" + target.getName());
+                    }
                 }
                 return true;
             }

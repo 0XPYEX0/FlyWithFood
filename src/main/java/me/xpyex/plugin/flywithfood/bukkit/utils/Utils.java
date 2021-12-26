@@ -17,8 +17,10 @@ public class Utils {
     public static String getColorfulMsg(String msg) {
         return ColorMsg.getColorMsg(msg);
     }
-    public static void autoSendMsg(CommandSender sender, String msg) {
-        sender.sendMessage(getColorfulMsg(msg));
+    public static void autoSendMsg(CommandSender sender, String... msg) {
+        for (String s : msg) {
+            sender.sendMessage(getColorfulMsg(s));
+        }
     }
     public static void sendFWFMsg(CommandSender target, FWFMsgType msgType) {
         if (msgType == FWFMsgType.DisableInThisWorld || msgType == FWFMsgType.NoPermission) {
@@ -49,7 +51,11 @@ public class Utils {
             if (!titleMsg.isEmpty()) {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
-                    FlyWithFood.logger.warning("Title数量错误!最多仅有2行!");
+                    if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
+                        FlyWithFood.logger.warning("Title数量错误!最多仅有2行!");
+                    } else {
+                        FlyWithFood.logger.warning("Title Messages can only have two at most!");
+                    }
                     HandleConfig.enableTitle = false;
                     return;
                 }

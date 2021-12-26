@@ -32,45 +32,37 @@ public class FlyCmd {
                         return CommandResult.success();
                     }
                     //执行/fly时帮助
-                    if (HandleConfig.config.getInteger("HelpMsgType") == 1) {
-                        Utils.autoSendMsg(sender, "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
-                        Utils.autoSendMsg(sender, "&9你目前可用的命令: ");
-                        if (sender.hasPermission("fly.fly")) {
-                            Utils.autoSendMsg(sender, "&a/fly &b<on|off|toggle> &f- &e为你自己开启或关闭飞行");
-                        }
-                        if (sender.hasPermission("fly.other")) {
-                            Utils.autoSendMsg(sender, "&a/fly &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行");
-                        }
-                        if (sender.hasPermission("fly.admin")) {
-                            Utils.autoSendMsg(sender, "&a/fly &breload &f- &e重载配置");
 
-                            Utils.autoSendMsg(sender, "&d以下为权限列表: ");
-                            Utils.autoSendMsg(sender, "&afly.fly &f- &e允许玩家开启或关闭飞行");
-                            Utils.autoSendMsg(sender, "&afly.nohunger &f- &e允许玩家飞行时不消耗饥饿值");
-                            Utils.autoSendMsg(sender, "&afly.other &f- &e允许玩家开启或关闭他人的飞行");
-                            Utils.autoSendMsg(sender, "&afly.admin &f- &e可收到权限列表");
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Start")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o));
                         }
-                    } else if (HandleConfig.config.getInteger("HelpMsgType") == 2) {
-                        Utils.autoSendMsg(sender, "&7你可以使用&8/Fly|Fwf|FlyWithFood&7来使用本插件");
-                        Utils.autoSendMsg(sender, "&8╔══════════════════════════════");
-                        if (sender.hasPermission("fly.fly")) {
-                            Utils.autoSendMsg(sender, "&8║ &7/fly [ON|OFF|Toggle] &f- &8为你自己开启或关闭飞行");
+                    }
+                    if (sender.hasPermission("fly.fly")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Fly")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
                         }
-                        if (sender.hasPermission("fly.other")) {
-                            Utils.autoSendMsg(sender, "&8║ &7/fly [ON|OFF|Toggle] [玩家] &f- &8为指定玩家开启或关闭飞行");
+                    }
+                    if (sender.hasPermission("fly.other")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Other")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
                         }
-                        if (sender.hasPermission("fly.admin")) {
-                            Utils.autoSendMsg(sender, "&8║ &7/fly Reload &f- &8重载配置");
-                            Utils.autoSendMsg(sender, "&8╠══════════════════════════════");
-                            Utils.autoSendMsg(sender, "&8║ 权限列表: ");
-                            Utils.autoSendMsg(sender, "&8║ &7fly.fly &f- &8允许玩家开启或关闭飞行");
-                            Utils.autoSendMsg(sender, "&8║ &7fly.nohunger &f- &8允许玩家飞行时不消耗饥饿值");
-                            Utils.autoSendMsg(sender, "&8║ &7fly.other &f- &8允许玩家开启或关闭他人的飞行");
-                            Utils.autoSendMsg(sender, "&8║ &7fly.admin &f- &8可收到权限列表");
+                    }
+                    if (sender.hasPermission("fly.admin")) {
+                        for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("Admin")) {
+                            if (o instanceof String) {
+                                Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                            }
                         }
-                        Utils.autoSendMsg(sender, "&8╚══════════════════════════════");
-                    } else {
-                        Utils.autoSendMsg(sender, "&c插件配置出现错误，请联系服务器管理员操作.错误原因: &fHelpMsgType");
+                    }
+                    for (Object o : HandleConfig.config.getJSONObject("Languages").getJSONArray("End")) {
+                        if (o instanceof String) {
+                            Utils.autoSendMsg(sender, ((String) o).replace("%command%", "/fly"));
+                        }
                     }
                     return CommandResult.success();
                 })
