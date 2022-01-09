@@ -52,9 +52,9 @@ public class Utils {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     if (HandleConfig.config.getString("Language").equalsIgnoreCase("Chinese")) {
-                        FlyWithFood.logger.warning("Title数量错误!最多仅有2行!");
+                        FlyWithFood.LOGGER.warning("Title数量错误!最多仅有2行!");
                     } else {
-                        FlyWithFood.logger.warning("Title Messages can only have two at most!");
+                        FlyWithFood.LOGGER.warning("Title Messages can only have two at most!");
                     }
                     HandleConfig.enableTitle = false;
                     return;

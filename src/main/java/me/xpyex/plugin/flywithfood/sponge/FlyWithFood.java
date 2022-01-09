@@ -33,24 +33,24 @@ import java.util.function.Consumer;
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
-    public static Logger logger;
+    public static Logger LOGGER;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         INSTANCE = this;
-        logger = LoggerFactory.getLogger("FlyWithFood");
+        LOGGER = LoggerFactory.getLogger("FlyWithFood");
         FlyCmd.registerCmd();
         if (!HandleConfig.loadConfig()) {
-            logger.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
-            logger.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+            LOGGER.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
+            LOGGER.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
             return;
         }
         if (VersionUtil.getPluginConfigVersion() != VersionUtil.getLocalConfigVersion()) {
-            logger.info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
+            LOGGER.info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
             HandleConfig.updateConfigFile();
             if (!HandleConfig.reloadConfig()) {
-                logger.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
-                logger.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+                LOGGER.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
+                LOGGER.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
                 return;
             }
         }
@@ -58,8 +58,8 @@ public class FlyWithFood {
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
-        logger.info("成功加载配置文件");
-        logger.info("已成功加载!");
+        LOGGER.info("成功加载配置文件");
+        LOGGER.info("已成功加载!");
     }
 
     @Listener

@@ -42,22 +42,22 @@ public class HandleConfig {
     public static boolean loadConfig() {
         try {
             if (!ROOT.exists()) {
-                FlyWithFood.logger.info("第一次加载？正在生成配置文件!");
-                FlyWithFood.logger.info("Are you using this plugin for the first time? The configuration file is being generated for you!");
-                FlyWithFood.logger.info(" ");
+                FlyWithFood.LOGGER.info("第一次加载？正在生成配置文件!");
+                FlyWithFood.LOGGER.info("Are you using this plugin for the first time? The configuration file is being generated for you!");
+                FlyWithFood.LOGGER.info(" ");
                 createConfigFile();
                 createHowToConfigFile();
             }
             if (!CONFIG_FILE.exists()) {
-                FlyWithFood.logger.info("配置文件丢失？正在生成配置文件!");
-                FlyWithFood.logger.info("Lost your configuration file? The configuration file is being generated for you!");
-                FlyWithFood.logger.info(" ");
+                FlyWithFood.LOGGER.info("配置文件丢失？正在生成配置文件!");
+                FlyWithFood.LOGGER.info("Lost your configuration file? The configuration file is being generated for you!");
+                FlyWithFood.LOGGER.info(" ");
                 createConfigFile();
             }
             if (!HOW_TO_CONFIG_FILE_CH.exists()) {
-                FlyWithFood.logger.info("教程文件丢失？正在生成教程文件!");
-                FlyWithFood.logger.info("Lost your tutorial files? The configuration file is being generated for you!");
-                FlyWithFood.logger.info(" ");
+                FlyWithFood.LOGGER.info("教程文件丢失？正在生成教程文件!");
+                FlyWithFood.LOGGER.info("Lost your tutorial files? The configuration file is being generated for you!");
+                FlyWithFood.LOGGER.info(" ");
                 createHowToConfigFile();
             }
             StringBuilder configText = new StringBuilder();
@@ -82,11 +82,11 @@ public class HandleConfig {
                         Player.class.getMethod("sendTitle", String.class, String.class);
                         isOldVer = true;
                     } catch (Throwable ignored2) {
-                        FlyWithFood.logger.warning("你的服务器不支持发送Title信息!");
-                        FlyWithFood.logger.warning("请在配置文件禁用Title信息");
-                        FlyWithFood.logger.warning(" ");
-                        FlyWithFood.logger.warning("Your server does not support sending Title Messages!");
-                        FlyWithFood.logger.warning("Please disable this function in config file.");
+                        FlyWithFood.LOGGER.warning("你的服务器不支持发送Title信息!");
+                        FlyWithFood.LOGGER.warning("请在配置文件禁用Title信息");
+                        FlyWithFood.LOGGER.warning(" ");
+                        FlyWithFood.LOGGER.warning("Your server does not support sending Title Messages!");
+                        FlyWithFood.LOGGER.warning("Please disable this function in config file.");
                         enableTitle = false;
                     }
                 }
@@ -97,14 +97,14 @@ public class HandleConfig {
                     TextComponent.fromLegacyText("检查是否支持ActionBar的方法(非常粗暴");
                     Player.Spigot.class.getMethod("sendMessage", ChatMessageType.class, BaseComponent.class);
                 } catch (Throwable ignored) {
-                    FlyWithFood.logger.warning("你的服务器不支持直接发送Action信息!");
-                    FlyWithFood.logger.warning("将尝试调用NMS以发送Action信息");
+                    FlyWithFood.LOGGER.warning("你的服务器不支持直接发送Action信息!");
+                    FlyWithFood.LOGGER.warning("将尝试调用NMS以发送Action信息");
                     NMSAll.shouldUseNMSAction = true;
-                    FlyWithFood.logger.info("当前服务端NMS版本: " + NMSAll.nmsVer);
-                    FlyWithFood.logger.warning(" ");
-                    FlyWithFood.logger.warning("Your server does not support sending Action Messages directly!");
-                    FlyWithFood.logger.warning("FlyWithFood will try to use NMS to send Action Messages.");
-                    FlyWithFood.logger.info("The NMS Version of your server: " + NMSAll.nmsVer);
+                    FlyWithFood.LOGGER.info("当前服务端NMS版本: " + NMSAll.nmsVer);
+                    FlyWithFood.LOGGER.warning(" ");
+                    FlyWithFood.LOGGER.warning("Your server does not support sending Action Messages directly!");
+                    FlyWithFood.LOGGER.warning("FlyWithFood will try to use NMS to send Action Messages.");
+                    FlyWithFood.LOGGER.info("The NMS Version of your server: " + NMSAll.nmsVer);
                 }
             }
             FlyWithFood.startCheck();

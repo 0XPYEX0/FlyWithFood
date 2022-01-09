@@ -33,16 +33,16 @@ public class HandleConfig {
     public static boolean loadConfig() {
         try {
             if (!root.exists()) {
-                FlyWithFood.logger.info("第一次加载？正在生成配置文件!");
+                FlyWithFood.LOGGER.info("第一次加载？正在生成配置文件!");
                 createConfigFile();
                 createHowToConfigFile();
             }
             if (!configFile.exists()) {
-                FlyWithFood.logger.info("配置文件丢失？正在生成配置文件!");
+                FlyWithFood.LOGGER.info("配置文件丢失？正在生成配置文件!");
                 createConfigFile();
             }
             if (!howToConfigFile.exists()) {
-                FlyWithFood.logger.info("教程文件丢失？正在生成教程文件!");
+                FlyWithFood.LOGGER.info("教程文件丢失？正在生成教程文件!");
                 createHowToConfigFile();
             }
             Scanner in = new Scanner(configFile, "UTF-8");
@@ -66,8 +66,8 @@ public class HandleConfig {
                 supportTitleMsg = false;
             }
             if (enableTitle && !supportTitleMsg) {
-                FlyWithFood.logger.warn("你的服务器不支持发送Title信息!");
-                FlyWithFood.logger.warn("请在配置中禁用Title信息!");
+                FlyWithFood.LOGGER.warn("你的服务器不支持发送Title信息!");
+                FlyWithFood.LOGGER.warn("请在配置中禁用Title信息!");
                 enableTitle = false;
             }
 
@@ -78,8 +78,8 @@ public class HandleConfig {
                 supportActionMsg = false;
             }
             if (enableAction && !supportActionMsg) {
-                FlyWithFood.logger.warn("你的服务器不支持发送Action信息!");
-                FlyWithFood.logger.warn("请在配置中禁用Action信息!");
+                FlyWithFood.LOGGER.warn("你的服务器不支持发送Action信息!");
+                FlyWithFood.LOGGER.warn("请在配置中禁用Action信息!");
                 enableAction = false;
             }
             FlyWithFood.startCheck();

@@ -46,7 +46,7 @@ public class Utils {
             if (!titleDisableMsg.isEmpty()) {
                 String[] titles = titleDisableMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
-                    FlyWithFood.logger.warn("Title数量错误!最多仅有2行!");
+                    FlyWithFood.LOGGER.warn("Title数量错误!最多仅有2行!");
                     HandleConfig.enableTitle = false;
                     return;
                 }

@@ -86,8 +86,8 @@ public class NMSUtil {
             }
         } catch (ReflectiveOperationException e) {
             HandleConfig.enableAction = false;
-            FlyWithFood.logger.warning("你的服务器不支持发送Action信息！");
-            FlyWithFood.logger.warning("请在配置文件禁用Action信息！");
+            FlyWithFood.LOGGER.warning("你的服务器不支持发送Action信息！");
+            FlyWithFood.LOGGER.warning("请在配置文件禁用Action信息！");
             throw new IllegalStateException(e);
         }
     }
@@ -113,8 +113,8 @@ public class NMSUtil {
             } catch (Exception e) {
                 e.printStackTrace();
                 HandleConfig.enableAction = false;
-                FlyWithFood.logger.warning("你的服务器不支持发送Action信息！");
-                FlyWithFood.logger.warning("请在配置文件禁用Action信息！");
+                FlyWithFood.LOGGER.warning("你的服务器不支持发送Action信息！");
+                FlyWithFood.LOGGER.warning("请在配置文件禁用Action信息！");
             }
         });
     }
