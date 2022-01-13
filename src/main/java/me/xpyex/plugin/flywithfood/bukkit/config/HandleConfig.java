@@ -107,7 +107,6 @@ public class HandleConfig {
                     FlyWithFood.LOGGER.info("The NMS Version of your server: " + NMSAll.nmsVer);
                 }
             }
-            FlyWithFood.startCheck();
         } catch (Exception e) {
             e.printStackTrace();
             return false;

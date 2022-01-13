@@ -64,6 +64,8 @@ public final class FlyWithFood extends JavaPlugin {
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
+        startCheck();
+
         LOGGER.info("已成功加载!");
         LOGGER.info("Plugin is loaded!!");
 

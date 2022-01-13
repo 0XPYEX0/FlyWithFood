@@ -58,6 +58,8 @@ public class FlyWithFood {
         HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
+        startCheck();
+
         LOGGER.info("成功加载配置文件");
         LOGGER.info("已成功加载!");
     }

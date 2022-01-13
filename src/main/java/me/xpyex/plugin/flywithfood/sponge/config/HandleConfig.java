@@ -82,7 +82,6 @@ public class HandleConfig {
                 FlyWithFood.LOGGER.warn("请在配置中禁用Action信息!");
                 enableAction = false;
             }
-            FlyWithFood.startCheck();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
