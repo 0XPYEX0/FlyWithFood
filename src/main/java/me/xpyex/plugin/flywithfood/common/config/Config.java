@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class Config {
+    public static final String PLUGIN_VERSION = "1.2.6";
     public static final int CONFIG_VERSION = 4;
     public static JSONObject getNewConfig() {
         JSONObject outJson = new JSONObject();

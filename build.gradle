@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
-    compile 'com.alibaba:fastjson:1.2.78'
+    compile 'com.alibaba:fastjson:1.2.79'
     compileOnly 'org.spongepowered:spongeapi:7.3.0'
     annotationProcessor 'org.spongepowered:spongeapi:7.3.0'
 }

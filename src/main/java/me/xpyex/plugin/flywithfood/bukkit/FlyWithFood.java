@@ -3,6 +3,8 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
+import me.xpyex.plugin.flywithfood.common.config.Config;
+import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
@@ -65,6 +67,15 @@ public final class FlyWithFood extends JavaPlugin {
         HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
 
         startCheck();
+        Bukkit.getScheduler().runTaskAsynchronously(INSTANCE, () -> {
+            NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
+            if (NetWorkUtil.newVer != null) {
+                LOGGER.info("你当前运行的版本为 v" + Config.PLUGIN_VERSION);
+                LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
+            } else {
+                LOGGER.info("当前已是最新版本");
+            }
+        });
 
         LOGGER.info("已成功加载!");
         LOGGER.info("Plugin is loaded!!");
