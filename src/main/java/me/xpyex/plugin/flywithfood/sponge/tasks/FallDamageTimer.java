@@ -32,9 +32,7 @@ public class FallDamageTimer implements Consumer<Task> {
 
     public void start() {
         Task.builder()
-                .execute(() ->
-                        new FallDamageTimer(player)
-                )
+                .execute(this)
                 .delayTicks(4)
                 .intervalTicks(4)
                 .submit(FlyWithFood.INSTANCE);
