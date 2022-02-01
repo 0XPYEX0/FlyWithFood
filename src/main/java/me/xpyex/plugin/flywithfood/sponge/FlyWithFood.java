@@ -6,7 +6,10 @@ import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.implementations.FWFUser;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.EXPLevelEnergy;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.EXPPointEnergy;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.FoodEnergy;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.MoneyEnergy;
 import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +41,14 @@ public class FlyWithFood {
         INSTANCE = this;
         LOGGER = LoggerFactory.getLogger("FlyWithFood");
         FlyCmd.registerCmd();
+
+        {
+            new EXPPointEnergy().register();
+            new EXPLevelEnergy().register();
+            new FoodEnergy().register();
+            new MoneyEnergy().register();
+        }
+
         if (!HandleConfig.loadConfig()) {
             LOGGER.error("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
             LOGGER.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
@@ -57,6 +68,7 @@ public class FlyWithFood {
         HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
 
         startCheck();
+
         Task.builder().execute(() -> {
                     NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
                     if (NetWorkUtil.newVer != null) {

@@ -2,12 +2,15 @@ package me.xpyex.plugin.flywithfood.sponge.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Scanner;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
@@ -19,10 +22,10 @@ import org.spongepowered.api.text.title.Title;
 
 public class HandleConfig {
     public static FWFConfig config;
-    static final File root = new File("config/FlyWithFood/");
-    static final File configFile = new File("config/FlyWithFood/config.json");
-    static final File howToConfigFile = new File("config/FlyWithFood/HowToConfig.txt");
-    static final File bakFolder = new File("config/FlyWithFood/bakConfig");
+    static final File ROOT = new File("config/FlyWithFood/");
+    static final File CONFIG_FILE = new File("config/FlyWithFood/config.json");
+    static final File HOW_TO_CONFIG_FILE = new File("config/FlyWithFood/HowToConfig.txt");
+    static final File BAK_FOLDER = new File("config/FlyWithFood/bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
     public static boolean enableAction;
@@ -33,24 +36,30 @@ public class HandleConfig {
 
     public static boolean loadConfig() {
         try {
-            if (!root.exists()) {
+            if (!ROOT.exists()) {
                 FlyWithFood.LOGGER.info("第一次加载？正在生成配置文件!");
                 createConfigFile();
                 createHowToConfigFile();
             }
-            if (!configFile.exists()) {
+            if (!CONFIG_FILE.exists()) {
                 FlyWithFood.LOGGER.info("配置文件丢失？正在生成配置文件!");
                 createConfigFile();
             }
-            if (!howToConfigFile.exists()) {
+            if (!HOW_TO_CONFIG_FILE.exists()) {
                 FlyWithFood.LOGGER.info("教程文件丢失？正在生成教程文件!");
                 createHowToConfigFile();
             }
-            Scanner in = new Scanner(configFile, "UTF-8");
             StringBuilder configText = new StringBuilder();
-            while (in.hasNext()) {
-                configText.append(in.next());
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(CONFIG_FILE), StandardCharsets.UTF_8));  //Scanner会分割空格，导致消息缺失部分
+            String line;
+            while ((line = in.readLine()) != null) {
+                if (line.contains("//")) {
+                    line = line.split("//")[0];  //不读取注释
+                }
+                configText.append(line);
             }
+            in.close();
             in.close();
             config = new FWFConfig(JSON.parseObject(configText.toString()));
 
@@ -101,12 +110,12 @@ public class HandleConfig {
     }
 
     public static void createConfigFile(JSONObject json) throws Exception {
-        if (!root.exists()) {
-            root.mkdirs();
+        if (!ROOT.exists()) {
+            ROOT.mkdirs();
         }
-        configFile.createNewFile();
+        CONFIG_FILE.createNewFile();
 
-        PrintWriter out = new PrintWriter(configFile, "UTF-8");
+        PrintWriter out = new PrintWriter(CONFIG_FILE, "UTF-8");
         out.write(JSON.toJSONString(json, true));
         out.flush();
         out.close();
@@ -114,17 +123,17 @@ public class HandleConfig {
 
     public static void updateConfigFile() {
         try {
-            if (!HandleConfig.configFile.exists()) {
+            if (!HandleConfig.CONFIG_FILE.exists()) {
                 createConfigFile();
                 return;
             }
-            if (!bakFolder.exists()) {
-                bakFolder.mkdirs();
+            if (!BAK_FOLDER.exists()) {
+                BAK_FOLDER.mkdirs();
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String time = format.format(new Date());
             File targetFile = new File("config/FlyWithFood/bakConfig/config_" + time + ".json");
-            configFile.renameTo(targetFile);
+            CONFIG_FILE.renameTo(targetFile);
             JSONObject newJO = getNewConfig();
             for (String value : config.languages.keySet()) {
                 newJO.getJSONObject("Languages").put(value, config.languages.get(value));
@@ -146,9 +155,9 @@ public class HandleConfig {
     }
 
     public static void createHowToConfigFile() throws Exception {
-        howToConfigFile.createNewFile();
+        HOW_TO_CONFIG_FILE.createNewFile();
 
-        PrintWriter out = new PrintWriter(howToConfigFile, "UTF-8");
+        PrintWriter out = new PrintWriter(HOW_TO_CONFIG_FILE, "UTF-8");
         out.println("ConfigVersion: 配置文件版本，更新用，请勿自行调节！");
         out.println("FoodCost: 每秒消耗的饥饿值,每一格为2点");
         out.println("FoodDisable: 饥饿值小于该值则关闭飞行");

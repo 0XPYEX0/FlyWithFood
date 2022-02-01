@@ -68,6 +68,9 @@ public class HandleConfig {
                     new FileInputStream(CONFIG_FILE), StandardCharsets.UTF_8));  //Scanner会分割空格，导致消息缺失部分
             String line;
             while ((line = in.readLine()) != null) {
+                if (line.contains("//")) {
+                    line = line.split("//")[0];  //不读取注释
+                }
                 configText.append(line);
             }
             in.close();

@@ -38,6 +38,24 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Have a nice trip with this plugin  :)");
         LOGGER.info(" ");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
+
+        {
+            new EXPPointEnergy().register();
+            new EXPLevelEnergy().register();
+            new FoodEnergy().register();
+            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+                new MoneyEnergy().register();
+
+                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+                if (rsp == null) {
+                    return;
+                }
+                econ = rsp.getProvider();
+
+                LOGGER.info("已与Vault挂钩");
+            }
+        }
+
         if (!HandleConfig.loadConfig()) {
             LOGGER.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
             LOGGER.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
@@ -70,21 +88,6 @@ public final class FlyWithFood extends JavaPlugin {
         HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
 
         startCheck();
-
-        {
-            new EXPPointEnergy().register();
-            new EXPLevelEnergy().register();
-            new FoodEnergy().register();
-            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                new MoneyEnergy().register();
-
-                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-                if (rsp == null) {
-                    return;
-                }
-                econ = rsp.getProvider();
-            }
-        }
 
         Bukkit.getScheduler().runTaskAsynchronously(INSTANCE, () -> {
             NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
