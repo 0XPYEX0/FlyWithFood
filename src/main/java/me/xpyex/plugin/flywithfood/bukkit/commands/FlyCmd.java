@@ -1,24 +1,22 @@
 package me.xpyex.plugin.flywithfood.bukkit.commands;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.common.types.DenyReason;
-import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFDisableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFEnableFlyEvent;
+import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.FWFUser;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
-
+import me.xpyex.plugin.flywithfood.common.types.DenyReason;
+import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class FlyCmd implements CommandExecutor {
     @Override
@@ -139,21 +137,23 @@ public class FlyCmd implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("on")) {
-                if (target.hasPotionEffect(PotionEffectType.SATURATION) && !target.hasPermission("fly.nohunger")) {
-                    FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.HasEffect, "on");
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (target != sender) {
-                        if (HandleConfig.config.isChinese) {
-                            Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
-                        } else {
-                            Utils.autoSendMsg(sender, "&cUnable to turn flight for player &f" + target.getName() + " &c because: The player has Saturation Effect");
+                if (targetUser.getInfo().getEnergy() instanceof FoodEnergy) {
+                    if (targetUser.hasSaturationEff() && !targetUser.nocost()) {
+                        FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.HasEffect, "on");
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (target != sender) {
+                            if (HandleConfig.config.isChinese) {
+                                Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
+                            } else {
+                                Utils.autoSendMsg(sender, "&cUnable to turn flight for player &f" + target.getName() + " &c because: The player has Saturation Effect");
+                            }
+                            return true;
                         }
+                        Utils.sendFWFMsg(target, FWFMsgType.HasEffect);
                         return true;
                     }
-                    Utils.sendFWFMsg(target, FWFMsgType.HasEffect);
-                    return true;
                 }
-                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !target.hasPermission("fly.nohunger")) {
+                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !targetUser.nocost()) {
                     FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.NotEnoughFood, "on");
                     Bukkit.getPluginManager().callEvent(event);
                     if (target != sender) {

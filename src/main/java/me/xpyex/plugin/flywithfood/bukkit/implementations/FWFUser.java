@@ -55,6 +55,10 @@ public class FWFUser {
         return new FWFInfo(cost, disable, mode);
     }
 
+    public boolean nocost() {
+        return (player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost"));
+    }
+
     public Number getNow() {
         return getInfo().getEnergy().getNow(player);
     }
@@ -82,7 +86,7 @@ public class FWFUser {
         if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
             return false;
         }
-        if (player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost")) {  //若玩家拥有权限无视消耗，则没有处理的必要
+        if (nocost()) {  //若玩家拥有权限无视消耗，则没有处理的必要
             return false;
         }
         return true;

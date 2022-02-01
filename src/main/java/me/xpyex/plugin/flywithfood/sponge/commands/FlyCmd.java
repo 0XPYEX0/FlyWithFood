@@ -109,7 +109,7 @@ public class FlyCmd {
                             }
                             if (targetUser.getInfo().getEnergy() instanceof FoodEnergy) {
                                 if (targetUser.hasSaturationEff()) {
-                                    if (!target.hasPermission("fly.nohunger") && !target.hasPermission("fly.nocost")) {
+                                    if (!targetUser.nocost()) {
                                         if (sender != target) {
                                             Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
                                             return CommandResult.success();
@@ -119,7 +119,7 @@ public class FlyCmd {
                                     }
                                 }
                             }
-                            if ((target.foodLevel().get() < targetUser.getInfo().getDisable()) && !target.hasPermission("fly.nohunger")) {
+                            if ((target.foodLevel().get() < targetUser.getInfo().getDisable()) && !targetUser.nocost()) {
                                 if (target != sender) {
                                     Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家饱食度不足");
                                     return CommandResult.success();
