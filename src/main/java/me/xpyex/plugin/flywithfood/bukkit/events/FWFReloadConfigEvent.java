@@ -31,11 +31,11 @@ public class FWFReloadConfigEvent extends FWFEvent {
     }
 
     public JSONObject getNewJSON() {
-        return HandleConfig.config;
+        return HandleConfig.config.config;
     }
 
     public String getNewJSONText() {
-        return JSON.toJSONString(HandleConfig.config);
+        return JSON.toJSONString(HandleConfig.config.config);
     }
 
     public String getNewJSONTextPretty() {

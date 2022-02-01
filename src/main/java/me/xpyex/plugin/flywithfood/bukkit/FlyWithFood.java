@@ -1,25 +1,28 @@
 package me.xpyex.plugin.flywithfood.bukkit;
 
+import java.util.logging.Logger;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
-import me.xpyex.plugin.flywithfood.common.config.Config;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.FWFUser;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EXPLevelEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EXPPointEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FlyEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FoodEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.MoneyEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
-import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
-import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
-
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.logging.Logger;
 
 public final class FlyWithFood extends JavaPlugin {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
+    public static Economy econ;
 
     @Override
     public void onEnable() {
@@ -63,15 +66,36 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Load config file successfully");
         LOGGER.info(" ");
 
-        HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
-        HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
+        HandleConfig.functionWL = HandleConfig.config.functionWL.getBoolean("Enable");
+        HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
 
         startCheck();
+
+        {
+            new EXPPointEnergy().register();
+            new EXPLevelEnergy().register();
+            new FoodEnergy().register();
+            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+                new MoneyEnergy().register();
+
+                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+                if (rsp == null) {
+                    return;
+                }
+                econ = rsp.getProvider();
+            }
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(INSTANCE, () -> {
             NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
             if (NetWorkUtil.newVer != null) {
-                LOGGER.info("你当前运行的版本为 v" + Config.PLUGIN_VERSION);
+                LOGGER.info("你当前运行的版本为 v" + INSTANCE.getDescription().getVersion());
                 LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
+                LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
+                LOGGER.info(" ");
+                LOGGER.info("You are running FlyWithFood v" + INSTANCE.getDescription().getVersion());
+                LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
+                LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
             } else {
                 LOGGER.info("当前已是最新版本");
             }
@@ -90,60 +114,31 @@ public final class FlyWithFood extends JavaPlugin {
     }
 
     public static void startCheck() {
-        int cost = HandleConfig.config.getInteger("FoodCost"); //每秒消耗的饱食度,20为满,奇数即半格
-        int disable = HandleConfig.config.getInteger("FoodDisable"); //饱食度消耗至多少关闭飞行
-        int howLongCheck = HandleConfig.config.getInteger("CheckSeconds");  //间隔多少秒检查一次
         Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> {
-            boolean FunctionWLEnable = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
-            boolean NoCostFoodWLEnable = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (FunctionWLEnable && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
-                    continue;  //如果这个世界并未启用插件，则没有处理的必要
-                }
-                if (NoCostFoodWLEnable && HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getJSONArray("Worlds").contains(player.getLocation().getWorld().getName())) {
-                    continue;  //如果这个世界不需要消耗饥饿值，则没有处理的必要
-                }
-                if (!player.isFlying()) {  //玩家不在飞行则没有处理他的必要
+                FWFUser user = new FWFUser(player);
+                if (!user.needCheck()) {
                     continue;
                 }
-                if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
-                    continue;
+                double cost = user.getInfo().getCost();  //每秒消耗的数值，可为饥饿值或经验值
+                double disable = user.getInfo().getDisable(); //消耗至多少关闭飞行
+                FlyEnergy mode = user.getInfo().getEnergy();  //消耗什么数值
+                if (mode instanceof FoodEnergy) {
+                    if (user.hasSaturationEff()) {  //若玩家拥有饱和Buff，则禁止飞行
+                        user.disableFly();  //关闭玩家的飞行
+                        user.sendFWFMsg(FWFMsgType.HasEffect);
+                        continue;
+                    }
                 }
-                if (player.hasPermission("fly.nohunger")) {  //若玩家拥有权限无视消耗，则没有处理的必要
-                    continue;
-                }
-                if (player.hasPotionEffect(PotionEffectType.SATURATION)) {  //若玩家拥有饱和Buff，则禁止飞行
-                    Bukkit.getScheduler().runTask(INSTANCE, () -> {
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                    });
-                    Utils.sendFWFMsg(player, FWFMsgType.HasEffect);
-                    continue;
-                }
-                int nowFood = player.getFoodLevel();
-                Bukkit.getScheduler().runTask(INSTANCE, () ->
-                        player.setFoodLevel(Math.max((nowFood - cost), 0))  //扣除饥饿值
-                );
-                if ((nowFood - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
-                    FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(player);
-                    Bukkit.getScheduler().runTask(INSTANCE, () -> {
-                        Bukkit.getPluginManager().callEvent(event);
-                        player.setAllowFlight(false);
-                        player.setFlying(false);
-                    });
-                    Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    new BukkitRunnable() {  //为玩家免疫掉落伤害
-                        @Override
-                        public void run() {
-                            if ((!player.isOnline()) || player.getAllowFlight() || player.isOnGround()) {
-                                cancel();
-                                return;
-                            }
-                            player.setFallDistance(0f);
-                        }
-                    }.runTaskTimer(INSTANCE, 4L, 4L);
+                int now = user.getNow().intValue();
+                user.cost(now - cost);  //扣除数值
+                if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
+                    FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(user.getPlayer());
+                    user.disableFly(event);  //关闭玩家的飞行
+                    user.sendFWFMsg(FWFMsgType.CanNotFly);
+                    user.protectFromFall();  //为玩家免疫掉落伤害
                 }
             }
-        }, 0L, howLongCheck * 20L);
+        }, 0L, HandleConfig.config.howLongCheck * 20L);  //间隔多少秒检查一次
     }
 }

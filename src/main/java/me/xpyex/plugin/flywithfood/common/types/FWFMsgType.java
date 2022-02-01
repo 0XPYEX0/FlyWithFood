@@ -7,9 +7,11 @@ public enum FWFMsgType {
     CanNotEnable("CannotEnable"),
     HasEffect("HasEffect"),
     NoPermission("NoPermission"),
+    PlayerNotOnline("PlayerNotOnline"),
+    PlayerOnly("PlayerOnly"),
     DisableInThisWorld("DisableInThisWorld");
 
-    private String msgType;
+    private final String msgType;
 
     FWFMsgType(String msgType) {
         this.msgType = msgType;

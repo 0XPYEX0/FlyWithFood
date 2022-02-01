@@ -8,3 +8,5 @@ commands:
     aliases:
       - fwf
       - fly
+softdepend:
+  - Vault

@@ -1,23 +1,24 @@
 package me.xpyex.plugin.flywithfood.sponge.config;
 
-import me.xpyex.plugin.flywithfood.common.config.Config;
-import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
-import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import java.io.File;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Scanner;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
+import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
+import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.EnergyManager;
+import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 import org.spongepowered.api.effect.Viewer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
-
 public class HandleConfig {
-    public static JSONObject config;
+    public static FWFConfig config;
     static final File root = new File("config/FlyWithFood/");
     static final File configFile = new File("config/FlyWithFood/config.json");
     static final File howToConfigFile = new File("config/FlyWithFood/HowToConfig.txt");
@@ -51,11 +52,17 @@ public class HandleConfig {
                 configText.append(in.next());
             }
             in.close();
-            config = JSON.parseObject(configText.toString());
+            config = new FWFConfig(JSON.parseObject(configText.toString()));
 
-            enableRawMsg = config.getJSONObject("Languages").getJSONObject("RawMsg").getBoolean("Enable");
-            enableTitle = config.getJSONObject("Languages").getJSONObject("TitleMsg").getBoolean("Enable");
-            enableAction = config.getJSONObject("Languages").getJSONObject("ActionMsg").getBoolean("Enable");
+            if (!EnergyManager.hasEnergy(config.mode)) {
+                FlyWithFood.LOGGER.error("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种");
+                FlyWithFood.LOGGER.error("Error!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()));
+                return false;
+            }
+
+            enableRawMsg = config.languages.getJSONObject("RawMsg").getBoolean("Enable");
+            enableTitle = config.languages.getJSONObject("TitleMsg").getBoolean("Enable");
+            enableAction = config.languages.getJSONObject("ActionMsg").getBoolean("Enable");
 
 
             boolean supportTitleMsg = true;
@@ -119,14 +126,16 @@ public class HandleConfig {
             File targetFile = new File("config/FlyWithFood/bakConfig/config_" + time + ".json");
             configFile.renameTo(targetFile);
             JSONObject newJO = getNewConfig();
-            for (String value : config.keySet()) {
-                newJO.put(value, config.get(value));
+            for (String value : config.languages.keySet()) {
+                newJO.getJSONObject("Languages").put(value, config.languages.get(value));
             }
-            if (!newJO.getJSONObject("Languages").containsKey("DisableInThisWorld")) {
-                newJO.getJSONObject("Languages").put("DisableInThisWorld", "&c这个世界不允许使用这个命令");
-            }
-            if (!newJO.getJSONObject("Languages").containsKey("NoPermission")) {
-                newJO.getJSONObject("Languages").put("NoPermission", "&c你没有权限");
+            for (String value : config.config.keySet()) {
+                if (value.equals("Languages")) continue;
+                if (value.contains("Food")) {
+                    newJO.put(value.replace("Food", ""), config.config.get(value));
+                    continue;
+                }
+                newJO.put(value, config.config.get(value));
             }
             newJO.put("ConfigVersion", VersionUtil.getPluginConfigVersion());
             createConfigFile(newJO);
@@ -168,6 +177,6 @@ public class HandleConfig {
     }
 
     public static JSONObject getNewConfig() {
-        return Config.getNewConfig();
+        return ConfigUtil.getNewConfig();
     }
 }

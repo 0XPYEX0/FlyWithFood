@@ -23,11 +23,11 @@ public class Utils {
     }
     public static void sendFWFMsg(CommandSource target, FWFMsgType msgType) {
         if (msgType == FWFMsgType.DisableInThisWorld || msgType == FWFMsgType.NoPermission) {
-            target.sendMessage(Text.of(getColorfulMsg(HandleConfig.config.getJSONObject("Languages").getString(msgType.getValue()))));
+            target.sendMessage(Text.of(getColorfulMsg(HandleConfig.config.languages.getString(msgType.getValue()))));
             return;
         }
         if (HandleConfig.enableRawMsg) {
-            String rawDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("RawMsg").getString(msgType.getValue());
+            String rawDisableMsg = HandleConfig.config.languages.getJSONObject("RawMsg").getString(msgType.getValue());
             if (!rawDisableMsg.isEmpty()) {
                 target.sendMessage(Text.of(getColorfulMsg(rawDisableMsg)));
             }
@@ -36,13 +36,13 @@ public class Utils {
             return;
         }
         if (HandleConfig.enableAction) {
-            String actionDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("ActionMsg").getString(msgType.getValue());
+            String actionDisableMsg = HandleConfig.config.languages.getJSONObject("ActionMsg").getString(msgType.getValue());
             if (!actionDisableMsg.isEmpty()) {
                 ((Viewer) target).sendTitle(Title.builder().actionBar(Text.of(actionDisableMsg)).build());
             }
         }
         if (HandleConfig.enableTitle) {
-            String titleDisableMsg = HandleConfig.config.getJSONObject("Languages").getJSONObject("TitleMsg").getString(msgType.getValue());
+            String titleDisableMsg = HandleConfig.config.languages.getJSONObject("TitleMsg").getString(msgType.getValue());
             if (!titleDisableMsg.isEmpty()) {
                 String[] titles = titleDisableMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {

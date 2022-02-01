@@ -1,26 +1,25 @@
 package me.xpyex.plugin.flywithfood.sponge;
 
+import java.util.concurrent.TimeUnit;
+
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
+import me.xpyex.plugin.flywithfood.sponge.implementations.FWFUser;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
-
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import org.spongepowered.api.service.economy.EconomyService;
 
 @Plugin(
         id = "flywithfood-sponge",
@@ -34,6 +33,7 @@ import java.util.function.Consumer;
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
+    public static final EconomyService ECONOMY_SERVICE = Sponge.getServiceManager().provide(EconomyService.class).get();
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -55,8 +55,8 @@ public class FlyWithFood {
             }
         }
 
-        HandleConfig.functionWL = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
-        HandleConfig.noCostWL = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
+        HandleConfig.functionWL = HandleConfig.config.functionWL.getBoolean("Enable");
+        HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
 
         startCheck();
 
@@ -77,45 +77,27 @@ public class FlyWithFood {
 
     public static void startCheck() {
         Task.Builder Scheduler = Task.builder();
-        int cost = HandleConfig.config.getInteger("FoodCost"); //每秒消耗的饱食度,20为满,奇数即半格
-        int disable = HandleConfig.config.getInteger("FoodDisable"); //饱食度消耗至多少关闭飞行
         Scheduler.execute(() -> {
-            boolean FunctionWLEnable = HandleConfig.config.getJSONObject("FunctionsWhitelist").getBoolean("Enable");
-            boolean NoCostFoodWLEnable = HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getBoolean("Enable");
             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                if (FunctionWLEnable && !HandleConfig.config.getJSONObject("FunctionsWhitelist").getJSONArray("Worlds").contains(player.getWorld().getName())) {
+                FWFUser user = new FWFUser(player);
+                if (!user.needCheck()) {
                     continue;
                 }
-                if (NoCostFoodWLEnable && HandleConfig.config.getJSONObject("NoCostFoodWhitelist").getJSONArray("Worlds").contains(player.getWorld().getName())) {
-                    continue;
+                if (user.getInfo().getEnergy() instanceof FoodEnergy) {
+                    if (user.hasSaturationEff()) {
+                        user.disableFly();
+                        user.sendFWFMsg(FWFMsgType.HasEffect);
+                        continue;
+                    }
                 }
-                if (!player.get(Keys.IS_FLYING).orElse(false)) {
-                    continue;
-                }
-                if ("CREATIVE, SPECTATOR".toLowerCase().contains(player.gameMode().get().getName().toLowerCase())) {
-                    continue;
-                }
-                if (player.hasPermission("fly.nohunger")) {
-                    continue;
-                }
-                if (Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION)) {
-                    player.offer(Keys.CAN_FLY, false);
-                    player.offer(Keys.IS_FLYING, false);
-                    Utils.sendFWFMsg(player, FWFMsgType.HasEffect);
-                    continue;
-                }
-                int nowFood = player.foodLevel().get();
-                player.offer(Keys.FOOD_LEVEL, Math.max((nowFood - cost), 0));
+                double cost = user.getInfo().getCost(); //每秒消耗的饱食度,20为满,奇数即半格
+                double disable = user.getInfo().getDisable(); //饱食度消耗至多少关闭飞行
+                int nowFood = user.getNow().intValue();
+                user.cost((nowFood - cost));
                 if ((nowFood - cost) < disable) {
-                    player.offer(Keys.CAN_FLY, false);
-                    player.offer(Keys.IS_FLYING, false);
-                    Utils.sendFWFMsg(player, FWFMsgType.CanNotFly);
-                    Scheduler.execute(() ->
-                            new FallDamageTimer(player)
-                    )
-                            .delayTicks(4)
-                            .intervalTicks(4)
-                            .submit(INSTANCE);
+                    user.disableFly();
+                    user.sendFWFMsg(FWFMsgType.CanNotFly);
+                    user.protectFromFall();
                 }
             }
         })
@@ -125,25 +107,3 @@ public class FlyWithFood {
     }
 }
 
-class FallDamageTimer implements Consumer<Task> {
-    private final Player player;
-    public FallDamageTimer(Player player) {
-        this.player = player;
-    }
-    @Override
-    public void accept(Task task) {
-        if (!player.isOnline()) {
-            task.cancel();
-            return;
-        }
-        if (player.get(Keys.CAN_FLY).orElse(false)) {
-            task.cancel();
-            return;
-        }
-        if (player.isOnGround()) {
-            task.cancel();
-            return;
-        }
-        player.offer(Keys.FALL_DISTANCE, 0f);
-    }
-}
