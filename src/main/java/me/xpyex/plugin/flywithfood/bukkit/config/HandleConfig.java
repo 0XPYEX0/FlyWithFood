@@ -3,7 +3,6 @@ package me.xpyex.plugin.flywithfood.bukkit.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.Arrays;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFReloadConfigEvent;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EnergyManager;
@@ -19,10 +18,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;

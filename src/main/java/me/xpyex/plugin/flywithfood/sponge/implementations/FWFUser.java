@@ -4,6 +4,7 @@ import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.tasks.FallProtector;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
+
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;

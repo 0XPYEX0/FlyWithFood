@@ -1,6 +1,7 @@
 package me.xpyex.plugin.flywithfood.bukkit;
 
 import java.util.logging.Logger;
+
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
@@ -13,7 +14,9 @@ import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.MoneyEnergy;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
+
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
