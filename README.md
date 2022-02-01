@@ -5,3 +5,4 @@ https://www.mcbbs.net/thread-1253430-1-1.html
 
 FlyWithFood is a Minecraft plugin that run with Bukkit or Sponge.
 It makes players can cost points(Saturation, EXP Levels, EXP Points, Money) to fly
+https://www.spigotmc.org/resources/flywithfood.99676/
