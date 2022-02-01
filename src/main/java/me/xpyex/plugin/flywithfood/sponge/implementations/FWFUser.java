@@ -2,7 +2,7 @@ package me.xpyex.plugin.flywithfood.sponge.implementations;
 
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.sponge.tasks.FallDamageTimer;
+import me.xpyex.plugin.flywithfood.sponge.tasks.FallProtector;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -86,6 +86,6 @@ public class FWFUser {
     }
 
     public void protectFromFall() {
-        new FallDamageTimer(player).start();
+        new FallProtector(player).start();
     }
 }

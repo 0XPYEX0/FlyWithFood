@@ -1,17 +1,15 @@
 package me.xpyex.plugin.flywithfood.sponge;
 
 import java.util.concurrent.TimeUnit;
-
+import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -28,7 +26,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.0.0"
+        version = "1.2.6"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
@@ -59,6 +57,23 @@ public class FlyWithFood {
         HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
 
         startCheck();
+        Task.builder().execute(() -> {
+                    NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
+                    if (NetWorkUtil.newVer != null) {
+                        LOGGER.info("你当前运行的版本为 v" + Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get());
+                        LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
+                        LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
+                        LOGGER.info(" ");
+                        LOGGER.info("You are running FlyWithFood v" + Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get());
+                        LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
+                        LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
+                    } else {
+                        LOGGER.info("当前已是最新版本");
+                    }
+                })
+                .async()
+                .submit(INSTANCE)
+        ;
 
         LOGGER.info("成功加载配置文件");
         LOGGER.info("已成功加载!");

@@ -6,10 +6,10 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 
-public class FallDamageTimer implements Consumer<Task> {
+public class FallProtector implements Consumer<Task> {
     private final Player player;
 
-    public FallDamageTimer(Player player) {
+    public FallProtector(Player player) {
         this.player = player;
     }
 
