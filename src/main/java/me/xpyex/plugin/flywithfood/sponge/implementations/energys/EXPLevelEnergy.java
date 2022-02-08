@@ -7,7 +7,7 @@ import org.spongepowered.api.entity.living.player.Player;
 public class EXPLevelEnergy implements FlyEnergy {
     @Override
     public @NotNull String getName() {
-        return "EXPLevel";
+        return "ExpLevel";
     }
 
     @Override
