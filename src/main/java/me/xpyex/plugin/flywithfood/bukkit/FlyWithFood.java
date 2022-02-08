@@ -50,12 +50,10 @@ public final class FlyWithFood extends JavaPlugin {
                 new MoneyEnergy().register();
 
                 RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-                if (rsp == null) {
-                    return;
+                if (rsp != null) {
+                    econ = rsp.getProvider();
+                    LOGGER.info("已与Vault挂钩");
                 }
-                econ = rsp.getProvider();
-
-                LOGGER.info("已与Vault挂钩");
             }
         }
 
@@ -137,7 +135,7 @@ public final class FlyWithFood extends JavaPlugin {
                     }
                 }
                 int now = user.getNow().intValue();
-                user.cost(now - cost);  //扣除数值
+                user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(user.getPlayer());
                     user.disableFly(event);  //关闭玩家的飞行

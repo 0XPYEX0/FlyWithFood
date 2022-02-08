@@ -1,9 +1,12 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementations.energys;
 
+import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class FoodEnergy implements FlyEnergy{
+public class FoodEnergy implements FlyEnergy {
     @Override
     public @NotNull String getName() {
         return "Food";
@@ -11,7 +14,9 @@ public class FoodEnergy implements FlyEnergy{
 
     @Override
     public void cost(@NotNull Player target, @NotNull Number value) {
-        target.setFoodLevel(Math.max((target.getFoodLevel() - value.intValue()), 0));
+        Bukkit.getScheduler().runTask(FlyWithFood.INSTANCE, () ->
+                target.setFoodLevel(Math.max(target.getFoodLevel() - value.intValue(), 0))
+        );
     }
 
     @Override

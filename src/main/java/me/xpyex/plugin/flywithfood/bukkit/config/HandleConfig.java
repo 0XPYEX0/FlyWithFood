@@ -77,8 +77,8 @@ public class HandleConfig {
             config = new FWFConfig(JSON.parseObject(configText.toString()));
 
             if (!EnergyManager.hasEnergy(config.mode)) {
-                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种");
-                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()));
+                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种 -> " + config.mode);
+                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + " -> " + config.mode);
                 return false;
             }
 
@@ -229,8 +229,9 @@ public class HandleConfig {
         Bukkit.getScheduler().cancelTasks(FlyWithFood.INSTANCE);
         FWFReloadConfigEvent event = new FWFReloadConfigEvent(oldConfig);
         Bukkit.getPluginManager().callEvent(event);
-        loadConfig();
-        return config != null;
+        boolean result = loadConfig();
+        if (result) Bukkit.getScheduler().runTaskLater(FlyWithFood.INSTANCE, FlyWithFood::startCheck, 1L);
+        return result;
     }
 
     public static JSONObject getNewConfig() {

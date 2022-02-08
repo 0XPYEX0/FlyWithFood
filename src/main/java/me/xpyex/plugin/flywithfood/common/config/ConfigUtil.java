@@ -50,9 +50,10 @@ public class ConfigUtil {
         adminHelpMsg.add("&a%command% &breload &f- &e重载配置");
         adminHelpMsg.add("&d以下为权限列表: ");
         adminHelpMsg.add("&afly.fly &f- &e允许玩家开启或关闭飞行");
-        adminHelpMsg.add("&afly.nocost &f- &e允许玩家飞行时不消耗%Mode%");
+        adminHelpMsg.add("&afly.nocost &f- &e允许玩家飞行时不消耗点数");
         adminHelpMsg.add("&afly.other &f- &e允许玩家开启或关闭他人的飞行");
         adminHelpMsg.add("&afly.admin &f- &e可收到权限列表");
+        adminHelpMsg.add("&afly.groups.&2%GroupName% &f- &e将玩家归于配置文件的组内，%GroupName%为组名.如fly.groups.Group1，则将玩家归于Group1组");
         JSONArray endHelpMsg = new JSONArray();
         helpMsgList.put("Start", startHelpMsg);
         helpMsgList.put("Fly", flyHelpMsg);
