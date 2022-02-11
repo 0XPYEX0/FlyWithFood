@@ -29,6 +29,7 @@ public final class FlyWithFood extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         LOGGER = getLogger();
+        NetWorkUtil.PLUGIN_VERSION = INSTANCE.getDescription().getVersion();
         LOGGER.info(" ");
         LOGGER.info("感谢使用FlyWithFood.");
         LOGGER.info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
@@ -95,7 +96,7 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
                 LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
                 LOGGER.info(" ");
-                LOGGER.info("You are running FlyWithFood v" + INSTANCE.getDescription().getVersion());
+                LOGGER.info("You are running FlyWithFood v" + NetWorkUtil.PLUGIN_VERSION);
                 LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
                 LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
             } else {
