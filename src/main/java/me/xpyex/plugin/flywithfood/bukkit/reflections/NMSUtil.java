@@ -1,14 +1,12 @@
 package me.xpyex.plugin.flywithfood.bukkit.reflections;
 
-import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
-import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
+import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class NMSUtil {
 

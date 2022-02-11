@@ -2,10 +2,8 @@ package me.xpyex.plugin.flywithfood.sponge.utils;
 
 import me.xpyex.plugin.flywithfood.common.colormsg.ColorMsg;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
-
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
-
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.Viewer;
@@ -18,8 +16,10 @@ public class Utils {
     public static String getColorfulMsg(String msg) {
         return ColorMsg.getColorMsg(msg);
     }
-    public static void autoSendMsg(CommandSource sender, String msg) {
-        sender.sendMessage(Text.of(getColorfulMsg(msg)));
+    public static void autoSendMsg(CommandSource sender, String... msg) {
+        for (String s : msg) {
+            sender.sendMessage(Text.of(getColorfulMsg(s)));
+        }
     }
     public static void sendFWFMsg(CommandSource target, FWFMsgType msgType) {
         if (msgType == FWFMsgType.DisableInThisWorld || msgType == FWFMsgType.NoPermission) {

@@ -1,15 +1,16 @@
 package me.xpyex.plugin.flywithfood.sponge;
 
 import java.util.concurrent.TimeUnit;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.sponge.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.sponge.implementations.energys.EXPLevelEnergy;
-import me.xpyex.plugin.flywithfood.sponge.implementations.energys.EXPPointEnergy;
-import me.xpyex.plugin.flywithfood.sponge.implementations.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.sponge.implementations.energys.MoneyEnergy;
+import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpLevel;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpPoint;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeFood;
+import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeMoney;
 import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,13 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.3.0"
+        version = "1.3.2"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
     public static final EconomyService ECONOMY_SERVICE = Sponge.getServiceManager().provide(EconomyService.class).get();
+    public static final Task.Builder SCHEDULER = Task.builder();
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -43,10 +45,10 @@ public class FlyWithFood {
         FlyCmd.registerCmd();
 
         {
-            new EXPPointEnergy().register();
-            new EXPLevelEnergy().register();
-            new FoodEnergy().register();
-            new MoneyEnergy().register();
+            new SpongeExpPoint().register();
+            new SpongeExpLevel().register();
+            new SpongeFood().register();
+            new SpongeMoney().register();
         }
 
         if (!HandleConfig.loadConfig()) {
@@ -69,7 +71,7 @@ public class FlyWithFood {
 
         startCheck();
 
-        Task.builder().execute(() -> {
+        SCHEDULER.execute(() -> {
                     NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
                     if (NetWorkUtil.newVer != null) {
                         LOGGER.info("你当前运行的版本为 v" + Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get());
@@ -103,31 +105,30 @@ public class FlyWithFood {
     }
 
     public static void startCheck() {
-        Task.Builder Scheduler = Task.builder();
-        Scheduler.execute(() -> {
-            for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                FWFUser user = new FWFUser(player);
-                if (!user.needCheck()) {
-                    continue;
-                }
-                if (user.getInfo().getEnergy() instanceof FoodEnergy) {
-                    if (user.hasSaturationEff()) {
-                        user.disableFly();
-                        user.sendFWFMsg(FWFMsgType.HasEffect);
-                        continue;
+        SCHEDULER.execute(() -> {
+                    for (Player player : Sponge.getServer().getOnlinePlayers()) {
+                        SpongeUser user = new SpongeUser(player);
+                        if (!user.needCheck()) {
+                            continue;
+                        }
+                        if (user.getInfo().getEnergy() instanceof FoodEnergy) {
+                            if (user.hasSaturationEff()) {
+                                user.disableFly();
+                                user.sendFWFMsg(FWFMsgType.HasEffect);
+                                continue;
+                            }
+                        }
+                        double cost = user.getInfo().getCost(); //每秒消耗的饱食度,20为满,奇数即半格
+                        double disable = user.getInfo().getDisable(); //饱食度消耗至多少关闭飞行
+                        int nowFood = user.getNow().intValue();
+                        user.cost((nowFood - cost));
+                        if ((nowFood - cost) < disable) {
+                            user.disableFly();
+                            user.sendFWFMsg(FWFMsgType.CanNotFly);
+                            user.protectFromFall();
+                        }
                     }
-                }
-                double cost = user.getInfo().getCost(); //每秒消耗的饱食度,20为满,奇数即半格
-                double disable = user.getInfo().getDisable(); //饱食度消耗至多少关闭飞行
-                int nowFood = user.getNow().intValue();
-                user.cost((nowFood - cost));
-                if ((nowFood - cost) < disable) {
-                    user.disableFly();
-                    user.sendFWFMsg(FWFMsgType.CanNotFly);
-                    user.protectFromFall();
-                }
-            }
-        })
+                })
                 .interval(1, TimeUnit.SECONDS)
                 .delay(0, TimeUnit.SECONDS)
                 .submit(INSTANCE);

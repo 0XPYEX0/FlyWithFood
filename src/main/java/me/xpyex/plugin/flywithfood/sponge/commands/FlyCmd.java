@@ -1,11 +1,11 @@
 package me.xpyex.plugin.flywithfood.sponge.commands;
 
 import java.util.Optional;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.sponge.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.sponge.implementations.energys.FoodEnergy;
+import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -94,7 +94,7 @@ public class FlyCmd {
                                 Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
                                 return CommandResult.success();
                             }
-                            FWFUser targetUser = new FWFUser(target);
+                            SpongeUser targetUser = new SpongeUser(target);
                             if ((!sender.hasPermission("fly.other") && target != sender) || (!sender.hasPermission("fly.fly") && target == sender)) {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
@@ -109,7 +109,7 @@ public class FlyCmd {
                             }
                             if (targetUser.getInfo().getEnergy() instanceof FoodEnergy) {
                                 if (targetUser.hasSaturationEff()) {
-                                    if (!targetUser.nocost()) {
+                                    if (!targetUser.hasPermission()) {
                                         if (sender != target) {
                                             Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
                                             return CommandResult.success();
@@ -119,7 +119,7 @@ public class FlyCmd {
                                     }
                                 }
                             }
-                            if ((target.foodLevel().get() < targetUser.getInfo().getDisable()) && !targetUser.nocost()) {
+                            if ((target.foodLevel().get() < targetUser.getInfo().getDisable()) && !targetUser.hasPermission()) {
                                 if (target != sender) {
                                     Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家饱食度不足");
                                     return CommandResult.success();
@@ -155,7 +155,7 @@ public class FlyCmd {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
                             }
-                            FWFUser targetUser = new FWFUser(target);
+                            SpongeUser targetUser = new SpongeUser(target);
                             if (targetUser.inNoFunction()) {
                                 if (sender != target) {
                                     Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
@@ -192,7 +192,7 @@ public class FlyCmd {
                                 Utils.sendFWFMsg(sender, FWFMsgType.NoPermission);
                                 return CommandResult.success();
                             }
-                            FWFUser targetUser = new FWFUser(target);
+                            SpongeUser targetUser = new SpongeUser(target);
                             if (targetUser.inNoFunction()) {
                                 if (sender != target) {
                                     Utils.autoSendMsg(sender, "&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");

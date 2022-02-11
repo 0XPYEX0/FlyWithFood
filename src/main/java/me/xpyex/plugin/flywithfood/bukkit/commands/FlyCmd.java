@@ -7,9 +7,9 @@ import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFDisableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFEnableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDenyCmdEvent;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FoodEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.types.DenyReason;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import org.bukkit.Bukkit;
@@ -111,7 +111,7 @@ public class FlyCmd implements CommandExecutor {
                 Utils.sendFWFMsg(sender, FWFMsgType.PlayerNotOnline);
                 return true;
             }
-            FWFUser targetUser = new FWFUser(target);
+            BukkitUser targetUser = new BukkitUser(target);
             if ((target != sender && !sender.hasPermission("fly.other"))
                     ||
                     (target == sender && !sender.hasPermission("fly.fly"))) {
@@ -138,7 +138,7 @@ public class FlyCmd implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("on")) {
                 if (targetUser.getInfo().getEnergy() instanceof FoodEnergy) {
-                    if (targetUser.hasSaturationEff() && !targetUser.nocost()) {
+                    if (targetUser.hasSaturationEff() && !targetUser.hasPermission()) {
                         FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.HasEffect, "on");
                         Bukkit.getPluginManager().callEvent(event);
                         if (target != sender) {
@@ -153,7 +153,7 @@ public class FlyCmd implements CommandExecutor {
                         return true;
                     }
                 }
-                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !targetUser.nocost()) {
+                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !targetUser.hasPermission()) {
                     FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.NotEnoughFood, "on");
                     Bukkit.getPluginManager().callEvent(event);
                     if (target != sender) {
@@ -185,7 +185,7 @@ public class FlyCmd implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("off")) {
                 FWFDisableFlyEvent event = new FWFDisableFlyEvent(target);
-                new FWFUser(target).disableFly(event);
+                new BukkitUser(target).disableFly(event);
                 Utils.sendFWFMsg(target, FWFMsgType.DisableFly);
                 if (target != sender) {
                     if (HandleConfig.config.isChinese) {

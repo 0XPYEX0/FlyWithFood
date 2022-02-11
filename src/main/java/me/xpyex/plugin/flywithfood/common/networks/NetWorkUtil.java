@@ -27,6 +27,7 @@ public class NetWorkUtil {
             if (!name.equals("v" + FlyWithFood.INSTANCE.getDescription().getVersion())) {
                 return name;
             } else {
+                newVer = null;
                 return null;
             }
         } catch (Exception e) {

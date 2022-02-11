@@ -1,22 +1,20 @@
 package me.xpyex.plugin.flywithfood.bukkit;
 
 import java.util.logging.Logger;
-
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EXPLevelEnergy;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EXPPointEnergy;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FlyEnergy;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.MoneyEnergy;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpLevel;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpPoint;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitFood;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitMoney;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.FlyEnergy;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
-
 import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -43,11 +41,11 @@ public final class FlyWithFood extends JavaPlugin {
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
 
         {
-            new EXPPointEnergy().register();
-            new EXPLevelEnergy().register();
-            new FoodEnergy().register();
+            new BukkitExpPoint().register();
+            new BukkitExpLevel().register();
+            new BukkitFood().register();
             if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                new MoneyEnergy().register();
+                new BukkitMoney().register();
 
                 RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
                 if (rsp != null) {
@@ -120,7 +118,7 @@ public final class FlyWithFood extends JavaPlugin {
     public static void startCheck() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                FWFUser user = new FWFUser(player);
+                BukkitUser user = new BukkitUser(player);
                 if (!user.needCheck()) {
                     continue;
                 }

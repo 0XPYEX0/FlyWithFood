@@ -1,7 +1,7 @@
-package me.xpyex.plugin.flywithfood.bukkit.implementations;
+package me.xpyex.plugin.flywithfood.common.implementations;
 
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.EnergyManager;
-import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.FlyEnergy;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
+import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.FlyEnergy;
 
 public class FWFInfo {
     private final double cost;

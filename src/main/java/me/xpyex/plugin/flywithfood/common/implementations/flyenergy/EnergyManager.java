@@ -1,4 +1,4 @@
-package me.xpyex.plugin.flywithfood.sponge.implementations.energys;
+package me.xpyex.plugin.flywithfood.common.implementations.flyenergy;
 
 import java.util.HashMap;
 import org.jetbrains.annotations.Nullable;

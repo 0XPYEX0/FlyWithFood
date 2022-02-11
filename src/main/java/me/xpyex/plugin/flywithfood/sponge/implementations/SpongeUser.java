@@ -1,19 +1,24 @@
-package me.xpyex.plugin.flywithfood.bukkit.implementations;
+package me.xpyex.plugin.flywithfood.sponge.implementations;
 
-import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFDisableFlyEvent;
-import me.xpyex.plugin.flywithfood.bukkit.runnables.DisableFly;
-import me.xpyex.plugin.flywithfood.bukkit.runnables.FallRunnable;
-import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
+import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
+import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
+import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
+import me.xpyex.plugin.flywithfood.sponge.tasks.FallProtector;
+import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.living.player.Player;
 
-public class FWFUser {
+public class SpongeUser implements FWFUser {
     private final Player player;
 
-    public FWFUser(Player p) {
+    public SpongeUser(Player p) {
         this.player = p;
+    }
+
+    public void autoSendMsg(String... msg) {
+        Utils.autoSendMsg(player, msg);
     }
 
     public void sendFWFMsg(FWFMsgType msg) {
@@ -21,19 +26,16 @@ public class FWFUser {
     }
 
     public boolean hasSaturationEff() {
-        return player.hasPotionEffect(PotionEffectType.SATURATION);
+        return Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION);
     }
 
     public void cost(double value) {
-        this.getInfo().getEnergy().cost(player, value);
+        this.getInfo().getEnergy().cost(this, value);
     }
 
     public void disableFly() {
-        new DisableFly(player).start();
-    }
-
-    public void disableFly(FWFDisableFlyEvent reason) {
-        new DisableFly(reason).start();
+        player.offer(Keys.CAN_FLY, false);
+        player.offer(Keys.IS_FLYING, false);
     }
 
     public Player getPlayer() {
@@ -55,22 +57,22 @@ public class FWFUser {
         return new FWFInfo(cost, disable, mode);
     }
 
-    public boolean nocost() {
-        return (player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost"));
-    }
-
     public Number getNow() {
-        return getInfo().getEnergy().getNow(player);
+        return getInfo().getEnergy().getNow(this);
     }
 
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        boolean NoCostWLEnable = HandleConfig.config.noCostWL.getBoolean("Enable");
-        return NoCostWLEnable && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
+        boolean NoCostFoodWLEnable = HandleConfig.config.noCostWL.getBoolean("Enable");
+        return NoCostFoodWLEnable && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getWorld().getName());
     }
 
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
         boolean FunctionWLEnable = HandleConfig.config.functionWL.getBoolean("Enable");
-        return FunctionWLEnable && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
+        return FunctionWLEnable && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getWorld().getName());
+    }
+
+    public boolean hasPermission() {
+        return player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost");
     }
 
     public boolean needCheck() {
@@ -80,19 +82,19 @@ public class FWFUser {
         if (inNoCost()) {
             return false;  //如果这个世界不需要消耗，则没有处理的必要
         }
-        if (!player.isFlying()) {  //玩家不在飞行则没有处理他的必要
+        if (!player.get(Keys.IS_FLYING).orElse(false)) {  //玩家不在飞行则没有处理他的必要
             return false;
         }
-        if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
+        if ("CREATIVE, SPECTATOR".contains(player.get(Keys.GAME_MODE).get().getName().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
             return false;
         }
-        if (nocost()) {  //若玩家拥有权限无视消耗，则没有处理的必要
+        if (hasPermission()) {  //若玩家拥有权限无视消耗，则没有处理的必要
             return false;
         }
         return true;
     }
 
     public void protectFromFall() {
-        new FallRunnable(player).start();
+        new FallProtector(player).start();
     }
 }
