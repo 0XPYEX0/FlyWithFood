@@ -68,7 +68,6 @@ public class FlyWithFood {
 
         HandleConfig.functionWL = HandleConfig.config.functionWL.getBoolean("Enable");
         HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
-        NetWorkUtil.PLUGIN_VERSION = Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get();
 
         startCheck();
 
@@ -79,7 +78,7 @@ public class FlyWithFood {
                         LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
                         LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
                         LOGGER.info(" ");
-                        LOGGER.info("You are running FlyWithFood v" + NetWorkUtil.PLUGIN_VERSION);
+                        LOGGER.info("You are running FlyWithFood v" + Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get());
                         LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
                         LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
                     } else {
