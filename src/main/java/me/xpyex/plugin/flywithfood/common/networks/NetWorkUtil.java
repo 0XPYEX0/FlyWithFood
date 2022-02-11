@@ -6,10 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 
 public class NetWorkUtil {
     public static String newVer;
+    public static String PLUGIN_VERSION;
     public static String checkUpdate() {
         try {
             HttpURLConnection huc = (HttpURLConnection) new URL("https://gitee.com/api/v5/repos/xpyex/FlyWithFood/tags").openConnection();
@@ -24,7 +24,7 @@ public class NetWorkUtil {
             JSONArray array = JSON.parseArray(ba.toString("UTF-8"));
             JSONObject latestVer = array.getJSONObject(0);
             String name = latestVer.getString("name");
-            if (!name.equals("v" + FlyWithFood.INSTANCE.getDescription().getVersion())) {
+            if (!name.equals("v" + PLUGIN_VERSION)) {
                 return name;
             } else {
                 newVer = null;
