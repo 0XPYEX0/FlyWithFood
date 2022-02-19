@@ -33,5 +33,4 @@ public interface FWFUser {
 
     String getName();  //返回玩家名
 
-    boolean isPlayer();  //是否为玩家
 }

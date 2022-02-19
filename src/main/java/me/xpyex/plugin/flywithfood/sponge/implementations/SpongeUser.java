@@ -19,22 +19,31 @@ public class SpongeUser implements FWFUser {
 
     public void autoSendMsg(String... msg) {
         Utils.autoSendMsg(player, msg);
+        //
     }
 
     public boolean hasPermission(String perm) {
         return player.hasPermission(perm);
     }
 
+    @Override
+    public String getName() {
+        return player.getName();
+    }
+
     public void sendFWFMsg(FWFMsgType msg) {
         Utils.sendFWFMsg(player, msg);
+        //
     }
 
     public boolean hasSaturationEff() {
         return Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION);
+        //
     }
 
     public void cost(double value) {
         this.getInfo().getEnergy().cost(this, value);
+        //
     }
 
     public void disableFly() {
@@ -44,6 +53,7 @@ public class SpongeUser implements FWFUser {
 
     public Player getPlayer() {
         return this.player;
+        //
     }
 
     public FWFInfo getInfo() {
@@ -63,6 +73,7 @@ public class SpongeUser implements FWFUser {
 
     public Number getNow() {
         return getInfo().getEnergy().getNow(this);
+        //
     }
 
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
@@ -89,7 +100,7 @@ public class SpongeUser implements FWFUser {
         if (!player.get(Keys.IS_FLYING).orElse(false)) {  //玩家不在飞行则没有处理他的必要
             return false;
         }
-        if ("CREATIVE, SPECTATOR".contains(player.get(Keys.GAME_MODE).get().getName().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
+        if ("CREATIVE, SPECTATOR".contains(player.get(Keys.GAME_MODE).get().getName())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
             return false;
         }
         if (hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
@@ -100,5 +111,6 @@ public class SpongeUser implements FWFUser {
 
     public void protectFromFall() {
         new FallProtector(player).start();
+        //
     }
 }

@@ -31,12 +31,7 @@ public class BukkitUser implements FWFUser {
 
     @Override
     public String getName() {
-        return null;
-    }
-
-    @Override
-    public boolean isPlayer() {
-        return false;
+        return player.getName();
     }
 
     @Override
