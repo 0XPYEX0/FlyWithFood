@@ -138,7 +138,7 @@ public class FlyCmd implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("on")) {
                 if (targetUser.getInfo().getEnergy() instanceof FoodEnergy) {
-                    if (targetUser.hasSaturationEff() && !targetUser.hasPermission()) {
+                    if (targetUser.hasSaturationEff() && !targetUser.hasNoCostPerm()) {
                         FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.HasEffect, "on");
                         Bukkit.getPluginManager().callEvent(event);
                         if (target != sender) {
@@ -153,7 +153,7 @@ public class FlyCmd implements CommandExecutor {
                         return true;
                     }
                 }
-                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !targetUser.hasPermission()) {
+                if ((target.getFoodLevel() < targetUser.getInfo().getDisable()) && !targetUser.hasNoCostPerm()) {
                     FWFPlayerBeenDenyCmdEvent event = new FWFPlayerBeenDenyCmdEvent(target, DenyReason.NotEnoughFood, "on");
                     Bukkit.getPluginManager().callEvent(event);
                     if (target != sender) {

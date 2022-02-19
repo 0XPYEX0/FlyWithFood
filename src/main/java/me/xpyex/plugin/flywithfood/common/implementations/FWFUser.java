@@ -15,7 +15,7 @@ public interface FWFUser {
 
     FWFInfo getInfo();  //获取基本信息
 
-    boolean hasPermission();  //玩家是否有不消耗点数的权限
+    boolean hasNoCostPerm();  //玩家是否有不消耗点数的权限
 
     Number getNow();  //玩家当前的点数[能量]
 
@@ -28,4 +28,10 @@ public interface FWFUser {
     void protectFromFall();  //保护玩家免受掉落伤害
 
     void autoSendMsg(String... msg);  //发送信息
+
+    boolean hasPermission(String perm);  //检查有无权限
+
+    String getName();  //返回玩家名
+
+    boolean isPlayer();  //是否为玩家
 }

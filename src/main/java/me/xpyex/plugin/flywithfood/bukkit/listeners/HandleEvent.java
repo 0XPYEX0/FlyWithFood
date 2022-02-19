@@ -2,13 +2,17 @@ package me.xpyex.plugin.flywithfood.bukkit.listeners;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
+import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
+import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class HandleEvent implements Listener {
     @EventHandler
@@ -29,6 +33,23 @@ public class HandleEvent implements Listener {
                     msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/0XPYEX0/FlyWithFood/releases"));
                     event.getPlayer().spigot().sendMessage(msg);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onChangeWorld(PlayerTeleportEvent event) {  //传送事件可阻止(虽然好像没什么用)，且更方便判断所在位置
+        if (event.getFrom().getWorld() != event.getTo().getWorld()) {  //跨世界传送的情况
+            Player player = event.getPlayer();
+            if (!player.getAllowFlight()) {
+                return;
+            }
+            FWFUser user = new BukkitUser(player);
+            if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
+                return;
+            }
+            if (user.hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
+                return;
             }
         }
     }

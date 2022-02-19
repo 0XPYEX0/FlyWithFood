@@ -21,6 +21,10 @@ public class SpongeUser implements FWFUser {
         Utils.autoSendMsg(player, msg);
     }
 
+    public boolean hasPermission(String perm) {
+        return player.hasPermission(perm);
+    }
+
     public void sendFWFMsg(FWFMsgType msg) {
         Utils.sendFWFMsg(player, msg);
     }
@@ -71,7 +75,7 @@ public class SpongeUser implements FWFUser {
         return FunctionWLEnable && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getWorld().getName());
     }
 
-    public boolean hasPermission() {
+    public boolean hasNoCostPerm() {
         return player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost");
     }
 
@@ -88,7 +92,7 @@ public class SpongeUser implements FWFUser {
         if ("CREATIVE, SPECTATOR".contains(player.get(Keys.GAME_MODE).get().getName().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
             return false;
         }
-        if (hasPermission()) {  //若玩家拥有权限无视消耗，则没有处理的必要
+        if (hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
             return false;
         }
         return true;

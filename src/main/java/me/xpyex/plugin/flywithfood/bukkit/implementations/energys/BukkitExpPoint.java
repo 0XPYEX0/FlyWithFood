@@ -20,6 +20,9 @@ public class BukkitExpPoint implements ExpPointEnergy {
         if (value.floatValue() < -1f || value.floatValue() > 1f) {
             throw new IllegalArgumentException("在" + getName() + "模式中，Cost项∈[-1.0, 1.0].小数位可精确到6位.当前为" + value.floatValue() + ", 您也可尝试" + new BukkitExpLevel().getName() + "模式");
         }
+        if (target.getLevel() <= 0) {
+            return;
+        }
         if (target.getExp() - value.floatValue() < 0f) {
             Bukkit.getScheduler().runTask(FlyWithFood.INSTANCE, () -> {
                 target.setLevel(target.getLevel() - 1);

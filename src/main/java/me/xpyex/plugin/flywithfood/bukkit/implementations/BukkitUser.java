@@ -18,34 +18,63 @@ public class BukkitUser implements FWFUser {
         this.player = p;
     }
 
+    @Override
     public void autoSendMsg(String... msg) {
         Utils.autoSendMsg(player, msg);
+        //
     }
 
+    @Override
+    public boolean hasPermission(String perm) {  //新版在common包下处理命令，该方法用于判断权限.common包下无法使用BK/Sponge方法
+        return player.hasPermission(perm);
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public boolean isPlayer() {
+        return false;
+    }
+
+    @Override
     public void sendFWFMsg(FWFMsgType msg) {
         Utils.sendFWFMsg(player, msg);
+        //
     }
 
+    @Override
     public boolean hasSaturationEff() {
         return player.hasPotionEffect(PotionEffectType.SATURATION);
+        //
     }
 
+    @Override
     public void cost(double value) {
         this.getInfo().getEnergy().cost(this, value);
+        //
     }
 
+    @Override
     public void disableFly() {
         new DisableFly(player).start();
+        //
     }
 
     public void disableFly(FWFDisableFlyEvent reason) {
         new DisableFly(reason).start();
+        //
     }
 
+    @Override
     public Player getPlayer() {
         return this.player;
+        //
     }
 
+    @Override
     public FWFInfo getInfo() {
         double cost = HandleConfig.config.cost; //每秒消耗的数值，可为饥饿值或经验值
         double disable = HandleConfig.config.disable; //消耗至多少关闭飞行
@@ -61,7 +90,8 @@ public class BukkitUser implements FWFUser {
         return new FWFInfo(cost, disable, mode);
     }
 
-    public boolean hasPermission() {
+    @Override
+    public boolean hasNoCostPerm() {
         return (player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost"));
     }
 
@@ -69,16 +99,17 @@ public class BukkitUser implements FWFUser {
         return getInfo().getEnergy().getNow(this);
     }
 
+    @Override
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        boolean NoCostWLEnable = HandleConfig.config.noCostWL.getBoolean("Enable");
-        return NoCostWLEnable && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
+        return HandleConfig.noCostWL && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
     }
 
+    @Override
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
-        boolean FunctionWLEnable = HandleConfig.config.functionWL.getBoolean("Enable");
-        return FunctionWLEnable && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
+        return HandleConfig.functionWL && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getLocation().getWorld().getName());
     }
 
+    @Override
     public boolean needCheck() {
         if (inNoFunction()) {
             return false;  //如果这个世界并未启用插件，则没有处理的必要
@@ -92,13 +123,15 @@ public class BukkitUser implements FWFUser {
         if ("CREATIVE, SPECTATOR".contains(player.getGameMode().toString())) {  //1.7没有旁观者模式，创造模式与旁观者模式没有处理的必要
             return false;
         }
-        if (hasPermission()) {  //若玩家拥有权限无视消耗，则没有处理的必要
+        if (hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
             return false;
         }
         return true;
     }
 
+    @Override
     public void protectFromFall() {
         new FallRunnable(player).start();
+        //
     }
 }
