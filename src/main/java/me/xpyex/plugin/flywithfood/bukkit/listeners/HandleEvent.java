@@ -51,7 +51,7 @@ public class HandleEvent implements Listener {
             if (user.hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
                 return;
             }
-            if (HandleConfig.functionWL && HandleConfig.config.functionWL.containsKey(event.getTo().getWorld().getName())) {
+            if (HandleConfig.functionWL && HandleConfig.config.functionWL.getJSONArray("Worlds").contains(event.getTo().getWorld().getName())) {
                 player.setAllowFlight(false);
             }
         }
