@@ -69,6 +69,9 @@ public class HandleConfig {
                 return false;
             }
 
+            functionWL = ConfigUtil.CONFIG.functionWL.getBoolean("Enable");
+            noCostWL = ConfigUtil.CONFIG.noCostWL.getBoolean("Enable");  //重载的时候用
+
             enableRawMsg = config.languages.getJSONObject("RawMsg").getBoolean("Enable");
             enableTitle = config.languages.getJSONObject("TitleMsg").getBoolean("Enable");
             enableAction = config.languages.getJSONObject("ActionMsg").getBoolean("Enable");

@@ -77,15 +77,20 @@ public class HandleConfig {
                 return false;
             }
 
+            functionWL = ConfigUtil.CONFIG.functionWL.getBoolean("Enable");
+            noCostWL = ConfigUtil.CONFIG.noCostWL.getBoolean("Enable");  //重载的时候用
+
             enableRawMsg = config.languages.getJSONObject("RawMsg").getBoolean("Enable");
             enableTitle = config.languages.getJSONObject("TitleMsg").getBoolean("Enable");
             enableAction = config.languages.getJSONObject("ActionMsg").getBoolean("Enable");
             if (enableTitle) {
                 try {
                     Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
-                    //检查是否支持Title信息的方法(非常粗暴
-                    //反正也开源了，不需要用new String做注释了
-                    //早期用new String是因为没开源，可能有人反编译读我代码看不明白
+                    /*
+                    * 检查是否支持Title信息的方法(非常粗暴
+                    * 反正也开源了，不需要用new String做注释了
+                    * 早期用new String是因为没开源，可能有人反编译读我代码看不明白
+                    */
                 } catch (Throwable ignored) {
                     try {
                         Player.class.getMethod("sendTitle", String.class, String.class);
