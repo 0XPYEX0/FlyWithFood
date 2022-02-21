@@ -49,4 +49,15 @@ public class BukkitSender implements FWFSender {
         Utils.sendFWFMsg(sender, msg);
         //
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof BukkitSender)) {
+            return false;
+        }
+        return this.sender == ((BukkitSender) o).sender;
+    }
 }

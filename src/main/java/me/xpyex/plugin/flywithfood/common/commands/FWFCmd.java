@@ -104,14 +104,14 @@ public class FWFCmd {
                 sender.sendFWFMsg(FWFMsgType.PlayerNotOnline);
                 return;
             }
-            if ((target != sender && !sender.hasPermission("fly.other"))
+            if ((!target.equals(sender) && !sender.hasPermission("fly.other"))
                     ||
-                    (target == sender && !sender.hasPermission("fly.fly"))) {
+                    (target.equals(sender) && !sender.hasPermission("fly.fly"))) {
                 sender.sendFWFMsg(FWFMsgType.NoPermission);
                 return;
             }
             if (target.inNoFunction()) {
-                if (sender != target) {
+                if (!target.equals(sender)) {
                     if (ConfigUtil.CONFIG.isChinese) {
                         sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c调整飞行模式: 玩家所在世界禁止此功能");
                     } else {
@@ -125,7 +125,7 @@ public class FWFCmd {
             if (args[0].equalsIgnoreCase("on")) {
                 if (target.getInfo().getEnergy() instanceof FoodEnergy) {
                     if (target.hasSaturationEff() && !target.hasNoCostPerm()) {
-                        if (target != sender) {
+                        if (!target.equals(sender)) {
                             if (ConfigUtil.CONFIG.isChinese) {
                                 sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
                             } else {
@@ -138,11 +138,11 @@ public class FWFCmd {
                     }
                 }
                 if ((target.getNow().doubleValue() < target.getInfo().getDisable()) && !target.hasNoCostPerm()) {
-                    if (target != sender) {
+                    if (!target.equals(sender)) {
                         if (ConfigUtil.CONFIG.isChinese) {
-                            sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家饱食度不足");
+                            sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家的点数不足");
                         } else {
-                            sender.autoSendMsg("&cUnable to turn flight for player &f" + target.getName() + " &c because: The saturation of player is not enough to fly");
+                            sender.autoSendMsg("&cUnable to turn flight for player &f" + target.getName() + " &c because: The points of player is not enough to fly");
                         }
                         return;
                     }
@@ -150,26 +150,24 @@ public class FWFCmd {
                     return;
                 }
                 target.sendFWFMsg(FWFMsgType.EnableFly);
-                if (target != sender) {
+                if (!target.equals(sender)) {
                     if (ConfigUtil.CONFIG.isChinese) {
                         sender.autoSendMsg("&9成功打开 &f" + target.getName() + " &9的飞行");
                     } else {
                         sender.autoSendMsg("&9Successfully turn on the flight for player" + target.getName());
                     }
                 }
-                return;
             }
-            if (args[0].equalsIgnoreCase("off")) {
-                if (target != sender) {
+            else if (args[0].equalsIgnoreCase("off")) {
+                if (!target.equals(sender)) {
                     if (ConfigUtil.CONFIG.isChinese) {
                         sender.autoSendMsg("&9成功打开 &f" + target.getName() + " &9的飞行");
                     } else {
                         sender.autoSendMsg("&9Successfully turn off the flight for player" + target.getName());
                     }
                 }
-                return;
             }
-            if (args[0].equalsIgnoreCase("toggle")) {
+            else if (args[0].equalsIgnoreCase("toggle")) {
                 if (target.canFly()) {
                     //Bukkit.dispatchCommand(sender, label + " off " + args[1]);
                     onCmd(sender, label, "off", args[1]);

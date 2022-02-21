@@ -5,6 +5,7 @@ import me.xpyex.plugin.flywithfood.common.commands.FWFCmd;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeSender;
+import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -23,7 +24,7 @@ public class FlyCmd {
                 })
                 .child(CommandSpec.builder()
                         .executor(((sender, args) -> {
-                            FWFCmd.onCmd(new SpongeSender(sender), "fly", "reload");
+                            FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "reload");
                             return CommandResult.success();
                         }))
                         .build(), "reload")
@@ -43,7 +44,7 @@ public class FlyCmd {
                                 Utils.sendFWFMsg(sender, FWFMsgType.PlayerOnly);
                                 return CommandResult.success();
                             }
-                            FWFCmd.onCmd(new SpongeSender(sender), "fly", "on", target.getName());
+                            FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "on", target.getName());
                             return CommandResult.success();
                         })
                         .build(), "on")
@@ -63,7 +64,7 @@ public class FlyCmd {
                                 Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
                                 return CommandResult.success();
                             }
-                            FWFCmd.onCmd(new SpongeSender(sender), "fly", "off", target.getName());
+                            FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "off", target.getName());
                             return CommandResult.success();
                         })
                         .build(), "off")
@@ -83,7 +84,7 @@ public class FlyCmd {
                                 Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
                                 return CommandResult.success();
                             }
-                            FWFCmd.onCmd(new SpongeSender(sender), "fly", "toggle", target.getName());
+                            FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "toggle", target.getName());
                             return CommandResult.success();
                         })
                         .build(), "toggle")

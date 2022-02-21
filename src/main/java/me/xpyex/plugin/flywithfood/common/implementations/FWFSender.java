@@ -16,4 +16,6 @@ public interface FWFSender {
     boolean isBukkit();  //是不是Bukkit
 
     boolean isSponge();  //是不是Sponge
+
+    boolean equals(Object o);  //相等
 }

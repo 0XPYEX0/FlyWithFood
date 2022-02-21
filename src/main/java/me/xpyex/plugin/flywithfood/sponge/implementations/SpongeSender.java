@@ -49,4 +49,15 @@ public class SpongeSender implements FWFSender {
     public boolean hasNoCostPerm() {
         return sender.hasPermission("fly.nohunger") || sender.hasPermission("fly.nocost");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SpongeSender)) {
+            return false;
+        }
+        return this.sender == ((SpongeSender) o).sender;
+    }
 }
