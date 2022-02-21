@@ -157,8 +157,9 @@ public class FWFCmd {
                         sender.autoSendMsg("&9Successfully turn on the flight for player" + target.getName());
                     }
                 }
+                return;  //你妈的，下面会执行help啊，不要再删这个了
             }
-            else if (args[0].equalsIgnoreCase("off")) {
+            if (args[0].equalsIgnoreCase("off")) {
                 if (!target.equals(sender)) {
                     if (ConfigUtil.CONFIG.isChinese) {
                         sender.autoSendMsg("&9成功打开 &f" + target.getName() + " &9的飞行");
@@ -166,8 +167,9 @@ public class FWFCmd {
                         sender.autoSendMsg("&9Successfully turn off the flight for player" + target.getName());
                     }
                 }
+                return;  //你妈的，下面会执行help啊，不要再删这个了
             }
-            else if (args[0].equalsIgnoreCase("toggle")) {
+            if (args[0].equalsIgnoreCase("toggle")) {
                 if (target.canFly()) {
                     //Bukkit.dispatchCommand(sender, label + " off " + args[1]);
                     onCmd(sender, label, "off", args[1]);
@@ -175,7 +177,7 @@ public class FWFCmd {
                     //Bukkit.dispatchCommand(sender, label + " on " + args[1]);
                     onCmd(sender, label, "on", args[1]);
                 }
-                return;
+                return;  //你妈的，下面会执行help啊，不要再删这个了
             }
         }
         //Bukkit.dispatchCommand(sender, label);
