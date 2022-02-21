@@ -5,7 +5,8 @@ import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSUtil;
-import me.xpyex.plugin.flywithfood.common.colormsg.ColorMsg;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
+import me.xpyex.plugin.flywithfood.common.utils.ColorMsg;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import net.md_5.bungee.api.ChatMessageType;
@@ -16,7 +17,9 @@ import org.bukkit.entity.Player;
 public class Utils {
     public static String getColorfulMsg(String msg) {
         return ColorMsg.getColorMsg(msg);
+        //
     }
+
     public static String formatMsg(CommandSender target, String msg) {
         String mode = HandleConfig.config.mode;  //消耗什么数值
         for (String groupName : HandleConfig.config.groups.keySet()) {
@@ -30,18 +33,24 @@ public class Utils {
         }
         return msg.replace("%mode%", HandleConfig.config.languages.getJSONObject("Modes").getString(mode));
     }
+
     public static void autoSendMsg(CommandSender target, String... msg) {
         for (String s : msg) {
             target.sendMessage(getColorfulMsg(formatMsg(target, s)));
         }
     }
+
     public static void sendFWFMsg(CommandSender target, FWFMsgType msgType) {
-        if (msgType == FWFMsgType.DisableInThisWorld || msgType == FWFMsgType.NoPermission) {
-            autoSendMsg(target, HandleConfig.config.languages.getString(msgType.getValue()));
-            return;
+        switch (msgType) {
+            case DisableInThisWorld:
+            case NoPermission:
+            case PlayerOnly:
+            case PlayerNotOnline:
+                autoSendMsg(target, HandleConfig.config.languages.getString(msgType.getValue()));
+                return;
         }
         if (HandleConfig.enableRawMsg) {
-            String rawMsg = HandleConfig.config.languages.getJSONObject("RawMsg").getString(msgType.getValue());
+            String rawMsg = ConfigUtil.CONFIG.languages.getJSONObject("RawMsg").getString(msgType.getValue());
             if (!rawMsg.isEmpty()) {
                 autoSendMsg(target, rawMsg);
             }

@@ -61,7 +61,7 @@ public class HandleConfig {
             }
             in.close();
             in.close();
-            config = new FWFConfig(JSON.parseObject(configText.toString()));
+            config = (ConfigUtil.CONFIG = new SpongeConfig(JSON.parseObject(configText.toString())));
 
             if (!EnergyManager.hasEnergy(config.mode)) {
                 FlyWithFood.LOGGER.error("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种");

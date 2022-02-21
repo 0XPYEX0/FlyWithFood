@@ -3,7 +3,6 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import java.util.logging.Logger;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFPlayerBeenDisableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpLevel;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpPoint;
@@ -12,7 +11,7 @@ import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitMoney;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.FlyEnergy;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
+import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -136,8 +135,6 @@ public final class FlyWithFood extends JavaPlugin {
                 int now = user.getNow().intValue();
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
-                    FWFPlayerBeenDisableFlyEvent event = new FWFPlayerBeenDisableFlyEvent(user.getPlayer());
-                    user.disableFly(event);  //关闭玩家的飞行
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
                     user.protectFromFall();  //为玩家免疫掉落伤害
                 }

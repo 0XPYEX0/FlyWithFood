@@ -5,7 +5,7 @@ import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
 import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
+import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;

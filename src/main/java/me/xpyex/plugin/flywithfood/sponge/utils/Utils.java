@@ -1,6 +1,6 @@
 package me.xpyex.plugin.flywithfood.sponge.utils;
 
-import me.xpyex.plugin.flywithfood.common.colormsg.ColorMsg;
+import me.xpyex.plugin.flywithfood.common.utils.ColorMsg;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;

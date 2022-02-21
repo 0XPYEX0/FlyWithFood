@@ -2,7 +2,7 @@ package me.xpyex.plugin.flywithfood.sponge;
 
 import java.util.concurrent.TimeUnit;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.common.networks.NetWorkUtil;
+import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;

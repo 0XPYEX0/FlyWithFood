@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public class ConfigUtil {
     public static final int CONFIG_VERSION = 5;
+    public static FWFConfig CONFIG;
     public static JSONObject getNewConfig() {
         JSONObject outJson = new JSONObject();
         outJson.put("Cost", 4);

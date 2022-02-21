@@ -1,43 +1,34 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementations;
 
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFDisableFlyEvent;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.DisableFly;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.FallRunnable;
-import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-public class BukkitUser implements FWFUser {
+public class BukkitUser extends BukkitSender implements FWFUser {
     private final Player player;
 
     public BukkitUser(Player p) {
+        super(p);
         this.player = p;
     }
 
-    @Override
-    public void autoSendMsg(String... msg) {
-        Utils.autoSendMsg(player, msg);
-        //
+    public BukkitUser(String name) {
+        super(Bukkit.getPlayerExact(name));
+        Player player = Bukkit.getPlayerExact(name);
+        if (player == null) {
+            throw new NullPointerException("玩家" + name + "不存在");
+        }
+        this.player = player;
     }
 
     @Override
-    public boolean hasPermission(String perm) {  //新版在common包下处理命令，该方法用于判断权限.common包下无法使用BK/Sponge方法
-        return player.hasPermission(perm);
-    }
-
-    @Override
-    public String getName() {
-        return player.getName();
-    }
-
-    @Override
-    public void sendFWFMsg(FWFMsgType msg) {
-        Utils.sendFWFMsg(player, msg);
-        //
+    public boolean canFly() {
+        return player.getAllowFlight();
     }
 
     @Override
@@ -55,11 +46,6 @@ public class BukkitUser implements FWFUser {
     @Override
     public void disableFly() {
         new DisableFly(player).start();
-        //
-    }
-
-    public void disableFly(FWFDisableFlyEvent reason) {
-        new DisableFly(reason).start();
         //
     }
 
@@ -85,13 +71,9 @@ public class BukkitUser implements FWFUser {
         return new FWFInfo(cost, disable, mode);
     }
 
-    @Override
-    public boolean hasNoCostPerm() {
-        return (player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost"));
-    }
-
     public Number getNow() {
         return getInfo().getEnergy().getNow(this);
+        //
     }
 
     @Override

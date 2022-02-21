@@ -32,4 +32,10 @@ public class FWFConfig {
         this.isChinese = this.language.equalsIgnoreCase("Chinese");
         this.isEnglish = this.language.equalsIgnoreCase("English");
     }
+
+    public boolean reload() {
+        throw new IllegalStateException("非Bukkit或Sponge加载？？请联系开发者处理 QQ1723275529" +
+                "\n" +
+                "ERROR! Please ask the author for help.");
+    }
 }

@@ -1,41 +1,34 @@
 package me.xpyex.plugin.flywithfood.sponge.implementations;
 
+import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.tasks.FallProtector;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 
-public class SpongeUser implements FWFUser {
+public class SpongeUser extends SpongeSender implements FWFUser {
     private final Player player;
 
     public SpongeUser(Player p) {
+        super(p);
         this.player = p;
     }
 
-    public void autoSendMsg(String... msg) {
-        Utils.autoSendMsg(player, msg);
-        //
-    }
-
-    public boolean hasPermission(String perm) {
-        return player.hasPermission(perm);
+    public SpongeUser(String name) {
+        super(Sponge.getServer().getPlayer(name).get());
+        Optional<Player> player = Sponge.getServer().getPlayer(name);
+        if (!player.isPresent()) {
+            throw new NullPointerException("玩家" + name + "不存在");
+        }
+        this.player = player.get();
     }
 
     @Override
-    public String getName() {
-        return player.getName();
-    }
-
-    public void sendFWFMsg(FWFMsgType msg) {
-        Utils.sendFWFMsg(player, msg);
-        //
-    }
-
     public boolean hasSaturationEff() {
         return Utils.hasPotionEffect(player, PotionEffectTypes.SATURATION);
         //
@@ -46,16 +39,19 @@ public class SpongeUser implements FWFUser {
         //
     }
 
+    @Override
     public void disableFly() {
         player.offer(Keys.CAN_FLY, false);
         player.offer(Keys.IS_FLYING, false);
     }
 
+    @Override
     public Player getPlayer() {
         return this.player;
         //
     }
 
+    @Override
     public FWFInfo getInfo() {
         double cost = HandleConfig.config.cost; //每秒消耗的数值，可为饥饿值或经验值
         double disable = HandleConfig.config.disable; //消耗至多少关闭飞行
@@ -71,25 +67,23 @@ public class SpongeUser implements FWFUser {
         return new FWFInfo(cost, disable, mode);
     }
 
+    @Override
     public Number getNow() {
         return getInfo().getEnergy().getNow(this);
         //
     }
 
+    @Override
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        boolean NoCostFoodWLEnable = HandleConfig.config.noCostWL.getBoolean("Enable");
-        return NoCostFoodWLEnable && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getWorld().getName());
+        return HandleConfig.noCostWL && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getWorld().getName());
     }
 
+    @Override
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
-        boolean FunctionWLEnable = HandleConfig.config.functionWL.getBoolean("Enable");
-        return FunctionWLEnable && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getWorld().getName());
+        return HandleConfig.functionWL && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getWorld().getName());
     }
 
-    public boolean hasNoCostPerm() {
-        return player.hasPermission("fly.nohunger") || player.hasPermission("fly.nocost");
-    }
-
+    @Override
     public boolean needCheck() {
         if (inNoFunction()) {
             return false;  //如果这个世界并未启用插件，则没有处理的必要
@@ -109,8 +103,14 @@ public class SpongeUser implements FWFUser {
         return true;
     }
 
+    @Override
     public void protectFromFall() {
         new FallProtector(player).start();
         //
+    }
+
+    @Override
+    public boolean canFly() {
+        return player.get(Keys.CAN_FLY).orElse(false);
     }
 }

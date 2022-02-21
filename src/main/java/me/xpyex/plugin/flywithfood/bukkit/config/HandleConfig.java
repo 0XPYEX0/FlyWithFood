@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
-import me.xpyex.plugin.flywithfood.bukkit.events.FWFReloadConfigEvent;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
@@ -70,11 +69,11 @@ public class HandleConfig {
                 configText.append(line);
             }
             in.close();
-            config = new FWFConfig(JSON.parseObject(configText.toString()));
+            config = (ConfigUtil.CONFIG = new BukkitConfig(JSON.parseObject(configText.toString())));
 
             if (!EnergyManager.hasEnergy(config.mode)) {
-                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种 -> " + config.mode);
-                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + " -> " + config.mode);
+                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + config.mode);
+                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + ". -> " + config.mode);
                 return false;
             }
 
@@ -84,7 +83,9 @@ public class HandleConfig {
             if (enableTitle) {
                 try {
                     Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
-                    new String("检查是否支持Title信息的方法(非常粗暴");
+                    //检查是否支持Title信息的方法(非常粗暴
+                    //反正也开源了，不需要用new String做注释了
+                    //早期用new String是因为没开源，可能有人反编译读我代码看不明白
                 } catch (Throwable ignored) {
                     try {
                         Player.class.getMethod("sendTitle", String.class, String.class);
@@ -217,14 +218,11 @@ public class HandleConfig {
     }
 
     public static boolean reloadConfig() {
-        JSONObject oldConfig = (JSONObject) config.config.clone();
         config = null;
         enableRawMsg = false;
         enableAction = false;
         enableTitle = false;
         Bukkit.getScheduler().cancelTasks(FlyWithFood.INSTANCE);
-        FWFReloadConfigEvent event = new FWFReloadConfigEvent(oldConfig);
-        Bukkit.getPluginManager().callEvent(event);
         boolean result = loadConfig();
         if (result) Bukkit.getScheduler().runTaskLater(FlyWithFood.INSTANCE, FlyWithFood::startCheck, 1L);
         return result;
@@ -232,5 +230,6 @@ public class HandleConfig {
 
     public static JSONObject getNewConfig() {
         return ConfigUtil.getNewConfig();
+        //
     }
 }
