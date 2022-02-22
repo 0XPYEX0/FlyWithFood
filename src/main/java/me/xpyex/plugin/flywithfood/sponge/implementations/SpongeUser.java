@@ -4,6 +4,8 @@ import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
+import me.xpyex.plugin.flywithfood.sponge.tasks.DisableFly;
+import me.xpyex.plugin.flywithfood.sponge.tasks.EnableFly;
 import me.xpyex.plugin.flywithfood.sponge.tasks.FallProtector;
 import me.xpyex.plugin.flywithfood.sponge.utils.Utils;
 import org.spongepowered.api.Sponge;
@@ -41,8 +43,12 @@ public class SpongeUser extends SpongeSender implements FWFUser {
 
     @Override
     public void disableFly() {
-        player.offer(Keys.CAN_FLY, false);
-        player.offer(Keys.IS_FLYING, false);
+        new DisableFly(player).start();
+    }
+
+    @Override
+    public void enableFly() {
+        new EnableFly(player).start();
     }
 
     @Override

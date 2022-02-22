@@ -23,4 +23,6 @@ public interface FWFUser extends FWFSender {
     void protectFromFall();  //保护玩家免受掉落伤害
 
     boolean canFly();  //玩家能不能飞行
+
+    void enableFly();  //启用飞行
 }

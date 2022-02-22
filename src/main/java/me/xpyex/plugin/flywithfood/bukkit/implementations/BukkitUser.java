@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.bukkit.implementations;
 
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.DisableFly;
+import me.xpyex.plugin.flywithfood.bukkit.runnables.EnableFly;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.FallRunnable;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
@@ -47,6 +48,11 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     public void disableFly() {
         new DisableFly(player).start();
         //
+    }
+
+    @Override
+    public void enableFly() {
+        new EnableFly(player).start();
     }
 
     @Override

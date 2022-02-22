@@ -136,6 +136,7 @@ public final class FlyWithFood extends JavaPlugin {
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
+                    user.disableFly();  //关闭玩家的飞行
                     user.protectFromFall();  //为玩家免疫掉落伤害
                 }
             }
