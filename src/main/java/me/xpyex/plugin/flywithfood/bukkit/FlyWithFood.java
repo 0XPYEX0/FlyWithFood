@@ -100,6 +100,7 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
             } else {
                 LOGGER.info("当前已是最新版本");
+                LOGGER.info("You are running the newest FlyWithFood");
             }
         });
 

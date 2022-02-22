@@ -30,7 +30,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.3.2"
+        version = "1.3.6"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
@@ -84,6 +84,7 @@ public class FlyWithFood {
                         LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
                     } else {
                         LOGGER.info("当前已是最新版本");
+                        LOGGER.info("You are running the newest FlyWithFood");
                     }
                 })
                 .async()
