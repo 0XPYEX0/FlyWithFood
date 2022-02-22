@@ -132,7 +132,7 @@ public final class FlyWithFood extends JavaPlugin {
                         continue;
                     }
                 }
-                int now = user.getNow().intValue();
+                double now = user.getNow().doubleValue();
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);

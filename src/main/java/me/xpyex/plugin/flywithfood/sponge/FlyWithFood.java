@@ -121,9 +121,9 @@ public class FlyWithFood {
                         }
                         double cost = user.getInfo().getCost(); //每秒消耗的饱食度,20为满,奇数即半格
                         double disable = user.getInfo().getDisable(); //饱食度消耗至多少关闭飞行
-                        int nowFood = user.getNow().intValue();
-                        user.cost((nowFood - cost));
-                        if ((nowFood - cost) < disable) {
+                        double now = user.getNow().doubleValue();
+                        user.cost((now - cost));
+                        if ((now - cost) < disable) {
                             user.disableFly();
                             user.sendFWFMsg(FWFMsgType.CanNotFly);
                             user.protectFromFall();
