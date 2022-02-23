@@ -16,7 +16,7 @@ public class FWFCmd {
         CHECK_ARGS.add("toggle");
     }  //写成常量节省一丢丢性能
     public static void onCmd(FWFSender sender, String label, String... args) {
-        if (ConfigUtil.CONFIG.config == null) {
+        if (ConfigUtil.CONFIG == null || ConfigUtil.CONFIG.config == null) {  //未雨绸缪一下
             if (!sender.hasPermission("fly.admin")) {
                 sender.autoSendMsg(
                         "&c插件载入时出错，无法使用，请联系管理员处理",
