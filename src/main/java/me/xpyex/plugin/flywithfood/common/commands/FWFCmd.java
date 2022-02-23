@@ -9,6 +9,12 @@ import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.PlayerUtil;
 
 public class FWFCmd {
+    private static final HashSet<String> CHECK_ARGS = new HashSet<>();
+    static {
+        CHECK_ARGS.add("on");
+        CHECK_ARGS.add("off");
+        CHECK_ARGS.add("toggle");
+    }  //写成常量节省一丢丢性能
     public static void onCmd(FWFSender sender, String label, String... args) {
         if (ConfigUtil.CONFIG.config == null) {
             if (!sender.hasPermission("fly.admin")) {
@@ -84,11 +90,7 @@ public class FWFCmd {
             onCmd(sender, label, args[0], sender.getName());
             return;  //令命令重新执行，定义目标
         }
-        HashSet<String> checkArgs = new HashSet<>();
-        checkArgs.add("on");
-        checkArgs.add("off");
-        checkArgs.add("toggle");
-        if (checkArgs.contains(args[0].toLowerCase())) {  //如果是调整飞行模式
+        if (CHECK_ARGS.contains(args[0].toLowerCase())) {  //如果是调整飞行模式
             if ((!(sender instanceof FWFUser)) && sender.getName().equals(args[1])) { //sender不是玩家，且对象是sender的时候
                 sender.sendFWFMsg(FWFMsgType.PlayerOnly);
                 return;
