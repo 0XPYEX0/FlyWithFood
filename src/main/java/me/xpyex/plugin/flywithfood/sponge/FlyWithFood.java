@@ -1,9 +1,10 @@
 package me.xpyex.plugin.flywithfood.sponge;
 
 import java.util.concurrent.TimeUnit;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
+import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
@@ -11,7 +12,6 @@ import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpLevel
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpPoint;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeFood;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeMoney;
-import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -56,7 +56,7 @@ public class FlyWithFood {
             LOGGER.error("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
             return;
         }
-        if (VersionUtil.getPluginConfigVersion() != VersionUtil.getLocalConfigVersion()) {
+        if (ConfigUtil.needUpdate()) {
             LOGGER.info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
             HandleConfig.updateConfigFile();
             if (!HandleConfig.reloadConfig()) {

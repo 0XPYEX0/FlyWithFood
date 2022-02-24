@@ -8,11 +8,11 @@ import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpLevel
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpPoint;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitFood;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitMoney;
-import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.FlyEnergy;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
-import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
+import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -64,7 +64,7 @@ public final class FlyWithFood extends JavaPlugin {
             LOGGER.warning("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
             return;
         }
-        if (VersionUtil.getPluginConfigVersion() != VersionUtil.getLocalConfigVersion()) {
+        if (ConfigUtil.needUpdate()) {
             LOGGER.info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
             LOGGER.info("The configuration file is modified in this update, and the original file is being backed up and a new file is being generated.");
             LOGGER.info(" ");

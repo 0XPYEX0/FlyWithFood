@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
-import me.xpyex.plugin.flywithfood.bukkit.utils.VersionUtil;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
@@ -171,7 +170,7 @@ public class HandleConfig {
                 }
                 newJO.put(value, config.config.get(value));
             }
-            newJO.put("ConfigVersion", VersionUtil.getPluginConfigVersion());
+            newJO.put("ConfigVersion", ConfigUtil.getPluginConfigVersion());
             createConfigFile(newJO);
 
         } catch (Exception e) {

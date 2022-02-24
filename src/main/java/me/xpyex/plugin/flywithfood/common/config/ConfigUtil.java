@@ -116,4 +116,16 @@ public class ConfigUtil {
 
         return outJson;
     }
+
+    public static int getLocalConfigVersion() {
+        return CONFIG.config.containsKey("ConfigVersion") ? CONFIG.version : 0;
+    }
+
+    public static int getPluginConfigVersion() {
+        return CONFIG_VERSION;
+    }
+
+    public static boolean needUpdate() {
+        return getPluginConfigVersion() != getLocalConfigVersion();
+    }
 }

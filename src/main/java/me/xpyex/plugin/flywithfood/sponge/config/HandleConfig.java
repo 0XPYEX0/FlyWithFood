@@ -15,7 +15,6 @@ import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
-import me.xpyex.plugin.flywithfood.sponge.utils.VersionUtil;
 import org.spongepowered.api.effect.Viewer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
@@ -149,7 +148,7 @@ public class HandleConfig {
                 }
                 newJO.put(value, config.config.get(value));
             }
-            newJO.put("ConfigVersion", VersionUtil.getPluginConfigVersion());
+            newJO.put("ConfigVersion", ConfigUtil.getPluginConfigVersion());
             createConfigFile(newJO);
 
         } catch (Exception e) {
