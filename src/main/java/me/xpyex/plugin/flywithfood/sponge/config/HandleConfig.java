@@ -21,10 +21,10 @@ import org.spongepowered.api.text.title.Title;
 
 public class HandleConfig {
     public static FWFConfig config;
-    static final File ROOT = new File("config/FlyWithFood/");
-    static final File CONFIG_FILE = new File("config/FlyWithFood/config.json");
-    static final File HOW_TO_CONFIG_FILE = new File("config/FlyWithFood/HowToConfig.txt");
-    static final File BAK_FOLDER = new File("config/FlyWithFood/bakConfig");
+    private static final File ROOT = new File("config/FlyWithFood/");
+    private static final File CONFIG_FILE = new File(ROOT, "config.json");
+    private static final File HOW_TO_CONFIG_FILE = new File(ROOT, "HowToConfig.txt");
+    private static final File BAK_FOLDER = new File(ROOT, "bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
     public static boolean enableAction;
@@ -79,7 +79,11 @@ public class HandleConfig {
             boolean supportTitleMsg = true;
             try {
                 Viewer.class.getMethod("sendTitle", Title.class);
-                new String("检查是否支持Title信息的方法(非常粗暴");
+                /*
+                 * 检查是否支持Title信息的方法(非常粗暴
+                 * 反正也开源了，不需要用new String做注释了
+                 * 早期用new String是因为没开源，可能有人反编译读我代码看不明白
+                 */
             } catch (Throwable ignored) {
                 supportTitleMsg = false;
             }
@@ -134,7 +138,7 @@ public class HandleConfig {
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String time = format.format(new Date());
-            File targetFile = new File("config/FlyWithFood/bakConfig/config_" + time + ".json");
+            File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JSONObject newJO = getNewConfig();
             for (String value : config.languages.keySet()) {

@@ -24,11 +24,11 @@ import org.bukkit.entity.Player;
 
 public class HandleConfig {
     public static FWFConfig config;
-    private final static File ROOT = new File("plugins/" + FlyWithFood.INSTANCE.getName());
-    private final static File CONFIG_FILE = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/config.json");
-    private final static File HOW_TO_CONFIG_FILE_CH = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig-CH.txt");
-    private final static File HOW_TO_CONFIG_FILE_EN = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/HowToConfig-EN.txt");
-    private final static File BAK_FOLDER = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig");
+    private final static File ROOT = FlyWithFood.INSTANCE.getDataFolder();
+    private final static File CONFIG_FILE = new File(ROOT, "config.json");
+    private final static File HOW_TO_CONFIG_FILE_CH = new File(ROOT, "HowToConfig-CH.txt");
+    private final static File HOW_TO_CONFIG_FILE_EN = new File(ROOT, "HowToConfig-EN.txt");
+    private final static File BAK_FOLDER = new File(ROOT, "bakConfig");
     public static boolean enableRawMsg;
     public static boolean enableTitle;
     public static boolean enableAction;
@@ -154,7 +154,7 @@ public class HandleConfig {
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String time = format.format(new Date());
-            File targetFile = new File("plugins/" + FlyWithFood.INSTANCE.getName() + "/bakConfig/config_" + time + ".json");
+            File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JSONObject newJO = getNewConfig();
             for (String value : config.languages.keySet()) {
