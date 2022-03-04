@@ -30,6 +30,6 @@ public class BukkitMoney implements MoneyEnergy {
     @Override
     public void register() {
         EnergyManager.registerEnergy(getName(), this);
-        ///
+        //
     }
 }
