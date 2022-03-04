@@ -17,7 +17,7 @@ public class BukkitMoney implements MoneyEnergy {
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         if (FlyWithFood.econ != null) {
             Player target = (Player) user.getPlayer();
-            FlyWithFood.econ.depositPlayer(target, value.doubleValue());  //才发现这玩意叫存款，，我还以为是设置金额
+            FlyWithFood.econ.depositPlayer(target, -value.doubleValue());  //才发现这玩意叫存款，，我还以为是设置金额
         }
     }
 
@@ -30,5 +30,6 @@ public class BukkitMoney implements MoneyEnergy {
     @Override
     public void register() {
         EnergyManager.registerEnergy(getName(), this);
+        //
     }
 }
