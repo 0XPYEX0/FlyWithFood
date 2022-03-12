@@ -22,11 +22,12 @@ public class SpongeExpPoint implements ExpPointEnergy {
     @Override
     public @NotNull Integer getNow(FWFUser user) {
         Player target = (Player) user.getPlayer();
-        return target.get(Keys.EXPERIENCE_SINCE_LEVEL).get();
+        return target.get(Keys.EXPERIENCE_LEVEL).get();
     }
 
     @Override
     public void register() {
         EnergyManager.registerEnergy(getName(), this);
+        //
     }
 }

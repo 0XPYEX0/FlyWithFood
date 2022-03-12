@@ -1,6 +1,8 @@
 package me.xpyex.plugin.flywithfood.sponge.implementations;
 
+import com.google.gson.JsonPrimitive;
 import java.util.Optional;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
@@ -59,14 +61,14 @@ public class SpongeUser extends SpongeSender implements FWFUser {
 
     @Override
     public FWFInfo getInfo() {
-        double cost = HandleConfig.config.cost; //每秒消耗的数值，可为饥饿值或经验值
-        double disable = HandleConfig.config.disable; //消耗至多少关闭飞行
-        String mode = HandleConfig.config.mode;  //消耗什么数值
-        for (String groupName : HandleConfig.config.groups.keySet()) {
+        double cost = ConfigUtil.CONFIG.cost; //每秒消耗的数值，可为饥饿值或经验值
+        double disable = ConfigUtil.CONFIG.disable; //消耗至多少关闭飞行
+        String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
+        for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
             if (player.hasPermission("fly.groups." + groupName)) {
-                cost = HandleConfig.config.groups.getJSONObject(groupName).getDouble("Cost");
-                disable = HandleConfig.config.groups.getJSONObject(groupName).getDouble("Disable");
-                mode = HandleConfig.config.groups.getJSONObject(groupName).getString("CostMode");  //重新分配分组中的值
+                cost = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Cost").getAsDouble();
+                disable = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Disable").getAsDouble();
+                mode = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
                 break;
             }
         }
@@ -81,12 +83,12 @@ public class SpongeUser extends SpongeSender implements FWFUser {
 
     @Override
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        return HandleConfig.noCostWL && HandleConfig.config.noCostWL.getJSONArray("Worlds").contains(player.getWorld().getName());
+        return HandleConfig.noCostWL && ConfigUtil.CONFIG.noCostWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getWorld().getName()));
     }
 
     @Override
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
-        return HandleConfig.functionWL && !HandleConfig.config.functionWL.getJSONArray("Worlds").contains(player.getWorld().getName());
+        return HandleConfig.functionWL && !ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getWorld().getName()));
     }
 
     @Override

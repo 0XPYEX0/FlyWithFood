@@ -33,33 +33,33 @@ public class FWFCmd {
             return;
         }
         if (args.length == 0) {
-            for (Object o : ConfigUtil.CONFIG.languages.getJSONObject("HelpMsgList").getJSONArray("Start")) {
+            for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Start").getAsJsonArray()) {
                 if (o instanceof String) {
                     sender.autoSendMsg((String) o);
                 }
             }
             if (sender.hasPermission("fly.fly")) {
-                for (Object o : ConfigUtil.CONFIG.languages.getJSONObject("HelpMsgList").getJSONArray("Fly")) {
+                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Fly").getAsJsonArray()) {
                     if (o instanceof String) {
                         sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
                     }
                 }
             }
             if (sender.hasPermission("fly.other")) {
-                for (Object o : ConfigUtil.CONFIG.languages.getJSONObject("HelpMsgList").getJSONArray("Other")) {
+                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Other").getAsJsonArray()) {
                     if (o instanceof String) {
                         sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
                     }
                 }
             }
             if (sender.hasPermission("fly.admin")) {
-                for (Object o : ConfigUtil.CONFIG.languages.getJSONObject("HelpMsgList").getJSONArray("Admin")) {
+                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Admin").getAsJsonArray()) {
                     if (o instanceof String) {
                         sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
                     }
                 }
             }
-            for (Object o : ConfigUtil.CONFIG.languages.getJSONObject("HelpMsgList").getJSONArray("End")) {
+            for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get(("End")).getAsJsonArray()) {
                 if (o instanceof String) {
                     sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
                 }

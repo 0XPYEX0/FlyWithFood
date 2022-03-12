@@ -41,13 +41,14 @@ public class BukkitExpPoint implements ExpPointEnergy {
     }
 
     @Override
-    public @NotNull Float getNow(FWFUser user) {
+    public @NotNull Integer getNow(FWFUser user) {
         Player target = (Player) user.getPlayer();
-        return target.getExp();
+        return target.getLevel();
     }
 
     @Override
     public void register() {
         EnergyManager.registerEnergy(getName(), this);
+        //
     }
 }

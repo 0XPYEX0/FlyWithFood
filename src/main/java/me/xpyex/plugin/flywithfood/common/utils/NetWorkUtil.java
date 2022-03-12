@@ -1,11 +1,11 @@
 package me.xpyex.plugin.flywithfood.common.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 
 public class NetWorkUtil {
     public static String newVer;
@@ -21,9 +21,9 @@ public class NetWorkUtil {
             while ((nRead = huc.getInputStream().read(data, 0, data.length)) != -1) {
                 ba.write(data, 0, nRead);
             }
-            JSONArray array = JSON.parseArray(ba.toString("UTF-8"));
-            JSONObject latestVer = array.getJSONObject(0);
-            String name = latestVer.getString("name");
+            JsonArray array = ConfigUtil.GSON.fromJson(ba.toString("UTF-8"), JsonArray.class);
+            JsonObject latestVer = array.get(0).getAsJsonObject();
+            String name = latestVer.get("name").getAsString();
             if (!name.equals("v" + PLUGIN_VERSION)) {
                 return name;
             } else {

@@ -66,8 +66,8 @@ public class FlyWithFood {
             }
         }
 
-        HandleConfig.functionWL = HandleConfig.config.functionWL.getBoolean("Enable");
-        HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
+        HandleConfig.functionWL = HandleConfig.config.functionWL.get("Enable").getAsBoolean();
+        HandleConfig.noCostWL = HandleConfig.config.noCostWL.get("Enable").getAsBoolean();
         NetWorkUtil.PLUGIN_VERSION = Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get();
 
         startCheck();

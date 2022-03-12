@@ -1,5 +1,6 @@
 package me.xpyex.plugin.flywithfood.bukkit.listeners;
 
+import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
@@ -51,7 +52,7 @@ public class HandleEvent implements Listener {
             if (user.hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
                 return;
             }
-            if (HandleConfig.functionWL && HandleConfig.config.functionWL.getJSONArray("Worlds").contains(event.getTo().getWorld().getName())) {
+            if (HandleConfig.functionWL && HandleConfig.config.functionWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(event.getTo().getWorld().getName()))) {
                 player.setAllowFlight(false);
             }
         }

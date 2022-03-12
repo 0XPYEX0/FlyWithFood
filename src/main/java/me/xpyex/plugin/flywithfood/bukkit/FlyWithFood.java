@@ -83,8 +83,8 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Load config file successfully");
         LOGGER.info(" ");
 
-        HandleConfig.functionWL = HandleConfig.config.functionWL.getBoolean("Enable");
-        HandleConfig.noCostWL = HandleConfig.config.noCostWL.getBoolean("Enable");
+        HandleConfig.functionWL = HandleConfig.config.functionWL.get("Enable").getAsBoolean();
+        HandleConfig.noCostWL = HandleConfig.config.noCostWL.get("Enable").getAsBoolean();
 
         startCheck();
 

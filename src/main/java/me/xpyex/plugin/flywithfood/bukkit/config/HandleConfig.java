@@ -1,7 +1,6 @@
 package me.xpyex.plugin.flywithfood.bukkit.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +67,7 @@ public class HandleConfig {
                 configText.append(line);
             }
             in.close();
-            config = (ConfigUtil.CONFIG = new BukkitConfig(JSON.parseObject(configText.toString())));
+            config = (ConfigUtil.CONFIG = new BukkitConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class)));
 
             if (!EnergyManager.hasEnergy(config.mode)) {
                 FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + config.mode);
@@ -76,12 +75,12 @@ public class HandleConfig {
                 return false;
             }
 
-            functionWL = ConfigUtil.CONFIG.functionWL.getBoolean("Enable");
-            noCostWL = ConfigUtil.CONFIG.noCostWL.getBoolean("Enable");  //重载的时候用
+            functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
+            noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();  //重载的时候用
 
-            enableRawMsg = config.languages.getJSONObject("RawMsg").getBoolean("Enable");
-            enableTitle = config.languages.getJSONObject("TitleMsg").getBoolean("Enable");
-            enableAction = config.languages.getJSONObject("ActionMsg").getBoolean("Enable");
+            enableRawMsg = config.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableTitle = config.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableAction = config.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
             if (enableTitle) {
                 try {
                     Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
@@ -131,14 +130,14 @@ public class HandleConfig {
         createConfigFile(getNewConfig());
     }
 
-    public static void createConfigFile(JSONObject json) throws Exception {
+    public static void createConfigFile(JsonObject json) throws Exception {
         if (!ROOT.exists()) {
             ROOT.mkdirs();
         }
         CONFIG_FILE.createNewFile();
 
         PrintWriter out = new PrintWriter(CONFIG_FILE, "UTF-8");
-        out.write(JSON.toJSONString(json, true));
+        out.write(ConfigUtil.GSON.toJson(json));
         out.flush();
         out.close();
     }
@@ -156,21 +155,21 @@ public class HandleConfig {
             String time = format.format(new Date());
             File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
-            JSONObject newJO = getNewConfig();
-            for (String value : config.languages.keySet()) {
-                newJO.getJSONObject("Languages").put(value, config.languages.get(value));
+            JsonObject newJO = getNewConfig();
+            for (String value : ConfigUtil.getJsonObjectKeys(config.languages)) {
+                newJO.get("Languages").getAsJsonObject().add(value, config.languages.get(value));
             }
-            for (String value : config.config.keySet()) {
+            for (String value : ConfigUtil.getJsonObjectKeys(config.config)) {
                 if (value.equals("Languages")) {  //在上文处理了
                     continue;
                 }
                 if (value.contains("Food")) {
-                    newJO.put(value.replace("Food", ""), config.config.get(value));  //更名
+                    newJO.add(value.replace("Food", ""), config.config.get(value));  //更名
                     continue;
                 }
-                newJO.put(value, config.config.get(value));
+                newJO.add(value, config.config.get(value));
             }
-            newJO.put("ConfigVersion", ConfigUtil.getPluginConfigVersion());
+            newJO.addProperty("ConfigVersion", ConfigUtil.getPluginConfigVersion());
             createConfigFile(newJO);
 
         } catch (Exception e) {
@@ -232,7 +231,7 @@ public class HandleConfig {
         return result;
     }
 
-    public static JSONObject getNewConfig() {
+    public static JsonObject getNewConfig() {
         return ConfigUtil.getNewConfig();
         //
     }

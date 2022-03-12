@@ -22,16 +22,16 @@ public class Utils {
 
     public static String formatMsg(CommandSender target, String msg) {
         String mode = HandleConfig.config.mode;  //消耗什么数值
-        for (String groupName : HandleConfig.config.groups.keySet()) {
+        for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
             if (target.hasPermission("fly.groups." + groupName)) {
-                mode = HandleConfig.config.groups.getJSONObject(groupName).getString("CostMode");  //重新分配分组中的值
+                mode = HandleConfig.config.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
                 break;
             }
         }
-        if (!HandleConfig.config.languages.getJSONObject("Modes").containsKey(mode)) {
+        if (!HandleConfig.config.languages.get("Modes").getAsJsonObject().has(mode)) {
             throw new IllegalStateException(target.getName() + " 的CostMode出现错误！无法正确替换信息！请检查配置文件！CostMode只应出现" + Arrays.toString(EnergyManager.getEnergys()));
         }
-        return msg.replace("%mode%", HandleConfig.config.languages.getJSONObject("Modes").getString(mode));
+        return msg.replace("%mode%", HandleConfig.config.languages.get("Modes").getAsJsonObject().get(mode).getAsString());
     }
 
     public static void autoSendMsg(CommandSender target, String... msg) {
@@ -46,11 +46,11 @@ public class Utils {
             case NoPermission:
             case PlayerOnly:
             case PlayerNotOnline:
-                autoSendMsg(target, HandleConfig.config.languages.getString(msgType.getValue()));
+                autoSendMsg(target, ConfigUtil.CONFIG.languages.get(msgType.getValue()).getAsString());
                 return;
         }
         if (HandleConfig.enableRawMsg) {
-            String rawMsg = ConfigUtil.CONFIG.languages.getJSONObject("RawMsg").getString(msgType.getValue());
+            String rawMsg = ConfigUtil.CONFIG.languages.get("RawMsg").getAsJsonObject().get(msgType.getValue()).getAsString();
             if (!rawMsg.isEmpty()) {
                 autoSendMsg(target, rawMsg);
             }
@@ -59,7 +59,7 @@ public class Utils {
             return;
         }
         if (HandleConfig.enableAction) {
-            String actionMsg = formatMsg(target, HandleConfig.config.languages.getJSONObject("ActionMsg").getString(msgType.getValue()));
+            String actionMsg = formatMsg(target, ConfigUtil.CONFIG.languages.get("ActionMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
             if (!actionMsg.isEmpty()) {
                 if (NMSAll.shouldUseNMSAction) {
                     NMSUtil.sendActionBar((Player) target, getColorfulMsg(actionMsg));
@@ -69,7 +69,7 @@ public class Utils {
             }
         }
         if (HandleConfig.enableTitle) {
-            String titleMsg = formatMsg(target, HandleConfig.config.languages.getJSONObject("TitleMsg").getString(msgType.getValue()));
+            String titleMsg = formatMsg(target, ConfigUtil.CONFIG.languages.get("TitleMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
             if (!titleMsg.isEmpty()) {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {

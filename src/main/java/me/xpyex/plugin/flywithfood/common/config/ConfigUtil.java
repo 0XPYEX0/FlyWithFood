@@ -1,53 +1,58 @@
 package me.xpyex.plugin.flywithfood.common.config;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import java.util.HashSet;
 
 public class ConfigUtil {
     public static final int CONFIG_VERSION = 5;
     public static FWFConfig CONFIG;
-    public static JSONObject getNewConfig() {
-        JSONObject outJson = new JSONObject();
-        outJson.put("Cost", 4);
-        outJson.put("Disable", 6);
-        outJson.put("CheckSeconds", 1);
-        outJson.put("ConfigVersion", CONFIG_VERSION);
-        outJson.put("CostMode", "Food");
-        outJson.put("Language", "Chinese");
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    
+    public static JsonObject getNewConfig() {
+        JsonObject outJson = new JsonObject();
+        outJson.addProperty("Cost", 4);
+        outJson.addProperty("Disable", 6);
+        outJson.addProperty("CheckSeconds", 1);
+        outJson.addProperty("ConfigVersion", CONFIG_VERSION);
+        outJson.addProperty("CostMode", "Food");
+        outJson.addProperty("Language", "Chinese");
 
-        JSONObject rawMsgConfig = new JSONObject();
-        rawMsgConfig.put("Enable", true);
-        rawMsgConfig.put("On", "&b[飞行]&a你已经成功开启飞行！请注意你的%mode%");
-        rawMsgConfig.put("Off", "&b[飞行]&a你已经关闭飞行！");
-        rawMsgConfig.put("CannotEnable", "&b[飞行]&c%mode%不足，无法开启飞行!");
-        rawMsgConfig.put("CannotFly", "&b[飞行]&c你的%mode%不足，已经自动关闭飞行");
-        rawMsgConfig.put("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
+        JsonObject rawMsgConfig = new JsonObject();
+        rawMsgConfig.addProperty("Enable", true);
+        rawMsgConfig.addProperty("On", "&b[飞行]&a你已经成功开启飞行！请注意你的%mode%");
+        rawMsgConfig.addProperty("Off", "&b[飞行]&a你已经关闭飞行！");
+        rawMsgConfig.addProperty("CannotEnable", "&b[飞行]&c%mode%不足，无法开启飞行!");
+        rawMsgConfig.addProperty("CannotFly", "&b[飞行]&c你的%mode%不足，已经自动关闭飞行");
+        rawMsgConfig.addProperty("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
 
-        JSONObject titleMsgConfig = new JSONObject();
-        titleMsgConfig.put("Enable", true);
-        titleMsgConfig.put("On", "&b[飞行]\\n&a你已经成功开启飞行！请注意你的%mode%");
-        titleMsgConfig.put("Off", "&b[飞行]\\n&a你已经关闭飞行！");
-        titleMsgConfig.put("CannotEnable", "&b[飞行]\\n&c%mode%不足，无法开启飞行!");
-        titleMsgConfig.put("CannotFly", "&b[飞行]\\n&c你的%mode%不足，已经自动关闭飞行");
-        titleMsgConfig.put("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
+        JsonObject titleMsgConfig = new JsonObject();
+        titleMsgConfig.addProperty("Enable", true);
+        titleMsgConfig.addProperty("On", "&b[飞行]\\n&a你已经成功开启飞行！请注意你的%mode%");
+        titleMsgConfig.addProperty("Off", "&b[飞行]\\n&a你已经关闭飞行！");
+        titleMsgConfig.addProperty("CannotEnable", "&b[飞行]\\n&c%mode%不足，无法开启飞行!");
+        titleMsgConfig.addProperty("CannotFly", "&b[飞行]\\n&c你的%mode%不足，已经自动关闭飞行");
+        titleMsgConfig.addProperty("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
 
-        JSONObject actionMsgConfig = new JSONObject();
-        actionMsgConfig.put("Enable", false);
-        actionMsgConfig.put("On", "&a你已经成功开启飞行！请注意你的%mode%");
-        actionMsgConfig.put("Off", "&a你已经关闭飞行！");
-        actionMsgConfig.put("CannotEnable", "&c%mode%不足，无法开启飞行!");
-        actionMsgConfig.put("CannotFly", "&c你的%mode%不足，已经自动关闭飞行");
-        actionMsgConfig.put("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
+        JsonObject actionMsgConfig = new JsonObject();
+        actionMsgConfig.addProperty("Enable", false);
+        actionMsgConfig.addProperty("On", "&a你已经成功开启飞行！请注意你的%mode%");
+        actionMsgConfig.addProperty("Off", "&a你已经关闭飞行！");
+        actionMsgConfig.addProperty("CannotEnable", "&c%mode%不足，无法开启飞行!");
+        actionMsgConfig.addProperty("CannotFly", "&c你的%mode%不足，已经自动关闭飞行");
+        actionMsgConfig.addProperty("HasEffect", "&9你无法在拥有饱和效果的情况下飞行");
 
-        JSONObject helpMsgList = new JSONObject();
-        JSONArray startHelpMsg = new JSONArray();
+        JsonObject helpMsgList = new JsonObject();
+        JsonArray startHelpMsg = new JsonArray();
         startHelpMsg.add("&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
         startHelpMsg.add("&9你目前可用的命令: ");
-        JSONArray flyHelpMsg = new JSONArray();
+        JsonArray flyHelpMsg = new JsonArray();
         flyHelpMsg.add("&a%command% &b<on|off|toggle> &f- &e为你自己开启或关闭飞行");
-        JSONArray otherHelpMsg = new JSONArray();
+        JsonArray otherHelpMsg = new JsonArray();
         otherHelpMsg.add("&a%command% &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行");
-        JSONArray adminHelpMsg = new JSONArray();
+        JsonArray adminHelpMsg = new JsonArray();
         adminHelpMsg.add("&a%command% &breload &f- &e重载配置");
         adminHelpMsg.add("&d以下为权限列表: ");
         adminHelpMsg.add("&afly.fly &f- &e允许玩家开启或关闭飞行");
@@ -55,70 +60,70 @@ public class ConfigUtil {
         adminHelpMsg.add("&afly.other &f- &e允许玩家开启或关闭他人的飞行");
         adminHelpMsg.add("&afly.admin &f- &e可收到权限列表");
         adminHelpMsg.add("&afly.groups.&2%GroupName% &f- &e将玩家归于配置文件的组内，%GroupName%为组名.如fly.groups.Group1，则将玩家归于Group1组");
-        JSONArray endHelpMsg = new JSONArray();
-        helpMsgList.put("Start", startHelpMsg);
-        helpMsgList.put("Fly", flyHelpMsg);
-        helpMsgList.put("Other", otherHelpMsg);
-        helpMsgList.put("Admin", adminHelpMsg);
-        helpMsgList.put("End", endHelpMsg);
+        JsonArray endHelpMsg = new JsonArray();
+        helpMsgList.add("Start", startHelpMsg);
+        helpMsgList.add("Fly", flyHelpMsg);
+        helpMsgList.add("Other", otherHelpMsg);
+        helpMsgList.add("Admin", adminHelpMsg);
+        helpMsgList.add("End", endHelpMsg);
 
-        JSONObject modes = new JSONObject();
-        modes.put("ExpLevel", "经验等级");
-        modes.put("Food", "饥饿值");
-        modes.put("ExpPoint", "经验值");
-        modes.put("Money", "游戏币");
+        JsonObject modes = new JsonObject();
+        modes.addProperty("ExpLevel", "经验等级");
+        modes.addProperty("Food", "饥饿值");
+        modes.addProperty("ExpPoint", "经验值");
+        modes.addProperty("Money", "游戏币");
 
-        JSONObject languages = new JSONObject();
-        languages.put("RawMsg", rawMsgConfig);
-        languages.put("TitleMsg", titleMsgConfig);
-        languages.put("ActionMsg", actionMsgConfig);
-        languages.put("HelpMsgList", helpMsgList);
-        languages.put("NoPermission", "&c你没有权限");
-        languages.put("DisableInThisWorld", "&c这个世界不允许使用这个命令");
-        languages.put("PlayerOnly", "&c该命令仅允许玩家执行");
-        languages.put("PlayerNotOnline", "&c玩家不存在");
-        languages.put("Modes", modes);
-        outJson.put("Languages", languages);
+        JsonObject languages = new JsonObject();
+        languages.add("RawMsg", rawMsgConfig);
+        languages.add("TitleMsg", titleMsgConfig);
+        languages.add("ActionMsg", actionMsgConfig);
+        languages.add("HelpMsgList", helpMsgList);
+        languages.addProperty("NoPermission", "&c你没有权限");
+        languages.addProperty("DisableInThisWorld", "&c这个世界不允许使用这个命令");
+        languages.addProperty("PlayerOnly", "&c该命令仅允许玩家执行");
+        languages.addProperty("PlayerNotOnline", "&c玩家不存在");
+        languages.add("Modes", modes);
+        outJson.add("Languages", languages);
 
-        JSONArray worlds = new JSONArray();
+        JsonArray worlds = new JsonArray();
         worlds.add("world");
         worlds.add("world_nether");
         worlds.add("world_the_end");
         worlds.add("spawnworld");
 
-        JSONObject FunctionsWhitelist = new JSONObject();
-        FunctionsWhitelist.put("Enable", false);
-        FunctionsWhitelist.put("Worlds", worlds);
-        outJson.put("FunctionsWhitelist", FunctionsWhitelist);
+        JsonObject FunctionsWhitelist = new JsonObject();
+        FunctionsWhitelist.addProperty("Enable", false);
+        FunctionsWhitelist.add("Worlds", worlds);
+        outJson.add("FunctionsWhitelist", FunctionsWhitelist);
 
-        JSONObject NoCostWhitelist = new JSONObject();
-        NoCostWhitelist.put("Enable", false);
-        NoCostWhitelist.put("Worlds", worlds);
-        outJson.put("NoCostWhitelist", NoCostWhitelist);
+        JsonObject NoCostWhitelist = new JsonObject();
+        NoCostWhitelist.addProperty("Enable", false);
+        NoCostWhitelist.add("Worlds", worlds);
+        outJson.add("NoCostWhitelist", NoCostWhitelist);
 
-        JSONObject Groups = new JSONObject();
-        JSONObject G1 = new JSONObject();
-        G1.put("Cost", 2);
-        G1.put("Disable", 6);
-        G1.put("CostMode", "Food");
-        Groups.put("Group1", G1);
-        JSONObject G2 = new JSONObject();
-        G2.put("Cost", 1);
-        G2.put("Disable", 4);
-        G2.put("CostMode", "ExpLevel");
-        Groups.put("Group2", G2);
-        JSONObject G3 = new JSONObject();
-        G3.put("Cost", 1);
-        G3.put("Disable", 4);
-        G3.put("CostMode", "ExpPoint");
-        Groups.put("Players_3", G3);
-        outJson.put("Groups", Groups);
+        JsonObject Groups = new JsonObject();
+        JsonObject G1 = new JsonObject();
+        G1.addProperty("Cost", 2);
+        G1.addProperty("Disable", 6);
+        G1.addProperty("CostMode", "Food");
+        Groups.add("Group1", G1);
+        JsonObject G2 = new JsonObject();
+        G2.addProperty("Cost", 1);
+        G2.addProperty("Disable", 4);
+        G2.addProperty("CostMode", "ExpLevel");
+        Groups.add("Group2", G2);
+        JsonObject G3 = new JsonObject();
+        G3.addProperty("Cost", 1);
+        G3.addProperty("Disable", 4);
+        G3.addProperty("CostMode", "ExpPoint");
+        Groups.add("Players_3", G3);
+        outJson.add("Groups", Groups);
 
         return outJson;
     }
 
     public static int getLocalConfigVersion() {
-        return CONFIG.config.containsKey("ConfigVersion") ? CONFIG.version : 0;
+        return CONFIG.config.has("ConfigVersion") ? CONFIG.version : 0;
     }
 
     public static int getPluginConfigVersion() {
@@ -127,5 +132,13 @@ public class ConfigUtil {
 
     public static boolean needUpdate() {
         return getPluginConfigVersion() != getLocalConfigVersion();
+    }
+
+    public static String[] getJsonObjectKeys(JsonObject target) {
+        HashSet<String> set = new HashSet<>();
+        target.entrySet().forEach(E -> {
+            set.add(E.getKey());
+        });
+        return set.toArray(new String[0]);
     }
 }
