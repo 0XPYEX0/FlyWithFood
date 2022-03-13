@@ -21,17 +21,17 @@ public class Utils {
     }
 
     public static String formatMsg(CommandSender target, String msg) {
-        String mode = HandleConfig.config.mode;  //消耗什么数值
+        String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
         for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
             if (target.hasPermission("fly.groups." + groupName)) {
-                mode = HandleConfig.config.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
+                mode = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
                 break;
             }
         }
-        if (!HandleConfig.config.languages.get("Modes").getAsJsonObject().has(mode)) {
+        if (!ConfigUtil.CONFIG.languages.get("Modes").getAsJsonObject().has(mode)) {
             throw new IllegalStateException(target.getName() + " 的CostMode出现错误！无法正确替换信息！请检查配置文件！CostMode只应出现" + Arrays.toString(EnergyManager.getEnergys()));
         }
-        return msg.replace("%mode%", HandleConfig.config.languages.get("Modes").getAsJsonObject().get(mode).getAsString());
+        return msg.replace("%mode%", ConfigUtil.CONFIG.languages.get("Modes").getAsJsonObject().get(mode).getAsString());
     }
 
     public static void autoSendMsg(CommandSender target, String... msg) {
@@ -73,7 +73,7 @@ public class Utils {
             if (!titleMsg.isEmpty()) {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
-                    if (HandleConfig.config.language.equalsIgnoreCase("Chinese")) {
+                    if (ConfigUtil.CONFIG.language.equalsIgnoreCase("Chinese")) {
                         FlyWithFood.LOGGER.warning("Title数量错误!最多仅有2行!");
                     } else {
                         FlyWithFood.LOGGER.warning("Title Messages can only have two at most!");

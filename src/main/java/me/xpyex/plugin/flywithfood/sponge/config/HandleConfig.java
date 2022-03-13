@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
-import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import org.spongepowered.api.effect.Viewer;
@@ -19,7 +18,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
 public class HandleConfig {
-    public static FWFConfig config;
     private static final File ROOT = new File("config/FlyWithFood/");
     private static final File CONFIG_FILE = new File(ROOT, "config.json");
     private static final File HOW_TO_CONFIG_FILE = new File(ROOT, "HowToConfig.txt");
@@ -59,9 +57,9 @@ public class HandleConfig {
             }
             in.close();
             in.close();
-            config = (ConfigUtil.CONFIG = new SpongeConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class)));
+            ConfigUtil.CONFIG = new SpongeConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class));
 
-            if (!EnergyManager.hasEnergy(config.mode)) {
+            if (!EnergyManager.hasEnergy(ConfigUtil.CONFIG.mode)) {
                 FlyWithFood.LOGGER.error("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种");
                 FlyWithFood.LOGGER.error("Error!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()));
                 return false;
@@ -70,9 +68,9 @@ public class HandleConfig {
             functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
             noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();  //重载的时候用
 
-            enableRawMsg = config.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableTitle = config.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableAction = config.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableRawMsg = ConfigUtil.CONFIG.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableTitle = ConfigUtil.CONFIG.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableAction = ConfigUtil.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
 
 
             boolean supportTitleMsg = true;
@@ -107,7 +105,7 @@ public class HandleConfig {
             e.printStackTrace();
             return false;
         }
-        return config != null;
+        return ConfigUtil.CONFIG != null;
     }
 
     public static void createConfigFile() throws Exception {
@@ -140,16 +138,16 @@ public class HandleConfig {
             File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JsonObject newJO = getNewConfig();
-            for (String value : ConfigUtil.getJsonObjectKeys(config.languages)) {
-                newJO.get("Languages").getAsJsonObject().add(value, config.languages.get(value));
+            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.languages)) {
+                newJO.get("Languages").getAsJsonObject().add(value, ConfigUtil.CONFIG.languages.get(value));
             }
-            for (String value : ConfigUtil.getJsonObjectKeys(config.config)) {
+            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.config)) {
                 if (value.equals("Languages")) continue;
                 if (value.contains("Food")) {
-                    newJO.add(value.replace("Food", ""), config.config.get(value));
+                    newJO.add(value.replace("Food", ""), ConfigUtil.CONFIG.config.get(value));
                     continue;
                 }
-                newJO.add(value, config.config.get(value));
+                newJO.add(value, ConfigUtil.CONFIG.config.get(value));
             }
             newJO.addProperty("ConfigVersion", ConfigUtil.getPluginConfigVersion());
             createConfigFile(newJO);
@@ -181,13 +179,12 @@ public class HandleConfig {
     }
 
     public static boolean reloadConfig() {
-        config = null;
+        ConfigUtil.CONFIG = null;
         enableRawMsg = false;
         enableAction = false;
         enableTitle = false;
         FlyWithFood.cancelTasks();
-        loadConfig();
-        return config != null;
+        return loadConfig();
     }
 
     public static JsonObject getNewConfig() {

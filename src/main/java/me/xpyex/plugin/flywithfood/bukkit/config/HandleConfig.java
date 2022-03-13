@@ -13,7 +13,6 @@ import java.util.Date;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
-import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -22,9 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class HandleConfig {
-    public static FWFConfig config;
     private final static File ROOT = FlyWithFood.INSTANCE.getDataFolder();
-    private final static File CONFIG_FILE = new File(ROOT, "config.json");
+    private final static File CONFIG_FILE = new File(ROOT, "ConfigUtil.CONFIG.json");
     private final static File HOW_TO_CONFIG_FILE_CH = new File(ROOT, "HowToConfig-CH.txt");
     private final static File HOW_TO_CONFIG_FILE_EN = new File(ROOT, "HowToConfig-EN.txt");
     private final static File BAK_FOLDER = new File(ROOT, "bakConfig");
@@ -67,20 +65,20 @@ public class HandleConfig {
                 configText.append(line);
             }
             in.close();
-            config = (ConfigUtil.CONFIG = new BukkitConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class)));
+            ConfigUtil.CONFIG = new BukkitConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class));
 
-            if (!EnergyManager.hasEnergy(config.mode)) {
-                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + config.mode);
-                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + ". -> " + config.mode);
+            if (!EnergyManager.hasEnergy(ConfigUtil.CONFIG.mode)) {
+                FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + ConfigUtil.CONFIG.mode);
+                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + ". -> " + ConfigUtil.CONFIG.mode);
                 return false;
             }
 
             functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
             noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();  //重载的时候用
 
-            enableRawMsg = config.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableTitle = config.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableAction = config.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableRawMsg = ConfigUtil.CONFIG.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableTitle = ConfigUtil.CONFIG.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            enableAction = ConfigUtil.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
             if (enableTitle) {
                 try {
                     Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
@@ -123,7 +121,7 @@ public class HandleConfig {
             e.printStackTrace();
             return false;
         }
-        return config != null;
+        return ConfigUtil.CONFIG != null;
     }
 
     public static void createConfigFile() throws Exception {
@@ -156,18 +154,18 @@ public class HandleConfig {
             File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JsonObject newJO = getNewConfig();
-            for (String value : ConfigUtil.getJsonObjectKeys(config.languages)) {
-                newJO.get("Languages").getAsJsonObject().add(value, config.languages.get(value));
+            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.languages)) {
+                newJO.get("Languages").getAsJsonObject().add(value, ConfigUtil.CONFIG.languages.get(value));
             }
-            for (String value : ConfigUtil.getJsonObjectKeys(config.config)) {
+            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.config)) {
                 if (value.equals("Languages")) {  //在上文处理了
                     continue;
                 }
                 if (value.contains("Food")) {
-                    newJO.add(value.replace("Food", ""), config.config.get(value));  //更名
+                    newJO.add(value.replace("Food", ""), ConfigUtil.CONFIG.config.get(value));  //更名
                     continue;
                 }
-                newJO.add(value, config.config.get(value));
+                newJO.add(value, ConfigUtil.CONFIG.config.get(value));
             }
             newJO.addProperty("ConfigVersion", ConfigUtil.getPluginConfigVersion());
             createConfigFile(newJO);
@@ -221,7 +219,7 @@ public class HandleConfig {
     }
 
     public static boolean reloadConfig() {
-        config = null;
+        ConfigUtil.CONFIG = null;
         enableRawMsg = false;
         enableAction = false;
         enableTitle = false;

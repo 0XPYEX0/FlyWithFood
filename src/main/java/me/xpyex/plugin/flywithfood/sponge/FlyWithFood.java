@@ -30,7 +30,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.3.7"
+        version = "1.3.9"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
@@ -66,8 +66,8 @@ public class FlyWithFood {
             }
         }
 
-        HandleConfig.functionWL = HandleConfig.config.functionWL.get("Enable").getAsBoolean();
-        HandleConfig.noCostWL = HandleConfig.config.noCostWL.get("Enable").getAsBoolean();
+        HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
+        HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
         NetWorkUtil.PLUGIN_VERSION = Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get();
 
         startCheck();

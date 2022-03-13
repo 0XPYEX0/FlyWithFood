@@ -83,8 +83,8 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Load config file successfully");
         LOGGER.info(" ");
 
-        HandleConfig.functionWL = HandleConfig.config.functionWL.get("Enable").getAsBoolean();
-        HandleConfig.noCostWL = HandleConfig.config.noCostWL.get("Enable").getAsBoolean();
+        HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
+        HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
 
         startCheck();
 
@@ -141,6 +141,6 @@ public final class FlyWithFood extends JavaPlugin {
                     user.protectFromFall();  //为玩家免疫掉落伤害
                 }
             }
-        }, 0L, HandleConfig.config.howLongCheck * 20L);  //间隔多少秒检查一次
+        }, 0L, ConfigUtil.CONFIG.howLongCheck * 20L);  //间隔多少秒检查一次
     }
 }
