@@ -27,6 +27,10 @@ public class FallProtector implements Consumer<Task> {
             task.cancel();
             return;
         }
+        if (player.get(Keys.IS_ELYTRA_FLYING).orElse(false)) {
+            task.cancel();
+            return;
+        }
         player.offer(Keys.FALL_DISTANCE, 0f);
     }
 

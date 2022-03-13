@@ -13,7 +13,15 @@ public class FallRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        if ((!player.isOnline()) || player.getAllowFlight() || player.isOnGround()) {
+        if (
+                !player.isOnline()
+                        ||
+                        player.getAllowFlight()
+                        ||
+                        player.isOnGround()
+                        ||
+                        player.isGliding()
+        ) {
             cancel();
             return;
         }
@@ -22,5 +30,6 @@ public class FallRunnable extends BukkitRunnable {
 
     public void start() {
         this.runTaskTimer(FlyWithFood.INSTANCE, 4L, 4L);
+        //
     }
 }
