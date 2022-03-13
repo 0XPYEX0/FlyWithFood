@@ -60,4 +60,10 @@ public class BukkitSender implements FWFSender {
         }
         return this.sender == ((BukkitSender) o).sender;
     }
+
+    @Override
+    public void sendMessage(String s) {
+        autoSendMsg(s);
+        //
+    }
 }

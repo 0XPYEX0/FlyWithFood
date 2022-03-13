@@ -26,9 +26,13 @@ public class Utils {
     }
     
     public static void sendFWFMsg(CommandSource target, FWFMsgType msgType) {
-        if (msgType == FWFMsgType.DisableInThisWorld || msgType == FWFMsgType.NoPermission) {
-            target.sendMessage(Text.of(getColorfulMsg(ConfigUtil.CONFIG.languages.get(msgType.getValue()).getAsString())));
-            return;
+        switch (msgType) {
+            case DisableInThisWorld:
+            case NoPermission:
+            case PlayerOnly:
+            case PlayerNotOnline:
+                target.sendMessage(Text.of(getColorfulMsg(ConfigUtil.CONFIG.languages.get(msgType.getValue()).getAsString())));
+                return;
         }
         if (HandleConfig.enableRawMsg) {
             String rawDisableMsg = ConfigUtil.CONFIG.languages.get("RawMsg").getAsJsonObject().get(msgType.getValue()).getAsString();

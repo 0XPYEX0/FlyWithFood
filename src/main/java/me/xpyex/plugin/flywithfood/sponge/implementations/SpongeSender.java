@@ -60,4 +60,10 @@ public class SpongeSender implements FWFSender {
         }
         return this.sender == ((SpongeSender) o).sender;
     }
+
+    @Override
+    public void sendMessage(String s) {
+        autoSendMsg(s);
+        //
+    }
 }
