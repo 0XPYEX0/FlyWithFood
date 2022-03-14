@@ -61,7 +61,7 @@ public class FlyCmd {
                                 target = (Player) sender;
                             } else {
                                 // 如果命令发送者不是玩家 则发送警告 终止命令
-                                Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
+                                Utils.sendFWFMsg(sender, FWFMsgType.PlayerOnly);
                                 return CommandResult.success();
                             }
                             FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "off", target.getName());
@@ -81,7 +81,7 @@ public class FlyCmd {
                                 target = (Player) sender;
                             } else {
                                 // 如果命令发送者不是玩家 则发送警告 终止命令
-                                Utils.autoSendMsg(sender, "&c该命令仅允许玩家使用");
+                                Utils.sendFWFMsg(sender, FWFMsgType.PlayerOnly);
                                 return CommandResult.success();
                             }
                             FWFCmd.onCmd(sender instanceof Player ? new SpongeUser((Player) sender) : new SpongeSender(sender), "fly", "toggle", target.getName());
