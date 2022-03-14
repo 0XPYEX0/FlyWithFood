@@ -96,12 +96,7 @@ public class FWFCmd {
                 return;
             }
             //BukkitUser targetUser = new BukkitUser(target);
-            FWFUser target;
-            if (sender.isBukkit()) {
-                target = PlayerUtil.getUser(args[1], "Bukkit");
-            } else {
-                target = PlayerUtil.getUser(args[1], "Sponge");
-            }
+            FWFUser target = sender.isBukkit() ? PlayerUtil.getUser(args[1], "Bukkit") : PlayerUtil.getUser(args[1], "Sponge");
             if (target == null) {
                 sender.sendFWFMsg(FWFMsgType.PlayerNotOnline);
                 return;
