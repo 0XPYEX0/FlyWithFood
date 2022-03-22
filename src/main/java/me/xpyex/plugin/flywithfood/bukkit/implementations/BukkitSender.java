@@ -26,16 +26,19 @@ public class BukkitSender implements FWFSender {
     @Override
     public String getName() {
         return sender.getName();
+        //
     }
 
     @Override
     public boolean isBukkit() {
         return true;
+        //
     }
 
     @Override
     public boolean isSponge() {
         return false;
+        //
     }
 
     @Override
@@ -64,6 +67,6 @@ public class BukkitSender implements FWFSender {
     @Override
     public void sendMessage(String s) {
         autoSendMsg(s);
-        //
+        //我为什么写这个来着？？
     }
 }

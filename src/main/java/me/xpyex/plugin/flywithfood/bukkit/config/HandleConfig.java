@@ -110,11 +110,11 @@ public class HandleConfig {
                     NMSAll.shouldUseNMSAction = true;
                     FlyWithFood.LOGGER.warning("你的服务器不支持直接发送Action信息!");
                     FlyWithFood.LOGGER.warning("将尝试调用NMS以发送Action信息");
-                    FlyWithFood.LOGGER.info("当前服务端NMS版本: " + NMSAll.nmsVer);
+                    FlyWithFood.LOGGER.info("当前服务端NMS版本: " + NMSAll.NMS_VERSION);
                     FlyWithFood.LOGGER.warning(" ");
                     FlyWithFood.LOGGER.warning("Your server does not support sending Action Messages directly!");
                     FlyWithFood.LOGGER.warning("FlyWithFood will try to use NMS to send Action Messages.");
-                    FlyWithFood.LOGGER.info("The NMS Version of your server: " + NMSAll.nmsVer);
+                    FlyWithFood.LOGGER.info("The NMS Version of your server: " + NMSAll.NMS_VERSION);
                 }
             }
         } catch (Exception e) {

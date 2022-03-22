@@ -19,5 +19,5 @@ public interface FWFSender {
 
     boolean equals(Object o);  //相等
 
-    void sendMessage(String s);  //发送信息
+    void sendMessage(String s);  //发送信息(我为什么写它来着？？
 }

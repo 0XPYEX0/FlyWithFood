@@ -11,10 +11,6 @@ import org.bukkit.entity.Player;
 public class NMSUtil {
 
     /*
-     * NMS版本号
-     */
-
-    /*
      * CraftBukkit类下面的getHandle方法 用于获取NMS对象
      */
     private static final Method getHandleMethod;
@@ -55,7 +51,7 @@ public class NMSUtil {
     static {
         try {
             // 这三个是发包需要的
-            Class<?> craftPlayerClass = getClass("org.bukkit.craftbukkit." + NMSAll.nmsVer + ".entity.CraftPlayer");
+            Class<?> craftPlayerClass = getClass("org.bukkit.craftbukkit." + NMSAll.NMS_VERSION + ".entity.CraftPlayer");
             getHandleMethod = craftPlayerClass.getMethod("getHandle");
             Class<?> entityPlayerClass = getNMSClass("EntityPlayer");
             playerConnectionField = entityPlayerClass.getField("playerConnection");
@@ -135,7 +131,7 @@ public class NMSUtil {
      * @return Class
      */
     private static Class<?> getNMSClass(String className) {
-        return getClass("net.minecraft.server." + NMSAll.nmsVer + "." + className);
+        return getClass("net.minecraft.server." + NMSAll.NMS_VERSION + "." + className);
     }
 
     /**

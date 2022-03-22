@@ -9,7 +9,7 @@ import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpPoint
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitFood;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitMoney;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
-import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.FlyEnergy;
+import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
@@ -22,7 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class FlyWithFood extends JavaPlugin {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
-    public static Economy econ;
+    public static Economy ECON;
 
     @Override
     public void onEnable() {
@@ -45,12 +45,13 @@ public final class FlyWithFood extends JavaPlugin {
             new BukkitExpLevel().register();
             new BukkitFood().register();
             if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                new BukkitMoney().register();
-
                 RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
                 if (rsp != null) {
-                    econ = rsp.getProvider();
+                    ECON = rsp.getProvider();
+                    new BukkitMoney().register();
                     LOGGER.info("已与Vault挂钩");
+                } else {
+                    LOGGER.severe("你的Vault貌似出了点问题？无法与Vault挂钩");
                 }
             }
         }
@@ -123,16 +124,17 @@ public final class FlyWithFood extends JavaPlugin {
                 if (!user.needCheck()) {
                     continue;
                 }
-                double cost = user.getInfo().getCost();  //每秒消耗的数值，可为饥饿值或经验值
-                double disable = user.getInfo().getDisable(); //消耗至多少关闭飞行
-                FlyEnergy mode = user.getInfo().getEnergy();  //消耗什么数值
-                if (mode instanceof FoodEnergy) {
+                FWFInfo info = user.getInfo();  //内部实现一直在new，直接存起来稍微节省一点性能
+                //别问我为什么不在User实现类存实例，你有没有考虑过服主实时变动玩家权限(
+                if (info.getEnergy() instanceof FoodEnergy) {
                     if (user.hasSaturationEff()) {  //若玩家拥有饱和Buff，则禁止飞行
                         user.disableFly();  //关闭玩家的飞行
                         user.sendFWFMsg(FWFMsgType.HasEffect);
                         continue;
                     }
                 }
+                double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
+                double disable = info.getDisable(); //消耗至多少关闭飞行
                 double now = user.getNow().doubleValue();
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭

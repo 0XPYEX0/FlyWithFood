@@ -32,6 +32,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     @Override
     public boolean canFly() {
         return player.getAllowFlight();
+        //
     }
 
     @Override
@@ -55,6 +56,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     @Override
     public void enableFly() {
         new EnableFly(player).start();
+        //
     }
 
     @Override

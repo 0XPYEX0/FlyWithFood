@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.sponge;
 
 import java.util.concurrent.TimeUnit;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
+import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
@@ -30,7 +31,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.3.9"
+        version = "1.3.10"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
@@ -113,15 +114,16 @@ public class FlyWithFood {
                         if (!user.needCheck()) {
                             continue;
                         }
-                        if (user.getInfo().getEnergy() instanceof FoodEnergy) {
+                        FWFInfo info = user.getInfo();
+                        if (info.getEnergy() instanceof FoodEnergy) {
                             if (user.hasSaturationEff()) {
                                 user.disableFly();
                                 user.sendFWFMsg(FWFMsgType.HasEffect);
                                 continue;
                             }
                         }
-                        double cost = user.getInfo().getCost(); //每秒消耗的饱食度,20为满,奇数即半格
-                        double disable = user.getInfo().getDisable(); //饱食度消耗至多少关闭飞行
+                        double cost = info.getCost(); //每秒消耗的饱食度,20为满,奇数即半格
+                        double disable = info.getDisable(); //饱食度消耗至多少关闭飞行
                         double now = user.getNow().doubleValue();
                         user.cost((now - cost));
                         if ((now - cost) < disable) {
