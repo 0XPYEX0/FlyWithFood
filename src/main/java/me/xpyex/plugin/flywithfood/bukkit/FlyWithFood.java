@@ -112,7 +112,6 @@ public final class FlyWithFood extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Bukkit.getScheduler().cancelTasks(INSTANCE);
         LOGGER.info("已卸载");
         LOGGER.info("Plugin is unloaded. Thanks for your using  :)");
     }
