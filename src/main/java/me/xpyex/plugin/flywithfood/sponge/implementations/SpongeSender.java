@@ -51,14 +51,14 @@ public class SpongeSender implements FWFSender {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(FWFSender o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof SpongeSender)) {
             return false;
         }
-        return this.sender == ((SpongeSender) o).sender;
+        return this.sender.getName().equals(((SpongeSender) o).sender.getName());
     }
 
     @Override

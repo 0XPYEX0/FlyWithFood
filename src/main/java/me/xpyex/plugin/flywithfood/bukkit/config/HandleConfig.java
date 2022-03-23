@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 
 public class HandleConfig {
     private final static File ROOT = FlyWithFood.INSTANCE.getDataFolder();
-    private final static File CONFIG_FILE = new File(ROOT, "ConfigUtil.CONFIG.json");
+    private final static File CONFIG_FILE = new File(ROOT, "config.json");
     private final static File HOW_TO_CONFIG_FILE_CH = new File(ROOT, "HowToConfig-CH.txt");
     private final static File HOW_TO_CONFIG_FILE_EN = new File(ROOT, "HowToConfig-EN.txt");
     private final static File BAK_FOLDER = new File(ROOT, "bakConfig");

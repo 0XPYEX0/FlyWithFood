@@ -54,14 +54,14 @@ public class BukkitSender implements FWFSender {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(FWFSender o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof BukkitSender)) {
             return false;
         }
-        return this.sender == ((BukkitSender) o).sender;
+        return this.sender.getName().equals(((BukkitSender) o).sender.getName());
     }
 
     @Override

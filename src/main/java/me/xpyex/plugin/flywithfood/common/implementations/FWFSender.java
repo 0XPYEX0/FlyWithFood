@@ -17,7 +17,7 @@ public interface FWFSender {
 
     boolean isSponge();  //是不是Sponge
 
-    boolean equals(Object o);  //相等
+    boolean equals(FWFSender target);  //相等
 
     void sendMessage(String s);  //发送信息(我为什么写它来着？？
 }

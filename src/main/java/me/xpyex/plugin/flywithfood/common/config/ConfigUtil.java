@@ -9,7 +9,10 @@ import java.util.HashSet;
 public class ConfigUtil {
     public static final int CONFIG_VERSION = 5;
     public static FWFConfig CONFIG;
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .create();
     
     public static JsonObject getNewConfig() {
         JsonObject outJson = new JsonObject();

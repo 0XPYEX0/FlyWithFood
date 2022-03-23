@@ -135,7 +135,7 @@ public final class FlyWithFood extends JavaPlugin {
                 }
                 double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
                 double disable = info.getDisable(); //消耗至多少关闭飞行
-                double now = user.getNow().doubleValue();
+                double now = info.getEnergy().getNow(user).doubleValue();
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
