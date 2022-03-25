@@ -8,12 +8,14 @@ import me.xpyex.plugin.flywithfood.bukkit.utils.Utils;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
+import me.xpyex.plugin.flywithfood.common.utils.PlayerUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class HandleEvent implements Listener {
@@ -41,6 +43,9 @@ public class HandleEvent implements Listener {
 
     @EventHandler
     public void onChangeWorld(PlayerTeleportEvent event) {  //传送事件可阻止(虽然好像没什么用)，且更方便判断所在位置
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.END_PORTAL)) {  //当玩家在阅读终末之诗时，玩家的实例会消失，直到阅读完成后创建新的实例，故旧实例无法使用
+            PlayerUtil.removeUser(event.getPlayer().getName());
+        }
         if (event.getFrom().getWorld() != event.getTo().getWorld()) {  //跨世界传送的情况
             Player player = event.getPlayer();
             if (!player.getAllowFlight()) {
@@ -57,5 +62,10 @@ public class HandleEvent implements Listener {
                 player.setAllowFlight(false);
             }
         }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        PlayerUtil.removeUser(event.getPlayer().getName());  //玩家退出服务器后应移除实例
     }
 }

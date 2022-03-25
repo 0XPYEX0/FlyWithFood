@@ -6,6 +6,7 @@ import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
+import me.xpyex.plugin.flywithfood.common.utils.PlayerUtil;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
@@ -16,10 +17,13 @@ import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeMoney;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.economy.EconomyService;
@@ -99,6 +103,21 @@ public class FlyWithFood {
     @Listener
     public void onServerStop(GameStoppingServerEvent event) {
         cancelTasks();
+    }
+
+    @Listener
+    public void onPlayerQuit(ClientConnectionEvent.Disconnect event) {
+        PlayerUtil.removeUser(event.getTargetEntity().getName());
+    }
+
+    //@Listener
+    public void onPlayerTeleport(MoveEntityEvent.Teleport event) {
+        if (event.getTargetEntity().getType().equals(EntityTypes.PLAYER)) {  //当玩家传送
+            Player p = (Player) event.getTargetEntity();
+            //if (event.getCause().equals(Cause.of()))
+            //捏妈，写不下去了😅
+            //Sponge就这样8
+        }
     }
 
     public static void cancelTasks() {
