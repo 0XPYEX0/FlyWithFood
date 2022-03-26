@@ -8,6 +8,7 @@ import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpLevel
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitExpPoint;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitFood;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.energys.BukkitMoney;
+import me.xpyex.plugin.flywithfood.bukkit.listeners.HandleEvent;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.FoodEnergy;
@@ -105,6 +106,9 @@ public final class FlyWithFood extends JavaPlugin {
             }
         });
 
+        Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);  //😅居然这么久才发现我压根没注册监听器，哈哈了
+        LOGGER.info("已注册事件监听器");
+
         LOGGER.info("已成功加载!");
         LOGGER.info("Plugin is loaded!!");
 
@@ -123,7 +127,7 @@ public final class FlyWithFood extends JavaPlugin {
                 if (!user.needCheck()) {
                     continue;
                 }
-                FWFInfo info = user.getInfo();  //内部实现一直在new，直接存起来稍微节省一点性能
+                FWFInfo info = user.getInfo();  //直接存起来稍微节省一点性能?
                 //别问我为什么不在User实现类存实例，你有没有考虑过服主实时变动玩家权限(
                 if (info.getEnergy() instanceof FoodEnergy) {
                     if (user.hasSaturationEff()) {  //若玩家拥有饱和Buff，则禁止飞行
@@ -134,7 +138,7 @@ public final class FlyWithFood extends JavaPlugin {
                 }
                 double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
                 double disable = info.getDisable(); //消耗至多少关闭飞行
-                double now = info.getEnergy().getNow(user).doubleValue();
+                double now = user.getNow().doubleValue();  //内部实现已不再new，故可以使用
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);

@@ -66,6 +66,7 @@ public class HandleEvent implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        PlayerUtil.removeUser(event.getPlayer().getName());  //玩家退出服务器后应移除实例
+        PlayerUtil.removeUser(event.getPlayer().getName());
+        //玩家退出服务器后应移除实例
     }
 }

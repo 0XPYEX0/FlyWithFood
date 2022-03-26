@@ -1,5 +1,7 @@
 package me.xpyex.plugin.flywithfood.common.commands;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import java.util.HashSet;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFSender;
@@ -15,6 +17,7 @@ public class FWFCmd {
         CHECK_ARGS.add("off");
         CHECK_ARGS.add("toggle");
     }  //写成常量节省一丢丢性能
+
     public static void onCmd(FWFSender sender, String label, String... args) {
         if (ConfigUtil.CONFIG == null || ConfigUtil.CONFIG.config == null) {  //未雨绸缪一下
             if (!sender.hasPermission("fly.admin")) {
@@ -33,35 +36,35 @@ public class FWFCmd {
             return;
         }
         if (args.length == 0) {
-            for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Start").getAsJsonArray()) {
-                if (o instanceof String) {
-                    sender.autoSendMsg((String) o);
+            for (JsonElement o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Start").getAsJsonArray()) {
+                if (o.isJsonPrimitive() && ((JsonPrimitive) o).isString()) {
+                    sender.autoSendMsg(o.getAsString());
                 }
             }
             if (sender.hasPermission("fly.fly")) {
-                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Fly").getAsJsonArray()) {
-                    if (o instanceof String) {
-                        sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
+                for (JsonElement o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Fly").getAsJsonArray()) {
+                    if (o.isJsonPrimitive() && ((JsonPrimitive) o).isString()) {
+                        sender.autoSendMsg(o.getAsString().replace("%command%", "/" + label));
                     }
                 }
             }
             if (sender.hasPermission("fly.other")) {
-                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Other").getAsJsonArray()) {
-                    if (o instanceof String) {
-                        sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
+                for (JsonElement o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Other").getAsJsonArray()) {
+                    if (o.isJsonPrimitive() && ((JsonPrimitive) o).isString()) {
+                        sender.autoSendMsg(o.getAsString().replace("%command%", "/" + label));
                     }
                 }
             }
             if (sender.hasPermission("fly.admin")) {
-                for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Admin").getAsJsonArray()) {
-                    if (o instanceof String) {
-                        sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
+                for (JsonElement o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get("Admin").getAsJsonArray()) {
+                    if (o.isJsonPrimitive() && ((JsonPrimitive) o).isString()) {
+                        sender.autoSendMsg(o.getAsString().replace("%command%", "/" + label));
                     }
                 }
             }
-            for (Object o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get(("End")).getAsJsonArray()) {
-                if (o instanceof String) {
-                    sender.autoSendMsg(((String) o).replace("%command%", "/" + label));
+            for (JsonElement o : ConfigUtil.CONFIG.languages.get("HelpMsgList").getAsJsonObject().get(("End")).getAsJsonArray()) {
+                if (o.isJsonPrimitive() && ((JsonPrimitive) o).isString()) {
+                    sender.autoSendMsg(o.getAsString().replace("%command%", "/" + label));
                 }
             }
             return;

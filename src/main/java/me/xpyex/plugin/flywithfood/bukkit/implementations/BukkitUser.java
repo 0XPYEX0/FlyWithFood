@@ -14,6 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class BukkitUser extends BukkitSender implements FWFUser {
     private final Player player;
+    private FWFInfo info;
 
     public BukkitUser(Player p) {
         super(p);
@@ -67,18 +68,21 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     public FWFInfo getInfo() {
-        double cost = ConfigUtil.CONFIG.cost; //每秒消耗的数值，可为饥饿值或经验值
-        double disable = ConfigUtil.CONFIG.disable; //消耗至多少关闭飞行
-        String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
-        for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
-            if (player.hasPermission("fly.groups." + groupName)) {
-                cost = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Cost").getAsDouble();
-                disable = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Disable").getAsDouble();
-                mode = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
-                break;
+        if (info == null) {
+            double cost = ConfigUtil.CONFIG.cost; //每秒消耗的数值，可为饥饿值或经验值
+            double disable = ConfigUtil.CONFIG.disable; //消耗至多少关闭飞行
+            String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
+            for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
+                if (player.hasPermission("fly.groups." + groupName)) {
+                    cost = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Cost").getAsDouble();
+                    disable = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Disable").getAsDouble();
+                    mode = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
+                    break;
+                }
             }
+            info = new FWFInfo(cost, disable, mode);
         }
-        return new FWFInfo(cost, disable, mode);
+        return info;
     }
 
     public Number getNow() {

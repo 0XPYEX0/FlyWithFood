@@ -7,9 +7,11 @@ public interface FlyEnergy {
 
     @NotNull String getName();
 
-    void cost(@NotNull FWFUser target, @NotNull Number value);
+    void cost(@NotNull FWFUser target, @NotNull Number value);  //对target扣除value的点数
 
-    @NotNull Number getNow(FWFUser target);
+    @NotNull Number getNow(FWFUser target);  //获取target现在的点数
 
     void register();
+
+    //boolean canFly();  //是否允许飞行
 }
