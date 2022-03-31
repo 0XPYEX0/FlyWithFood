@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.util.HashSet;
 
 public class ConfigUtil {
@@ -13,7 +14,11 @@ public class ConfigUtil {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
-    
+
+    /**
+     * 获取全新的配置文件
+     * @return 新的配置文件
+     */
     public static JsonObject getNewConfig() {
         JsonObject outJson = new JsonObject();
         outJson.addProperty("Cost", 4);
@@ -49,20 +54,21 @@ public class ConfigUtil {
 
         JsonObject helpMsgList = new JsonObject();
         JsonArray startHelpMsg = new JsonArray();
-        startHelpMsg.add("&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件");
-        startHelpMsg.add("&9你目前可用的命令: ");
+        startHelpMsg.add(new JsonPrimitive("&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件"));
+        //旧版本Gson没有JsonArray.add(String)，但有JsonArray.add(JsonElement)
+        startHelpMsg.add(new JsonPrimitive("&9你目前可用的命令: "));
         JsonArray flyHelpMsg = new JsonArray();
-        flyHelpMsg.add("&a%command% &b<on|off|toggle> &f- &e为你自己开启或关闭飞行");
+        flyHelpMsg.add(new JsonPrimitive("&a%command% &b<on|off|toggle> &f- &e为你自己开启或关闭飞行"));
         JsonArray otherHelpMsg = new JsonArray();
-        otherHelpMsg.add("&a%command% &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行");
+        otherHelpMsg.add(new JsonPrimitive("&a%command% &b<on|off|toggle> <在线玩家> &f- &e为指定玩家开启或关闭飞行"));
         JsonArray adminHelpMsg = new JsonArray();
-        adminHelpMsg.add("&a%command% &breload &f- &e重载配置");
-        adminHelpMsg.add("&d以下为权限列表: ");
-        adminHelpMsg.add("&afly.fly &f- &e允许玩家开启或关闭飞行");
-        adminHelpMsg.add("&afly.nocost &f- &e允许玩家飞行时不消耗点数");
-        adminHelpMsg.add("&afly.other &f- &e允许玩家开启或关闭他人的飞行");
-        adminHelpMsg.add("&afly.admin &f- &e可收到权限列表");
-        adminHelpMsg.add("&afly.groups.&2%GroupName% &f- &e将玩家归于配置文件的组内，%GroupName%为组名.如fly.groups.Group1，则将玩家归于Group1组");
+        adminHelpMsg.add(new JsonPrimitive("&a%command% &breload &f- &e重载配置"));
+        adminHelpMsg.add(new JsonPrimitive("&d以下为权限列表: "));
+        adminHelpMsg.add(new JsonPrimitive("&afly.fly &f- &e允许玩家开启或关闭飞行"));
+        adminHelpMsg.add(new JsonPrimitive("&afly.nocost &f- &e允许玩家飞行时不消耗点数"));
+        adminHelpMsg.add(new JsonPrimitive("&afly.other &f- &e允许玩家开启或关闭他人的飞行"));
+        adminHelpMsg.add(new JsonPrimitive("&afly.admin &f- &e可收到权限列表"));
+        adminHelpMsg.add(new JsonPrimitive("&afly.groups.&2%GroupName% &f- &e将玩家归于配置文件的组内，%GroupName%为组名.如fly.groups.Group1，则将玩家归于Group1组"));
         JsonArray endHelpMsg = new JsonArray();
         helpMsgList.add("Start", startHelpMsg);
         helpMsgList.add("Fly", flyHelpMsg);
@@ -89,10 +95,10 @@ public class ConfigUtil {
         outJson.add("Languages", languages);
 
         JsonArray worlds = new JsonArray();
-        worlds.add("world");
-        worlds.add("world_nether");
-        worlds.add("world_the_end");
-        worlds.add("spawnworld");
+        worlds.add(new JsonPrimitive("world"));
+        worlds.add(new JsonPrimitive("world_nether"));
+        worlds.add(new JsonPrimitive("world_the_end"));
+        worlds.add(new JsonPrimitive("spawnworld"));
 
         JsonObject FunctionsWhitelist = new JsonObject();
         FunctionsWhitelist.addProperty("Enable", false);
@@ -125,18 +131,35 @@ public class ConfigUtil {
         return outJson;
     }
 
+    /**
+     * 获取本地的配置文件版本
+     * @return 配置文件版本
+     */
     public static int getLocalConfigVersion() {
         return CONFIG.config.has("ConfigVersion") ? CONFIG.version : 0;
     }
 
+    /**
+     * 插件应使用的配置文件版本
+     * @return 新的配置文件版本
+     */
     public static int getPluginConfigVersion() {
         return CONFIG_VERSION;
     }
 
+    /**
+     * 配置文件是否需要更新
+     * @return 是否需要更新
+     */
     public static boolean needUpdate() {
         return getPluginConfigVersion() != getLocalConfigVersion();
     }
 
+    /**
+     * 获取JsonObject中的所有Key
+     * @param target 目标JsonObject
+     * @return 所有Key组成的数组
+     */
     public static String[] getJsonObjectKeys(JsonObject target) {
         HashSet<String> set = new HashSet<>();
         target.entrySet().forEach(E -> {
