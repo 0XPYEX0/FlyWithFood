@@ -1,6 +1,5 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementations;
 
-import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.DisableFly;
 import me.xpyex.plugin.flywithfood.bukkit.runnables.EnableFly;
@@ -92,12 +91,12 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        return HandleConfig.noCostWL && ConfigUtil.CONFIG.noCostWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getLocation().getWorld().getName()));
+        return HandleConfig.noCostWL && ConfigUtil.jsonArrayContains(ConfigUtil.CONFIG.noCostWL.get("Worlds").getAsJsonArray(), player.getLocation().getWorld().getName());
     }
 
     @Override
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
-        return HandleConfig.functionWL && !ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getLocation().getWorld().getName()));
+        return HandleConfig.functionWL && !ConfigUtil.jsonArrayContains(ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray(), player.getLocation().getWorld().getName());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package me.xpyex.plugin.flywithfood.sponge.implementations;
 
-import com.google.gson.JsonPrimitive;
 import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
@@ -83,12 +82,12 @@ public class SpongeUser extends SpongeSender implements FWFUser {
 
     @Override
     public boolean inNoCost() {  //玩家所在的世界是否不消耗
-        return HandleConfig.noCostWL && ConfigUtil.CONFIG.noCostWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getWorld().getName()));
+        return HandleConfig.noCostWL && ConfigUtil.jsonArrayContains(ConfigUtil.CONFIG.noCostWL.get("Worlds").getAsJsonArray(), player.getWorld().getName());
     }
 
     @Override
     public boolean inNoFunction() {  //玩家所在的世界是否未启用插件
-        return HandleConfig.functionWL && !ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(player.getWorld().getName()));
+        return HandleConfig.functionWL && !ConfigUtil.jsonArrayContains(ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray(), player.getWorld().getName());
     }
 
     @Override
