@@ -1,12 +1,8 @@
 package me.xpyex.plugin.flywithfood.bukkit.config;
 
 import com.google.gson.JsonObject;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,6 +10,7 @@ import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
+import me.xpyex.plugin.flywithfood.common.utils.FileUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -54,18 +51,7 @@ public class HandleConfig {
                 FlyWithFood.LOGGER.info(" ");
                 createHowToConfigFile();
             }
-            StringBuilder configText = new StringBuilder();
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(CONFIG_FILE), StandardCharsets.UTF_8));  //Scanner会分割空格，导致消息缺失部分
-            String line;
-            while ((line = in.readLine()) != null) {
-                if (line.contains("//")) {
-                    line = line.split("//")[0];  //不读取注释
-                }
-                configText.append(line);
-            }
-            in.close();
-            ConfigUtil.CONFIG = new BukkitConfig(ConfigUtil.GSON.fromJson(configText.toString(), JsonObject.class));
+            ConfigUtil.CONFIG = new BukkitConfig(ConfigUtil.GSON.fromJson(FileUtil.readFile(CONFIG_FILE), JsonObject.class));
 
             if (!EnergyManager.hasEnergy(ConfigUtil.CONFIG.mode)) {
                 FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + ConfigUtil.CONFIG.mode);
@@ -134,10 +120,7 @@ public class HandleConfig {
         }
         CONFIG_FILE.createNewFile();
 
-        PrintWriter out = new PrintWriter(CONFIG_FILE, "UTF-8");
-        out.write(ConfigUtil.GSON.toJson(json));
-        out.flush();
-        out.close();
+        FileUtil.writeFile(CONFIG_FILE, ConfigUtil.GSON.toJson(json));
     }
 
     public static void updateConfigFile() {

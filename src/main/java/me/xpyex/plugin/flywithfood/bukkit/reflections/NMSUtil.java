@@ -118,6 +118,7 @@ public class NMSUtil {
      *
      * @param text 文本
      * @return 数据包
+     * @throws ReflectiveOperationException 失败
      */
     public static Object generateActionBarPacket(String text) throws ReflectiveOperationException {
         Object chatComponentText = chatComponentTextConstructor.newInstance(text);
