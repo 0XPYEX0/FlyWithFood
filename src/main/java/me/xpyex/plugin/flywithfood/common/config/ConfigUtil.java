@@ -15,6 +15,7 @@ public class ConfigUtil {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
+    public static int oldGson = -1;  //0 -> false; 1 -> true; -1 -> null
 
     /**
      * 获取全新的配置文件
@@ -178,17 +179,35 @@ public class ConfigUtil {
      * @return 是否包含
      */
     public static boolean jsonArrayContains(JsonArray target, String content) {
-        try {
-            return target.contains(new JsonPrimitive(content));
-        } catch (NoSuchMethodError ignored) {
-            for (JsonElement e : target) {
-                if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
-                    if (e.getAsString().equals(content)) {
-                        return true;
+        switch (oldGson) {
+            case -1:
+                try {
+                    boolean b = target.contains(new JsonPrimitive(content));
+                    oldGson = 0;
+                    return b;
+                } catch (NoSuchMethodError ignored) {
+                    oldGson = 1;
+                    for (JsonElement e : target) {
+                        if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
+                            if (e.getAsString().equals(content)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            case 0:
+                return target.contains(new JsonPrimitive(content));
+            case 1:
+                for (JsonElement e : target) {
+                    if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
+                        if (e.getAsString().equals(content)) {
+                            return true;
+                        }
                     }
                 }
-            }
-            return false;
+                return false;
         }
+        throw new IllegalStateException("ConfigUtil类中oldGson常量为非法值");
     }
 }
