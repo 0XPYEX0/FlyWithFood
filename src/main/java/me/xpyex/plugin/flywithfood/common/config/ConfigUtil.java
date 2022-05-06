@@ -162,7 +162,7 @@ public class ConfigUtil {
      * @param target 目标JsonObject
      * @return 所有Key组成的数组
      */
-    public static String[] getJsonObjectKeys(JsonObject target) {
+    public static String[] getKeysOfJsonObject(JsonObject target) {
         HashSet<String> set = new HashSet<>();
         target.entrySet().forEach(E -> set.add(E.getKey()));
         return set.toArray(new String[0]);

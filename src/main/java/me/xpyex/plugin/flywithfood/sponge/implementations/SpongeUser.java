@@ -63,7 +63,7 @@ public class SpongeUser extends SpongeSender implements FWFUser {
         double cost = ConfigUtil.CONFIG.cost; //每秒消耗的数值，可为饥饿值或经验值
         double disable = ConfigUtil.CONFIG.disable; //消耗至多少关闭飞行
         String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
-        for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
+        for (String groupName : ConfigUtil.getKeysOfJsonObject(ConfigUtil.CONFIG.groups)) {
             if (player.hasPermission("fly.groups." + groupName)) {
                 cost = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Cost").getAsDouble();
                 disable = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("Disable").getAsDouble();

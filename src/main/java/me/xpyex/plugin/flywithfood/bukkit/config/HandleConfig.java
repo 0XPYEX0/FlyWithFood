@@ -137,10 +137,10 @@ public class HandleConfig {
             File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JsonObject newJO = getNewConfig();
-            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.languages)) {
+            for (String value : ConfigUtil.getKeysOfJsonObject(ConfigUtil.CONFIG.languages)) {
                 newJO.get("Languages").getAsJsonObject().add(value, ConfigUtil.CONFIG.languages.get(value));
             }
-            for (String value : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.config)) {
+            for (String value : ConfigUtil.getKeysOfJsonObject(ConfigUtil.CONFIG.config)) {
                 if (value.equals("Languages")) {  //在上文处理了
                     continue;
                 }

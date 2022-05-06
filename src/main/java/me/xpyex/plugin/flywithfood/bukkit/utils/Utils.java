@@ -22,7 +22,7 @@ public class Utils {
 
     public static String formatMsg(CommandSender target, String msg) {
         String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
-        for (String groupName : ConfigUtil.getJsonObjectKeys(ConfigUtil.CONFIG.groups)) {
+        for (String groupName : ConfigUtil.getKeysOfJsonObject(ConfigUtil.CONFIG.groups)) {
             if (target.hasPermission("fly.groups." + groupName)) {
                 mode = ConfigUtil.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
                 break;
