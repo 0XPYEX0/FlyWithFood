@@ -164,9 +164,7 @@ public class ConfigUtil {
      */
     public static String[] getJsonObjectKeys(JsonObject target) {
         HashSet<String> set = new HashSet<>();
-        target.entrySet().forEach(E -> {
-            set.add(E.getKey());
-        });
+        target.entrySet().forEach(E -> set.add(E.getKey()));
         return set.toArray(new String[0]);
     }
 
@@ -197,7 +195,7 @@ public class ConfigUtil {
             }
         }
 
-        if (isOldGson) {
+        if (!isOldGson) {
             return target.contains(new JsonPrimitive(content));
         }
 
