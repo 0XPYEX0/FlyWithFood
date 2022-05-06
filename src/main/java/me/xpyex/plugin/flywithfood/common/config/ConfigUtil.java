@@ -15,7 +15,7 @@ public class ConfigUtil {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
-    public static int oldGson = -1;  //0 -> false; 1 -> true; -1 -> null
+    public static Boolean isOldGson;  //基元类型不为空，所以用非基元类型
 
     /**
      * 获取全新的配置文件
@@ -179,26 +179,13 @@ public class ConfigUtil {
      * @return 是否包含
      */
     public static boolean jsonArrayContains(JsonArray target, String content) {
-        switch (oldGson) {
-            case -1:
-                try {
-                    boolean b = target.contains(new JsonPrimitive(content));
-                    oldGson = 0;
-                    return b;
-                } catch (NoSuchMethodError ignored) {
-                    oldGson = 1;
-                    for (JsonElement e : target) {
-                        if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
-                            if (e.getAsString().equals(content)) {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                }
-            case 0:
-                return target.contains(new JsonPrimitive(content));
-            case 1:
+        if (isOldGson == null) {
+            try {
+                boolean b = target.contains(new JsonPrimitive(content));
+                isOldGson = false;
+                return b;
+            } catch (NoSuchMethodError ignored) {
+                isOldGson = true;
                 for (JsonElement e : target) {
                     if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
                         if (e.getAsString().equals(content)) {
@@ -207,7 +194,20 @@ public class ConfigUtil {
                     }
                 }
                 return false;
+            }
         }
-        throw new IllegalStateException("ConfigUtil类中oldGson常量为非法值");
+
+        if (isOldGson) {
+            return target.contains(new JsonPrimitive(content));
+        }
+
+        for (JsonElement e : target) {
+            if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
+                if (e.getAsString().equals(content)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
