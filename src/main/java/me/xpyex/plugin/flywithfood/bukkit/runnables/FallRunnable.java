@@ -1,6 +1,8 @@
 package me.xpyex.plugin.flywithfood.bukkit.runnables;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
+import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
+import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,7 +22,7 @@ public class FallRunnable extends BukkitRunnable {
                         ||
                         player.isOnGround()
                         ||
-                        player.isGliding()
+                        (!(ConfigUtil.isOldGson || HandleConfig.isOldVer) && player.isGliding())
         ) {
             cancel();
             return;

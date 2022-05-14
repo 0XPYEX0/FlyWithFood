@@ -35,7 +35,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.4.3"
+        version = "1.4.4"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;

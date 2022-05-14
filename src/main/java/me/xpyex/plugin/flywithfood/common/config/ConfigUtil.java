@@ -17,8 +17,18 @@ public class ConfigUtil {
             .create();
     public static Boolean isOldGson;  //基元类型不为空，所以用非基元类型
 
+    static {
+        try {
+            new JsonArray().contains(new JsonPrimitive("CheckIsOld"));
+            isOldGson = false;
+        } catch (NoSuchMethodError ignored) {
+            isOldGson = true;
+        }
+    }
+
     /**
      * 获取全新的配置文件
+     *
      * @return 新的配置文件
      */
     public static JsonObject getNewConfig() {
@@ -135,6 +145,7 @@ public class ConfigUtil {
 
     /**
      * 获取本地的配置文件版本
+     *
      * @return 配置文件版本
      */
     public static int getLocalConfigVersion() {
@@ -143,6 +154,7 @@ public class ConfigUtil {
 
     /**
      * 插件应使用的配置文件版本
+     *
      * @return 新的配置文件版本
      */
     public static int getPluginConfigVersion() {
@@ -151,6 +163,7 @@ public class ConfigUtil {
 
     /**
      * 配置文件是否需要更新
+     *
      * @return 是否需要更新
      */
     public static boolean needUpdate() {
@@ -159,6 +172,7 @@ public class ConfigUtil {
 
     /**
      * 获取JsonObject中的所有Key
+     *
      * @param target 目标JsonObject
      * @return 所有Key组成的数组
      */
@@ -172,40 +186,23 @@ public class ConfigUtil {
      * 检查JsonArray中是否包含某个内容
      * 为了兼容旧版本Gson
      * Gson狗都不用！焯！！！
-     * @param target 目标JsonArray
+     *
+     * @param target  目标JsonArray
      * @param content 字符串内容
      * @return 是否包含
      */
     public static boolean jsonArrayContains(JsonArray target, String content) {
-        if (isOldGson == null) {
-            try {
-                boolean b = target.contains(new JsonPrimitive(content));
-                isOldGson = false;
-                return b;
-            } catch (NoSuchMethodError ignored) {
-                isOldGson = true;
-                for (JsonElement e : target) {
-                    if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
-                        if (e.getAsString().equals(content)) {
-                            return true;
-                        }
+        if (isOldGson) {
+            for (JsonElement e : target) {
+                if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
+                    if (e.getAsString().equals(content)) {
+                        return true;
                     }
                 }
-                return false;
             }
+            return false;
         }
 
-        if (!isOldGson) {
-            return target.contains(new JsonPrimitive(content));
-        }
-
-        for (JsonElement e : target) {
-            if (e.isJsonPrimitive() && ((JsonPrimitive) e).isString()) {
-                if (e.getAsString().equals(content)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return target.contains(new JsonPrimitive(content));
     }
 }
