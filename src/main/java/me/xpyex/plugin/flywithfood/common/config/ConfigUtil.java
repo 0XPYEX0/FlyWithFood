@@ -15,7 +15,7 @@ public class ConfigUtil {
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .create();
-    public static Boolean isOldGson;  //基元类型不为空，所以用非基元类型
+    public static boolean isOldGson;  //基元类型不为空，所以用非基元类型
 
     static {
         try {
