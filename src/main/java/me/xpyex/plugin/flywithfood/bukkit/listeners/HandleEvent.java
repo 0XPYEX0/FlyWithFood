@@ -1,6 +1,5 @@
 package me.xpyex.plugin.flywithfood.bukkit.listeners;
 
-import com.google.gson.JsonPrimitive;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
@@ -29,8 +28,7 @@ public class HandleEvent implements Listener {
                     TextComponent msg = new TextComponent(Utils.getColorfulMsg("&e点击打开下载界面"));
                     msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://gitee.com/xpyex/FlyWithFood/releases"));
                     event.getPlayer().spigot().sendMessage(msg);
-                }
-                if (ConfigUtil.CONFIG.isEnglish) {
+                } else {
                     event.getPlayer().sendMessage(Utils.getColorfulMsg("&bThe server is running FlyWithFood &fv" + FlyWithFood.INSTANCE.getDescription().getVersion()));
                     event.getPlayer().sendMessage(Utils.getColorfulMsg("&aThere is a newer version: &f" + NetWorkUtil.newVer));
                     TextComponent msg = new TextComponent(Utils.getColorfulMsg("&eClick me to download it!"));
@@ -58,7 +56,7 @@ public class HandleEvent implements Listener {
             if (user.hasNoCostPerm()) {  //若玩家拥有权限无视消耗，则没有处理的必要
                 return;
             }
-            if (HandleConfig.functionWL && ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray().contains(new JsonPrimitive(event.getTo().getWorld().getName()))) {
+            if (HandleConfig.functionWL && ConfigUtil.jsonArrayContains(ConfigUtil.CONFIG.functionWL.get("Worlds").getAsJsonArray(), event.getTo().getWorld().getName())) {
                 player.setAllowFlight(false);
             }
         }
