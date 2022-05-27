@@ -1,5 +1,8 @@
 package me.xpyex.plugin.flywithfood.sponge;
 
+import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFInfo;
@@ -14,6 +17,7 @@ import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpLevel
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpPoint;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeFood;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeMoney;
+import me.xpyex.plugin.flywithfood.sponge.bstats.Metrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -35,13 +39,20 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.4.5"
+        version = "1.4.6"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
     public static final EconomyService ECONOMY_SERVICE = Sponge.getServiceManager().provide(EconomyService.class).get();
     public static final Task.Builder SCHEDULER = Task.builder();
+    private final Metrics metrics;
+
+    @Inject
+    public FlyWithFood(Metrics.Factory metricsFactory) {
+        int pluginId = 15311;
+        metrics = metricsFactory.make(pluginId);
+    }
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -73,10 +84,10 @@ public class FlyWithFood {
 
         HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
         HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
+        LOGGER.info("成功加载配置文件");
+
         NetWorkUtil.PLUGIN_VERSION = Sponge.getPluginManager().getPlugin("flywithfood-sponge").get().getVersion().get();
-
         startCheck();
-
         SCHEDULER.execute(() -> {
                     NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
                     if (NetWorkUtil.newVer != null) {
@@ -93,16 +104,29 @@ public class FlyWithFood {
                     }
                 })
                 .async()
-                .submit(INSTANCE)
-        ;
+                .submit(INSTANCE);
 
-        LOGGER.info("成功加载配置文件");
+        try {
+            metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
+                Map<String, Map<String, Integer>> map = new HashMap<>();
+                Map<String, Integer> entry = new HashMap<>();
+                entry.put("Sponge-1.12.2", 1);
+                map.put("Sponge-1.12.2", entry);
+                return map;
+            }));
+            LOGGER.info("与bStats挂钩成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.warn("与bStats挂钩失败");
+        }
+
         LOGGER.info("已成功加载!");
     }
 
     @Listener
     public void onServerStop(GameStoppingServerEvent event) {
         cancelTasks();
+        //
     }
 
     @Listener

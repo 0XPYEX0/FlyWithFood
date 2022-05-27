@@ -1,5 +1,7 @@
 package me.xpyex.plugin.flywithfood.bukkit;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
@@ -15,6 +17,7 @@ import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.Food
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import net.milkbowl.vault.economy.Economy;
+import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -24,11 +27,31 @@ public final class FlyWithFood extends JavaPlugin {
     public static FlyWithFood INSTANCE;
     public static Logger LOGGER;
     public static Economy ECON;
+    public static String SERVER_TYPE;
+
+    static {
+        try {
+            Object MinecraftServer = Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());  //此时取到MCServer实例
+            String serverName = (String) MinecraftServer.getClass().getMethod("getServerModName").invoke(MinecraftServer);  //调用MCServer类的实例方法getServerModName -> Spigot
+            String serverVersion = (String) MinecraftServer.getClass().getMethod("getVersion").invoke(MinecraftServer);  //调用MCServer类的实例方法getVersion -> 1.12.2
+            SERVER_TYPE = serverName + "-" + serverVersion;  //拼接 -> Spigot-1.12.2
+            //该方法CraftBukkit也包含，不会出错罢
+            //别问我为什么用反射，球球了
+            //看看build.gradle罢，我导的是SpigotAPI，里面没有MinecraftServer的方法
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onEnable() {
         INSTANCE = this;
         LOGGER = getLogger();
+
+        LOGGER.info(" ");
+
+        LOGGER.info("你使用的服务端核心: " + SERVER_TYPE);
+
         NetWorkUtil.PLUGIN_VERSION = INSTANCE.getDescription().getVersion();
         LOGGER.info(" ");
         LOGGER.info("感谢使用FlyWithFood.");
@@ -41,29 +64,13 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info(" ");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
 
-        {
-            new BukkitExpPoint().register();
-            new BukkitExpLevel().register();
-            new BukkitFood().register();
-            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-                if (rsp != null) {
-                    ECON = rsp.getProvider();
-                    new BukkitMoney().register();
-                    LOGGER.info("已与Vault挂钩");
-                } else {
-                    LOGGER.severe("你的Vault貌似出了点问题？无法与Vault挂钩");
-                }
-            }
-        }
-
         if (!HandleConfig.loadConfig()) {
-            LOGGER.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
-            LOGGER.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
-            LOGGER.warning(" ");
-            LOGGER.warning("Wrong!! The plugin loading has been terminated. Please check your config file.");
-            LOGGER.warning("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
-            LOGGER.warning("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
+            LOGGER.severe("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
+            LOGGER.severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+            LOGGER.severe(" ");
+            LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
+            LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+            LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
             return;
         }
         if (ConfigUtil.needUpdate()) {
@@ -72,12 +79,12 @@ public final class FlyWithFood extends JavaPlugin {
             LOGGER.info(" ");
             HandleConfig.updateConfigFile();
             if (!HandleConfig.reloadConfig()) {
-                LOGGER.warning("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
-                LOGGER.warning("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
-                LOGGER.warning(" ");
-                LOGGER.warning("Wrong!! The plugin loading has been terminated. Please check your config file.");
-                LOGGER.warning("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
-                LOGGER.warning("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
+                LOGGER.severe("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
+                LOGGER.severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+                LOGGER.severe(" ");
+                LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
+                LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+                LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
                 return;
             }
         }
@@ -88,29 +95,86 @@ public final class FlyWithFood extends JavaPlugin {
         HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
         HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
 
+        {
+            new BukkitExpPoint().register();
+            new BukkitExpLevel().register();
+            new BukkitFood().register();
+            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+                if (rsp != null) {
+                    ECON = rsp.getProvider();
+                    new BukkitMoney().register();
+                    if (ConfigUtil.CONFIG.isChinese) {
+                        LOGGER.info("已与Vault挂钩");
+                    } else {
+                        LOGGER.info("Hooked with Vault successfully");
+                    }
+                } else {
+                    if (ConfigUtil.CONFIG.isChinese) {
+                        LOGGER.severe("你的Vault貌似出了点问题？无法与Vault挂钩");
+                        LOGGER.severe("或许是你没有安装任何经济插件！Vault并非经济插件，仅作为桥的功能出现！");
+                        LOGGER.severe("请放心，这个问题不会影响FWF的正常运作，但您无法使用Money模式");
+                    } else {
+                        LOGGER.severe("There is something wrong with Vault...FlyWithFood cannot hook with Vault");
+                        LOGGER.severe("This may because you did not install any plugin to control economy of your server.");
+                        LOGGER.severe("Don't worry about this, FlyWithFood will work perfectly. But you can not use \"Money\" mode");
+                    }
+                }
+            }
+        }
+
         startCheck();
 
         Bukkit.getScheduler().runTaskAsynchronously(INSTANCE, () -> {
             NetWorkUtil.newVer = NetWorkUtil.checkUpdate();
             if (NetWorkUtil.newVer != null) {
-                LOGGER.info("你当前运行的版本为 v" + INSTANCE.getDescription().getVersion());
-                LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
-                LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
-                LOGGER.info(" ");
-                LOGGER.info("You are running FlyWithFood v" + NetWorkUtil.PLUGIN_VERSION);
-                LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
-                LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
+                if (ConfigUtil.CONFIG.isChinese) {
+                    LOGGER.info("你当前运行的版本为 v" + INSTANCE.getDescription().getVersion());
+                    LOGGER.info("找到一个更新的版本: " + NetWorkUtil.newVer);
+                    LOGGER.info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
+                } else {
+                    LOGGER.info("You are running FlyWithFood v" + NetWorkUtil.PLUGIN_VERSION);
+                    LOGGER.info("There is a newer version: " + NetWorkUtil.newVer);
+                    LOGGER.info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
+                }
             } else {
-                LOGGER.info("当前已是最新版本");
-                LOGGER.info("You are running the newest FlyWithFood");
+                if (ConfigUtil.CONFIG.isChinese) {
+                    LOGGER.info("当前已是最新版本");
+                } else {
+                    LOGGER.info("You are running the newest FlyWithFood");
+                }
             }
         });
 
         Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);  //😅居然这么久才发现我压根没注册监听器，哈哈了
         LOGGER.info("已注册事件监听器");
 
+        try {
+            Metrics metrics = new Metrics(INSTANCE, 15311);
+            metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
+                Map<String, Map<String, Integer>> map = new HashMap<>();
+                Map<String, Integer> entry = new HashMap<>();
+                entry.put(SERVER_TYPE, 1);
+                map.put(SERVER_TYPE, entry);
+                return map;
+            }));
+            if (ConfigUtil.CONFIG.isChinese) {
+                LOGGER.info("与bStats挂钩成功");
+            } else {
+                LOGGER.info("Hooked with bStats successfully");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (ConfigUtil.CONFIG.isChinese) {
+                LOGGER.warning("与bStats挂钩失败");
+            } else {
+                LOGGER.warning("Failed to hook with bStats");
+            }
+        }
+
         LOGGER.info("已成功加载!");
         LOGGER.info("Plugin is loaded!!");
+        LOGGER.info(" ");
 
     }
 
