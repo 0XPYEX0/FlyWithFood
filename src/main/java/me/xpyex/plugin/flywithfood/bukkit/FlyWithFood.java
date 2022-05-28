@@ -28,6 +28,7 @@ public final class FlyWithFood extends JavaPlugin {
     public static Logger LOGGER;
     public static Economy ECON;
     public static String SERVER_TYPE;
+    public static boolean UNDER_1_9_VERSION;
 
     static {
         try {
@@ -38,6 +39,8 @@ public final class FlyWithFood extends JavaPlugin {
             //该方法CraftBukkit也包含，不会出错罢
             //别问我为什么用反射，球球了
             //看看build.gradle罢，我导的是SpigotAPI，里面没有MinecraftServer的方法
+
+            UNDER_1_9_VERSION = Integer.parseInt(serverVersion.split("\\.")[1]) < 9;
         } catch (Exception e) {
             e.printStackTrace();
         }
