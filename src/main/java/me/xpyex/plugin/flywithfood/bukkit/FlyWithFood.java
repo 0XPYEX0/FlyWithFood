@@ -3,6 +3,7 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.bukkit.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.bukkit.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.bukkit.implementations.BukkitUser;
@@ -17,7 +18,6 @@ import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.Food
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import net.milkbowl.vault.economy.Economy;
-import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -47,13 +47,13 @@ public final class FlyWithFood extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         LOGGER = getLogger();
-
         LOGGER.info(" ");
 
         LOGGER.info("你使用的服务端核心: " + SERVER_TYPE);
+        LOGGER.info("You are using the server software: " + SERVER_TYPE);
+        LOGGER.info(" ");
 
         NetWorkUtil.PLUGIN_VERSION = INSTANCE.getDescription().getVersion();
-        LOGGER.info(" ");
         LOGGER.info("感谢使用FlyWithFood.");
         LOGGER.info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
         LOGGER.info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");
@@ -64,6 +64,29 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info(" ");
         getCommand("FlyWithFood").setExecutor(new FlyCmd());
 
+        new BukkitExpPoint().register();
+        new BukkitExpLevel().register();
+        new BukkitFood().register();
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+            if (rsp != null) {
+                ECON = rsp.getProvider();
+                new BukkitMoney().register();
+                LOGGER.info("已与Vault挂钩");
+                LOGGER.info(" ");
+                LOGGER.info("Hooked with Vault successfully");
+            } else {
+                LOGGER.severe("你的Vault貌似出了点问题？无法与Vault挂钩");
+                LOGGER.severe("或许是你没有安装任何经济插件！Vault并非经济插件，仅作为桥的功能出现！");
+                LOGGER.severe("请放心，这个问题不会影响FWF的正常运作，但您无法使用Money模式");
+                LOGGER.severe(" ");
+                LOGGER.severe("There is something wrong with Vault...FlyWithFood cannot hook with Vault");
+                LOGGER.severe("This may because you did not install any plugin to control economy of your server.");
+                LOGGER.severe("Don't worry about this, FlyWithFood will work perfectly. But you can not use \"Money\" mode");
+            }
+        }
+        LOGGER.info(" ");
+
         if (!HandleConfig.loadConfig()) {
             LOGGER.severe("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
             LOGGER.severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
@@ -71,6 +94,7 @@ public final class FlyWithFood extends JavaPlugin {
             LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
             LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
             LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
+            LOGGER.severe(" ");
             return;
         }
         if (ConfigUtil.needUpdate()) {
@@ -85,6 +109,7 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
                 LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
                 LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
+                LOGGER.severe(" ");
                 return;
             }
         }
@@ -94,34 +119,6 @@ public final class FlyWithFood extends JavaPlugin {
 
         HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
         HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
-
-        {
-            new BukkitExpPoint().register();
-            new BukkitExpLevel().register();
-            new BukkitFood().register();
-            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-                if (rsp != null) {
-                    ECON = rsp.getProvider();
-                    new BukkitMoney().register();
-                    if (ConfigUtil.CONFIG.isChinese) {
-                        LOGGER.info("已与Vault挂钩");
-                    } else {
-                        LOGGER.info("Hooked with Vault successfully");
-                    }
-                } else {
-                    if (ConfigUtil.CONFIG.isChinese) {
-                        LOGGER.severe("你的Vault貌似出了点问题？无法与Vault挂钩");
-                        LOGGER.severe("或许是你没有安装任何经济插件！Vault并非经济插件，仅作为桥的功能出现！");
-                        LOGGER.severe("请放心，这个问题不会影响FWF的正常运作，但您无法使用Money模式");
-                    } else {
-                        LOGGER.severe("There is something wrong with Vault...FlyWithFood cannot hook with Vault");
-                        LOGGER.severe("This may because you did not install any plugin to control economy of your server.");
-                        LOGGER.severe("Don't worry about this, FlyWithFood will work perfectly. But you can not use \"Money\" mode");
-                    }
-                }
-            }
-        }
 
         startCheck();
 
@@ -144,10 +141,13 @@ public final class FlyWithFood extends JavaPlugin {
                     LOGGER.info("You are running the newest FlyWithFood");
                 }
             }
+            LOGGER.info(" ");
         });
 
         Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);  //😅居然这么久才发现我压根没注册监听器，哈哈了
         LOGGER.info("已注册事件监听器");
+        LOGGER.info("Register Events Listener successfully");
+        LOGGER.info(" ");
 
         try {
             Metrics metrics = new Metrics(INSTANCE, 15311);
@@ -171,9 +171,10 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.warning("Failed to hook with bStats");
             }
         }
+        LOGGER.info(" ");
 
         LOGGER.info("已成功加载!");
-        LOGGER.info("Plugin is loaded!!");
+        LOGGER.info("Plugin is loaded successfully!!");
         LOGGER.info(" ");
 
     }

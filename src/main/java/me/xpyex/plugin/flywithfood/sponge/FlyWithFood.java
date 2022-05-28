@@ -10,6 +10,7 @@ import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.Food
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.NetWorkUtil;
 import me.xpyex.plugin.flywithfood.common.utils.PlayerUtil;
+import me.xpyex.plugin.flywithfood.sponge.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.sponge.commands.FlyCmd;
 import me.xpyex.plugin.flywithfood.sponge.config.HandleConfig;
 import me.xpyex.plugin.flywithfood.sponge.implementations.SpongeUser;
@@ -17,7 +18,6 @@ import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpLevel
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeExpPoint;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeFood;
 import me.xpyex.plugin.flywithfood.sponge.implementations.energys.SpongeMoney;
-import me.xpyex.plugin.flywithfood.sponge.bstats.Metrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -39,7 +39,7 @@ import org.spongepowered.api.service.economy.EconomyService;
         authors = {
                 "XPYEX"
         },
-        version = "1.4.6"
+        version = "1.4.7"
 )
 public class FlyWithFood {
     public static FlyWithFood INSTANCE;

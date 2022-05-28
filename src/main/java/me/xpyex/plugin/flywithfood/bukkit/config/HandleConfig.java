@@ -55,7 +55,7 @@ public class HandleConfig {
 
             if (!EnergyManager.hasEnergy(ConfigUtil.CONFIG.mode)) {
                 FlyWithFood.LOGGER.severe("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergys()) + " 中的一种. -> " + ConfigUtil.CONFIG.mode);
-                FlyWithFood.LOGGER.severe("Wrong!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + ". -> " + ConfigUtil.CONFIG.mode);
+                FlyWithFood.LOGGER.severe("ERROR!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergys()) + ". -> " + ConfigUtil.CONFIG.mode);
                 return false;
             }
 
