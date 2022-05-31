@@ -28,7 +28,7 @@ public class HandleConfig {
     public static boolean enableAction;
     public static boolean functionWL;
     public static boolean noCostWL;
-    public static boolean isOldVer = false;
+    public static boolean useOldVerTitle = false;
 
     public static boolean loadConfig() {
         try {
@@ -76,7 +76,7 @@ public class HandleConfig {
                 } catch (Throwable ignored) {
                     try {
                         Player.class.getMethod("sendTitle", String.class, String.class);
-                        isOldVer = true;
+                        useOldVerTitle = true;
                     } catch (Throwable ignored2) {
                         FlyWithFood.LOGGER.warning("你的服务器不支持发送Title信息!");
                         FlyWithFood.LOGGER.warning("请在配置文件禁用Title信息");

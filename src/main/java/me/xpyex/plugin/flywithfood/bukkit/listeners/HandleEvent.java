@@ -15,11 +15,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class HandleEvent implements Listener {
+    private static boolean hasSpigotClass;
+
+    static {
+        try {
+            new TextComponent("检查能不能发Json信息").setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, ""));
+            hasSpigotClass = true;
+        } catch (Exception ignored) { hasSpigotClass = false; }
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        if (!hasSpigotClass) {
+            return;
+        }
         if (event.getPlayer().hasPermission("fly.admin")) {
             if (NetWorkUtil.newVer != null) {
                 if (ConfigUtil.CONFIG.isChinese) {
@@ -60,6 +73,12 @@ public class HandleEvent implements Listener {
                 player.setAllowFlight(false);
             }
         }
+    }
+
+    @EventHandler
+    public void onRespawnEvent(PlayerRespawnEvent event) {
+        PlayerUtil.removeUser(event.getPlayer().getName());
+        //
     }
 
     @EventHandler

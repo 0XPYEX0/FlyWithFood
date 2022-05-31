@@ -120,9 +120,6 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Load config file successfully");
         LOGGER.info(" ");
 
-        HandleConfig.functionWL = ConfigUtil.CONFIG.functionWL.get("Enable").getAsBoolean();
-        HandleConfig.noCostWL = ConfigUtil.CONFIG.noCostWL.get("Enable").getAsBoolean();
-
         startCheck();
 
         Bukkit.getScheduler().runTaskAsynchronously(INSTANCE, () -> {

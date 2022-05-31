@@ -21,6 +21,9 @@ public class Utils {
     }
 
     public static String formatMsg(CommandSender target, String msg) {
+        if (target.hasPermission("op")) {
+            return msg.replace("%mode%", "点数");
+        }
         String mode = ConfigUtil.CONFIG.mode;  //消耗什么数值
         for (String groupName : ConfigUtil.getKeysOfJsonObject(ConfigUtil.CONFIG.groups)) {
             if (target.hasPermission("fly.groups." + groupName)) {
@@ -74,14 +77,14 @@ public class Utils {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     if (ConfigUtil.CONFIG.language.equalsIgnoreCase("Chinese")) {
-                        FlyWithFood.LOGGER.warning("Title数量错误!最多仅有2行!");
+                        FlyWithFood.LOGGER.severe("Title数量错误!最多仅有2行!");
                     } else {
-                        FlyWithFood.LOGGER.warning("Title Messages can only have two at most!");
+                        FlyWithFood.LOGGER.severe("Title Messages can only have two at most!");
                     }
                     HandleConfig.enableTitle = false;
                     return;
                 }
-                if (HandleConfig.isOldVer) {
+                if (HandleConfig.useOldVerTitle) {
                     ((Player) target).sendTitle(getColorfulMsg(titles[0]), titles.length == 2 ? getColorfulMsg(titles[1]) : "");
                 } else {
                     ((Player) target).sendTitle(getColorfulMsg(titles[0]), titles.length == 2 ? getColorfulMsg(titles[1]) : "", 10, 70, 20);
