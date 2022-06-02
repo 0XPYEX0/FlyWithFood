@@ -37,8 +37,7 @@ public final class FlyWithFood extends JavaPlugin {
             String serverVersion = (String) MinecraftServer.getClass().getMethod("getVersion").invoke(MinecraftServer);  //调用MCServer类的实例方法getVersion -> 1.12.2
             SERVER_TYPE = serverName + "-" + serverVersion;  //拼接 -> Spigot-1.12.2
             //该方法CraftBukkit也包含，不会出错罢
-            //别问我为什么用反射，球球了
-            //看看build.gradle罢，我导的是SpigotAPI，里面没有MinecraftServer的方法
+            //项目使用SpigotAPI，里面没有MinecraftServer的方法，使用反射获取方法
 
             UNDER_1_9_VERSION = Integer.parseInt(serverVersion.split("\\.")[1]) < 9;
         } catch (Exception e) {
