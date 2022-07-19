@@ -88,6 +88,7 @@ public class NMSUtil {
 
     private NMSUtil() {
         throw new UnsupportedOperationException("此类不允许实例化");
+        //
     }
 
     /**

@@ -15,9 +15,11 @@ public enum FWFMsgType {
 
     FWFMsgType(String msgType) {
         this.msgType = msgType;
+        //
     }
 
     public String getValue() {
         return msgType;
+        //
     }
 }

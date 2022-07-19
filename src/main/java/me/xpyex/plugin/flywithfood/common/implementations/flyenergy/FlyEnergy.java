@@ -3,15 +3,18 @@ package me.xpyex.plugin.flywithfood.common.implementations.flyenergy;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
 import org.jetbrains.annotations.NotNull;
 
-public interface FlyEnergy {
+public abstract class FlyEnergy {
 
-    @NotNull String getName();
+    public abstract @NotNull String getName();
 
-    void cost(@NotNull FWFUser target, @NotNull Number value);  //对target扣除value的点数
+    public abstract void cost(@NotNull FWFUser target, @NotNull Number value);  //对target扣除value的点数
 
-    @NotNull Number getNow(FWFUser target);  //获取target现在的点数
+    public abstract @NotNull Number getNow(FWFUser target);  //获取target现在的点数
 
-    void register();
+    public void register() {
+        EnergyManager.registerEnergy(getName(), this);
+        //
+    }
 
     //boolean canFly();  //是否允许飞行
 }

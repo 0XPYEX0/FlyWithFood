@@ -2,18 +2,12 @@ package me.xpyex.plugin.flywithfood.bukkit.implementations.energys;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.implementations.FWFUser;
-import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.energys.MoneyEnergy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BukkitMoney implements MoneyEnergy {
-    @Override
-    public @NotNull String getName() {
-        return "Money";
-    }
-
+public class BukkitMoney extends MoneyEnergy {
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         if (value.doubleValue() == 0) {  //+-0没有变化
@@ -34,11 +28,5 @@ public class BukkitMoney implements MoneyEnergy {
     public @NotNull Double getNow(FWFUser user) {
         Player target = (Player) user.getPlayer();
         return FlyWithFood.ECON.getBalance(target);
-    }
-
-    @Override
-    public void register() {
-        EnergyManager.registerEnergy(getName(), this);
-        //
     }
 }

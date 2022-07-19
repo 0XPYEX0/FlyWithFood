@@ -89,7 +89,6 @@ public class FWFCmd {
                 }
                 return;
             }
-            //Bukkit.dispatchCommand(sender, label + " " + args[0] + " " + sender.getName());
             onCmd(sender, label, args[0], sender.getName());
             return;  //令命令重新执行，定义目标
         }

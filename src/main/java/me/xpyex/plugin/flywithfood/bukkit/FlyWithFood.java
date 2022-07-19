@@ -40,7 +40,7 @@ public final class FlyWithFood extends JavaPlugin {
             //项目使用SpigotAPI，里面没有MinecraftServer的方法，使用反射获取方法
 
             UNDER_1_9_VERSION = Integer.parseInt(serverVersion.split("\\.")[1]) < 9;
-        } catch (Exception e) {
+        } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
     }
@@ -94,7 +94,7 @@ public final class FlyWithFood extends JavaPlugin {
             LOGGER.severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
             LOGGER.severe(" ");
             LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
-            LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+            LOGGER.severe("If you can not solve this problem, please check error messages in console and open a Issue to my GitHub.");
             LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
             LOGGER.severe(" ");
             return;
@@ -109,7 +109,7 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
                 LOGGER.severe(" ");
                 LOGGER.severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
-                LOGGER.severe("If you can not solve this problem, please check wrong messages in console and open a Issue to my GitHub.");
+                LOGGER.severe("If you can not solve this problem, please check error messages in console and open a Issue to my GitHub.");
                 LOGGER.severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
                 LOGGER.severe(" ");
                 return;
@@ -143,7 +143,7 @@ public final class FlyWithFood extends JavaPlugin {
             LOGGER.info(" ");
         });
 
-        Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);  //😅居然这么久才发现我压根没注册监听器，哈哈了
+        Bukkit.getPluginManager().registerEvents(new HandleEvent(), INSTANCE);
         LOGGER.info("已注册事件监听器");
         LOGGER.info("Register Events Listener successfully");
         LOGGER.info(" ");

@@ -30,5 +30,6 @@ public class PlayerUtil {
 
     public static void removeUser(String name) {
         USER_MAP_NAME.remove(name);
+        //
     }
 }
