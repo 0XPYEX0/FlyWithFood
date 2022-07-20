@@ -13,7 +13,7 @@ public class BukkitExpPoint extends ExpPointEnergy {
         if (value.doubleValue() == 0) {
             return;
         }
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         if (value.floatValue() < -1f || value.floatValue() > 1f) {
             throw new IllegalArgumentException("在 " + getName() + " 模式中，Cost项∈[-1.0, 1.0].小数位可精确到6位.当前为 " + value.floatValue() + " , 您也可尝试 " + new BukkitExpLevel().getName() + " 模式");
         }
@@ -39,7 +39,7 @@ public class BukkitExpPoint extends ExpPointEnergy {
 
     @Override
     public @NotNull Integer getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return target.getLevel();
     }
 }

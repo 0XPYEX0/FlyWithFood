@@ -8,7 +8,7 @@ public interface FWFUser extends FWFSender {
 
     void disableFly();  //关闭其飞行
 
-    Object getPlayer();  //此处Object均为玩家，不可能存在其它情况，调用时可直接强转
+    <T> T getPlayer();  //此处泛型T均为玩家
 
     FWFInfo getInfo();  //获取基本信息
 

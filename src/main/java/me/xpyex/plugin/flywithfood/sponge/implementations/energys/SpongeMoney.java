@@ -21,13 +21,13 @@ public class SpongeMoney extends MoneyEnergy {
 
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         FlyWithFood.ECONOMY_SERVICE.getOrCreateAccount(target.getUniqueId()).get().setBalance(FlyWithFood.ECONOMY_SERVICE.getDefaultCurrency(), new BigDecimal(getNow(user).doubleValue() - value.doubleValue()), CAUSE);
     }
 
     @Override
     public @NotNull Number getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return FlyWithFood.ECONOMY_SERVICE.getOrCreateAccount(target.getUniqueId()).get().getBalance(FlyWithFood.ECONOMY_SERVICE.getDefaultCurrency());
     }
 }

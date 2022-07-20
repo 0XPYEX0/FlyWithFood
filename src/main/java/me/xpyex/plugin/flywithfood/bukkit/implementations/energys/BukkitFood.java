@@ -13,7 +13,7 @@ public class BukkitFood extends FoodEnergy {
         if (value.doubleValue() == 0) {
             return;
         }
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         Bukkit.getScheduler().runTask(FlyWithFood.INSTANCE, () ->
                 target.setFoodLevel(Math.max(target.getFoodLevel() - value.intValue(), 0))
         );
@@ -21,7 +21,7 @@ public class BukkitFood extends FoodEnergy {
 
     @Override
     public @NotNull Integer getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return target.getFoodLevel();
     }
 }

@@ -13,7 +13,7 @@ public class BukkitExpLevel extends ExpLevelEnergy {
         if (value.doubleValue() == 0) {
             return;
         }
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         Bukkit.getScheduler().runTask(FlyWithFood.INSTANCE, () ->
                 target.setLevel(Math.max(target.getLevel() - value.intValue(), 0))
         );
@@ -21,7 +21,7 @@ public class BukkitExpLevel extends ExpLevelEnergy {
 
     @Override
     public @NotNull Integer getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return target.getLevel();
     }
 }

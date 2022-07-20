@@ -53,8 +53,9 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     }
 
     @Override
-    public Player getPlayer() {
-        return this.player;
+    @SuppressWarnings("unchecked")
+    public <T> T getPlayer() {
+        return (T) this.player;
         //
     }
 

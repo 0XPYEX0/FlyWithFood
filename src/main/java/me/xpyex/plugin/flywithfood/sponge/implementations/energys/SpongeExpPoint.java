@@ -12,13 +12,13 @@ public class SpongeExpPoint extends ExpPointEnergy {
         if (value.doubleValue() == 0) {
             return;
         }
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         target.offer(Keys.EXPERIENCE_SINCE_LEVEL, Math.max(getNow(user) - value.intValue(), 0));
     }
 
     @Override
     public @NotNull Integer getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return target.get(Keys.EXPERIENCE_LEVEL).orElse(0);
     }
 }

@@ -10,6 +10,7 @@ public class BukkitSender implements FWFSender {
 
     public BukkitSender(CommandSender sender) {
         this.sender = sender;
+        //
     }
 
     @Override
@@ -58,7 +59,10 @@ public class BukkitSender implements FWFSender {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BukkitSender)) {
+        if (null == o) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
             return false;
         }
         return this.sender.getName().equals(((BukkitSender) o).sender.getName());

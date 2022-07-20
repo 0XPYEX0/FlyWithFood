@@ -14,7 +14,7 @@ public class BukkitMoney extends MoneyEnergy {
             return;
         }
         if (FlyWithFood.ECON != null) {
-            Player target = (Player) user.getPlayer();
+            Player target = user.getPlayer();
             EconomyResponse result = value.doubleValue() > 0 ?
                     FlyWithFood.ECON.withdrawPlayer(target, value.doubleValue()) :  //Ess不允许存入负数的钱款
                     FlyWithFood.ECON.depositPlayer(target, -value.doubleValue());  //存款
@@ -26,7 +26,7 @@ public class BukkitMoney extends MoneyEnergy {
 
     @Override
     public @NotNull Double getNow(FWFUser user) {
-        Player target = (Player) user.getPlayer();
+        Player target = user.getPlayer();
         return FlyWithFood.ECON.getBalance(target);
     }
 }
