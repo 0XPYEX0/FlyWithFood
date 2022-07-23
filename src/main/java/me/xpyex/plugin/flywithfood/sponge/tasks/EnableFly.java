@@ -11,11 +11,13 @@ public class EnableFly implements Consumer<Task> {
 
     public EnableFly(Player player) {
         this.player = player;
+        //
     }
 
     @Override
     public void accept(Task task) {
         player.offer(Keys.CAN_FLY, true);
+        //
     }
 
     public void start() {

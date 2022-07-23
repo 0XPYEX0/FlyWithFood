@@ -61,8 +61,8 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getPlayer() {
-        return (T) this.player;
+    public <_Player> _Player getPlayer() {
+        return (_Player) this.player;
         //
     }
 

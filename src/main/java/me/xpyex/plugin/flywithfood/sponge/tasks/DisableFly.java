@@ -11,6 +11,7 @@ public class DisableFly implements Consumer<Task> {
 
     public DisableFly(Player player) {
         this.player = player;
+        //
     }
 
     @Override

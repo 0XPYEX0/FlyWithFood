@@ -8,7 +8,7 @@ public interface FWFUser extends FWFSender {
 
     void disableFly();  //关闭其飞行
 
-    <T> T getPlayer();  //此处泛型T均为玩家
+    <Player> Player getPlayer();  //此处泛型T均为玩家
 
     FWFInfo getInfo();  //获取基本信息
 

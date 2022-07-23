@@ -45,17 +45,19 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     @Override
     public void disableFly() {
         new DisableFly(player).start();
+        //
     }
 
     @Override
     public void enableFly() {
         new EnableFly(player).start();
+        //
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getPlayer() {
-        return (T) this.player;
+    public <_Player> _Player getPlayer() {
+        return (_Player) this.player;
         //
     }
 
