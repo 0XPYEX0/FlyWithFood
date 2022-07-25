@@ -148,20 +148,31 @@ public final class FlyWithFood extends JavaPlugin {
         LOGGER.info("Register Events Listener successfully");
         LOGGER.info(" ");
 
+        Metrics metrics = new Metrics(INSTANCE, 15311);
         try {
-            Metrics metrics = new Metrics(INSTANCE, 15311);
             metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
                 Map<String, Map<String, Integer>> map = new HashMap<>();
                 Map<String, Integer> entry = new HashMap<>();
-                entry.put(SERVER_TYPE, 1);
-                map.put(SERVER_TYPE, entry);
+                try {
+                    entry.put(SERVER_TYPE, 1);
+                    map.put(SERVER_TYPE, entry);
+                    if (ConfigUtil.CONFIG.isChinese) {
+                        LOGGER.info("与bStats挂钩成功");
+                    } else {
+                        LOGGER.info("Hooked with bStats successfully");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (ConfigUtil.CONFIG.isChinese) {
+                        LOGGER.warning("添加饼状图失败");
+                    } else {
+                        LOGGER.warning("Failed to load bStats");
+                    }
+                    entry.put(Bukkit.getName() + "-" + Bukkit.getBukkitVersion(), 1);
+                    map.put(Bukkit.getName() + "-" + Bukkit.getBukkitVersion(), entry);
+                }
                 return map;
             }));
-            if (ConfigUtil.CONFIG.isChinese) {
-                LOGGER.info("与bStats挂钩成功");
-            } else {
-                LOGGER.info("Hooked with bStats successfully");
-            }
         } catch (Exception e) {
             e.printStackTrace();
             if (ConfigUtil.CONFIG.isChinese) {
@@ -170,6 +181,7 @@ public final class FlyWithFood extends JavaPlugin {
                 LOGGER.warning("Failed to hook with bStats");
             }
         }
+
         LOGGER.info(" ");
 
         LOGGER.info("已成功加载!");

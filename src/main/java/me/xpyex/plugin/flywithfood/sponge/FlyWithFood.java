@@ -110,8 +110,13 @@ public class FlyWithFood {
             metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
                 Map<String, Map<String, Integer>> map = new HashMap<>();
                 Map<String, Integer> entry = new HashMap<>();
-                entry.put("Sponge-1.12.2", 1);
-                map.put("Sponge-1.12.2", entry);
+                try {
+                    entry.put("Sponge-1.12.2", 1);
+                    map.put("Sponge-1.12.2", entry);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOGGER.info("添加饼状图失败");
+                }
                 return map;
             }));
             LOGGER.info("与bStats挂钩成功");
