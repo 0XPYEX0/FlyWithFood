@@ -122,5 +122,6 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     @Override
     public boolean canFly() {
         return player.get(Keys.CAN_FLY).orElse(false);
+        //
     }
 }

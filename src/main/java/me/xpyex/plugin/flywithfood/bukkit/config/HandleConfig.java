@@ -11,6 +11,7 @@ import me.xpyex.plugin.flywithfood.bukkit.reflections.NMSAll;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.utils.FileUtil;
+import me.xpyex.plugin.flywithfood.common.utils.ReflectUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -66,25 +67,16 @@ public class HandleConfig {
             enableTitle = ConfigUtil.CONFIG.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
             enableAction = ConfigUtil.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
             if (enableTitle) {
-                try {
-                    Player.class.getMethod("sendTitle", String.class, String.class, int.class, int.class, int.class);
-                    /*
-                    * 检查是否支持Title信息的方法(非常粗暴
-                    * 反正也开源了，不需要用new String做注释了
-                    * 早期用new String是因为没开源，可能有人反编译读我代码看不明白
-                    */
-                } catch (Throwable ignored) {
-                    try {
-                        Player.class.getMethod("sendTitle", String.class, String.class);
-                        useOldVerTitle = true;
-                    } catch (Throwable ignored2) {
-                        FlyWithFood.LOGGER.warning("你的服务器不支持发送Title信息!");
-                        FlyWithFood.LOGGER.warning("请在配置文件禁用Title信息");
-                        FlyWithFood.LOGGER.warning(" ");
-                        FlyWithFood.LOGGER.warning("Your server does not support sending Title Messages!");
-                        FlyWithFood.LOGGER.warning("Please disable this function in config file.");
-                        enableTitle = false;
-                    }
+                if (!ReflectUtil.methodExists(Player.class, "sendTitle")) {
+                    FlyWithFood.LOGGER.warning("你的服务器不支持发送Title信息!");
+                    FlyWithFood.LOGGER.warning("请在配置文件禁用Title信息");
+                    FlyWithFood.LOGGER.warning(" ");
+                    FlyWithFood.LOGGER.warning("Your server does not support sending Title Messages!");
+                    FlyWithFood.LOGGER.warning("Please disable this function in config file.");
+                    enableTitle = false;
+                }
+                if (!ReflectUtil.methodExists(Player.class, "sendTitle", String.class, String.class, int.class, int.class, int.class)) {
+                    useOldVerTitle = true;
                 }
             }
             if (enableAction) {

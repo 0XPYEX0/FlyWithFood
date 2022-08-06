@@ -106,10 +106,14 @@ public class NMSUtil {
                 Object playerConnection = playerConnectionField.get(nmsPlayer);
                 sendPacketMethod.invoke(playerConnection, packet);
             } catch (Exception e) {
+                if (e instanceof ReflectiveOperationException) {
+                    HandleConfig.enableAction = false;
+                    FlyWithFood.LOGGER.warning("你的服务器不支持发送Action信息！");
+                    FlyWithFood.LOGGER.warning("请在配置文件禁用Action信息！");
+                    return;
+                }
                 e.printStackTrace();
-                HandleConfig.enableAction = false;
-                FlyWithFood.LOGGER.warning("你的服务器不支持发送Action信息！");
-                FlyWithFood.LOGGER.warning("请在配置文件禁用Action信息！");
+                FlyWithFood.LOGGER.severe("在发送Action信息时出现异常: " + e);
             }
         });
     }

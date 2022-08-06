@@ -9,6 +9,7 @@ import java.util.Date;
 import me.xpyex.plugin.flywithfood.common.config.ConfigUtil;
 import me.xpyex.plugin.flywithfood.common.implementations.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.utils.FileUtil;
+import me.xpyex.plugin.flywithfood.common.utils.ReflectUtil;
 import me.xpyex.plugin.flywithfood.sponge.FlyWithFood;
 import org.spongepowered.api.effect.Viewer;
 import org.spongepowered.api.text.Text;
@@ -58,33 +59,20 @@ public class HandleConfig {
             enableAction = ConfigUtil.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
 
 
-            boolean supportTitleMsg = true;
-            try {
-                Viewer.class.getMethod("sendTitle", Title.class);
-                /*
-                 * 检查是否支持Title信息的方法(非常粗暴
-                 * 反正也开源了，不需要用new String做注释了
-                 * 早期用new String是因为没开源，可能有人反编译读我代码看不明白
-                 */
-            } catch (Throwable ignored) {
-                supportTitleMsg = false;
-            }
-            if (enableTitle && !supportTitleMsg) {
+            if (enableTitle && !ReflectUtil.methodExists(Viewer.class, "sendTitle")) {
                 FlyWithFood.LOGGER.warn("你的服务器不支持发送Title信息!");
                 FlyWithFood.LOGGER.warn("请在配置中禁用Title信息!");
                 enableTitle = false;
             }
 
-            boolean supportActionMsg = true;
-            try {
-                Title.builder().actionBar(Text.of("检查是否支持Action信息的方法(非常粗暴"));
-            } catch (Throwable ignored) {
-                supportActionMsg = false;
-            }
-            if (enableAction && !supportActionMsg) {
-                FlyWithFood.LOGGER.warn("你的服务器不支持发送Action信息!");
-                FlyWithFood.LOGGER.warn("请在配置中禁用Action信息!");
-                enableAction = false;
+            if (enableAction) {
+                try {
+                    Title.builder().actionBar(Text.of("检查是否支持Action信息的方法(非常粗暴"));
+                } catch (Throwable ignored) {
+                    FlyWithFood.LOGGER.warn("你的服务器不支持发送Action信息!");
+                    FlyWithFood.LOGGER.warn("请在配置中禁用Action信息!");
+                    enableAction = false;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
