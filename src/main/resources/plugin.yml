@@ -1,6 +1,6 @@
 name: FlyWithFood
 version: @version@
-main: me.xpyex.plugin.flywithfood.bukkit.FlyWithFood
+main: me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodB
 authors: [ XPYEX ]
 description: FlyWithFood
 commands:
