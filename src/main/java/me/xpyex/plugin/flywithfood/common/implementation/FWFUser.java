@@ -5,7 +5,7 @@ import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
 
 public interface FWFUser extends FWFSender {
-    FWFInfo[] info = new FWFInfo[1];
+    public FWFInfo[] info = new FWFInfo[1];
 
     public <T> T getPlayer();
 
@@ -30,6 +30,11 @@ public interface FWFUser extends FWFSender {
     }
 
     public default void cost(double value) {
+        getInfo().getEnergy().cost(this, value);
+        //
+    }
 
+    public default Number getNow() {
+        return getInfo().getEnergy().getNow(this);
     }
 }

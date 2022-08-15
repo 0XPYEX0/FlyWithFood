@@ -16,13 +16,16 @@ public class FWFInfo {
 
     public double getCost() {
         return this.cost;
+        //
     }
 
     public double getDisable() {
         return this.disable;
+        //
     }
 
     public FlyEnergy getEnergy() {
         return this.energy;
+        //
     }
 }
