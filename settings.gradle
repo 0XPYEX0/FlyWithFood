@@ -1,1 +1,4 @@
 rootProject.name = 'FlyWithFood'
+include 'bukkit'
+include 'common'
+include 'sponge_730'
