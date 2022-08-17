@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.bukkit.implementation;
 
 import me.xpyex.plugin.flywithfood.bukkit.tasks.DisableFly;
 import me.xpyex.plugin.flywithfood.bukkit.tasks.EnableFly;
+import me.xpyex.plugin.flywithfood.bukkit.tasks.ProtectFromFall;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
@@ -83,7 +84,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     public void protectFromFall() {
-
+        new ProtectFromFall(this).start();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package me.xpyex.plugin.flywithfood.bukkit.tasks;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -9,6 +10,11 @@ public class ProtectFromFall extends BukkitRunnable {
 
     public ProtectFromFall(Player player) {
         this.player = player;
+        //
+    }
+
+    public ProtectFromFall(FWFUser user) {
+        this.player = user.getPlayer();
         //
     }
 
