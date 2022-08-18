@@ -51,4 +51,9 @@ public class FWFLogger {
         log(LoggerInfoType.ERROR, messages);
         //
     }
+
+    public void severe(String... messages) {
+        log(LoggerInfoType.ERROR, messages);
+        //
+    }
 }

@@ -1,6 +1,7 @@
 package me.xpyex.plugin.flywithfood.bukkit.tasks;
 
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit;
+import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,7 +28,7 @@ public class ProtectFromFall extends BukkitRunnable {
                         ||
                         player.isOnGround()
                         ||
-                        (FlyWithFoodBukkit.SERVER_MAIN_VERSION >= 9 && player.isGliding())
+                        (FlyWithFood.getInstance().getAPI().getServerMainVer() >= 9 && player.isGliding())
         ) {
             cancel();
             return;
@@ -36,7 +37,7 @@ public class ProtectFromFall extends BukkitRunnable {
     }
 
     public void start() {
-        this.runTaskTimer(FlyWithFoodBukkit.INSTANCE, 4L, 4L);
+        this.runTaskTimer(FlyWithFoodBukkit.BUKKIT_INSTANCE, 4L, 4L);
         //
     }
 }

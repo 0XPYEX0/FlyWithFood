@@ -1,15 +1,15 @@
 package me.xpyex.plugin.flywithfood.common.implementation;
 
-import java.util.function.Function;
+import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
 
 public interface FWFUser extends FWFSender {
-    public static final Function<String, FWFUser>[] GET_PLAYER_FUNC = new Function[1];
 
     public static FWFUser of(String name) {
-        return GET_PLAYER_FUNC[0].apply(name);
+        return FlyWithFood.getInstance().getAPI().getUser(name);
+        //
     }
 
     public abstract <T> T getPlayer();
