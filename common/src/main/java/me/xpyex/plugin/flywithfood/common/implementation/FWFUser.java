@@ -12,9 +12,9 @@ public interface FWFUser extends FWFSender {
         //
     }
 
-    public abstract <T> T getPlayer();
+    public <T> T getPlayer();
 
-    public abstract boolean hasSaturationEff();
+    public boolean hasSaturationEff();
 
     public default FWFInfo getInfo() {
         double cost = FWFConfig.CONFIG.cost; //每秒消耗的数值，可为饥饿值或经验值

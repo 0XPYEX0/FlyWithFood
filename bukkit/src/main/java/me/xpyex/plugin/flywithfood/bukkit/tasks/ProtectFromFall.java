@@ -37,7 +37,7 @@ public class ProtectFromFall extends BukkitRunnable {
     }
 
     public void start() {
-        this.runTaskTimer(FlyWithFoodBukkit.BUKKIT_INSTANCE, 4L, 4L);
+        this.runTaskTimer(FlyWithFoodBukkit.INSTANCE, 4L, 4L);
         //
     }
 }

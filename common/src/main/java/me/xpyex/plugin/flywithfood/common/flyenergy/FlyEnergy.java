@@ -3,15 +3,15 @@ package me.xpyex.plugin.flywithfood.common.flyenergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.jetbrains.annotations.NotNull;
 
-public interface FlyEnergy {
-    public @NotNull String getName();
+public abstract class FlyEnergy {
+    public abstract @NotNull String getName();
 
-    public default void register() {
+    public final void register() {
         EnergyManager.registerEnergy(getName(), this);
         //
     }
 
-    public void cost(FWFUser user, double value);
+    public abstract void cost(@NotNull FWFUser user, @NotNull Number value);
 
-    public @NotNull Number getNow(FWFUser user);
+    public abstract @NotNull Number getNow(@NotNull FWFUser user);
 }

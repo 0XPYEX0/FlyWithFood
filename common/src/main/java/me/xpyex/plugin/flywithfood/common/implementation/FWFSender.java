@@ -90,9 +90,9 @@ public interface FWFSender {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     if (FWFConfig.CONFIG.language.equalsIgnoreCase("Chinese")) {
-                        FlyWithFood.LOGGER.error("Title数量错误!最多仅有2行!");
+                        FlyWithFood.getLogger().error("Title数量错误!最多仅有2行!");
                     } else {
-                        FlyWithFood.LOGGER.error("Title Messages can only have two at most!");
+                        FlyWithFood.getLogger().error("Title Messages can only have two at most!");
                     }
                     return;
                 }

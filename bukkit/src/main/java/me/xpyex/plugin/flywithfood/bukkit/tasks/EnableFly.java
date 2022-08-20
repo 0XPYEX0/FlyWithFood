@@ -28,7 +28,7 @@ public class EnableFly extends BukkitRunnable {
     }
 
     public void start() {
-        this.runTask(FlyWithFoodBukkit.BUKKIT_INSTANCE);
+        this.runTask(FlyWithFoodBukkit.INSTANCE);
         //
     }
 }

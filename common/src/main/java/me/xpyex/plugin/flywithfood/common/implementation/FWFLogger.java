@@ -8,6 +8,7 @@ public class FWFLogger {
     private final String prefixInfo;
     private final String prefixWarning;
     private final String prefixError;
+    private static final String PLUGIN_PREFIX = " &b[FlyWithFood] &f";
 
     public FWFLogger(FWFSender consoleSender) {
         this.consoleSender = consoleSender;
@@ -22,13 +23,13 @@ public class FWFLogger {
             String out;
             switch (type) {
                 case INFO:
-                    out = prefixInfo + " [FlyWithFood] " + s;
+                    out = "&a" + prefixInfo + PLUGIN_PREFIX + s;
                     break;
                 case WARNING:
-                    out = prefixWarning + " [FlyWithFood] " + s;
+                    out = "&6" + prefixWarning + PLUGIN_PREFIX + s;
                     break;
                 case ERROR:
-                    out = prefixError + " [FlyWithFood] " + s;
+                    out = "&4" + prefixError + PLUGIN_PREFIX + s;
                     break;
                 default:
                     out = "";

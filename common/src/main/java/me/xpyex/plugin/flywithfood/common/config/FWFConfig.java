@@ -215,22 +215,22 @@ public class FWFConfig {
 
         try {
             if (!ROOT.exists()) {
-                FlyWithFood.LOGGER.info("第一次加载？正在生成配置文件!");
-                FlyWithFood.LOGGER.info("Are you using this plugin for the first time? The configuration file is being generated for you!");
-                FlyWithFood.LOGGER.info(" ");
+                FlyWithFood.getLogger().info("第一次加载？正在生成配置文件!");
+                FlyWithFood.getLogger().info("Are you using this plugin for the first time? The configuration file is being generated for you!");
+                FlyWithFood.getLogger().info(" ");
                 createConfigFile();
             }
             if (!CONFIG_FILE.exists()) {
-                FlyWithFood.LOGGER.info("配置文件丢失？正在生成配置文件!");
-                FlyWithFood.LOGGER.info("Lost your configuration file? The configuration file is being generated for you!");
-                FlyWithFood.LOGGER.info(" ");
+                FlyWithFood.getLogger().info("配置文件丢失？正在生成配置文件!");
+                FlyWithFood.getLogger().info("Lost your configuration file? The configuration file is being generated for you!");
+                FlyWithFood.getLogger().info(" ");
                 createConfigFile();
             }
             FWFConfig.CONFIG = new FWFConfig(FWFConfig.GSON.fromJson(FileUtil.readFile(CONFIG_FILE), JsonObject.class));
 
             if (!EnergyManager.hasEnergy(FWFConfig.CONFIG.mode)) {
-                FlyWithFood.LOGGER.error("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergies()) + " 中的一种. -> " + FWFConfig.CONFIG.mode);
-                FlyWithFood.LOGGER.error("ERROR!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergies()) + ". -> " + FWFConfig.CONFIG.mode);
+                FlyWithFood.getLogger().error("CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergies()) + " 中的一种. -> " + FWFConfig.CONFIG.mode);
+                FlyWithFood.getLogger().error("ERROR!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergies()) + ". -> " + FWFConfig.CONFIG.mode);
                 return false;
             }
 

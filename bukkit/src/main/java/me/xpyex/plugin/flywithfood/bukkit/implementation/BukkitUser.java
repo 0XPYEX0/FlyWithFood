@@ -48,7 +48,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
             try {
                 player.sendTitle(title, subTitle);  //该方法已弃用
             } catch (Exception ignored2) {
-                FlyWithFood.LOGGER.error("你的服务器不支持发送Title信息，请在配置文件中关闭它");
+                FlyWithFood.getInstance().getAPI().getLogger().error("你的服务器不支持发送Title信息，请在配置文件中关闭它");
             }
         }
     }
@@ -60,7 +60,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
         try {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBar));
         } catch (Exception ignored) {
-            FlyWithFood.LOGGER.error("你的服务器不支持发送ActionBar信息，请在配置文件中关闭它");
+            FlyWithFood.getLogger().error("你的服务器不支持发送ActionBar信息，请在配置文件中关闭它");
         }
     }
 

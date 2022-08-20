@@ -5,42 +5,51 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FlyWithFood {
-    public static FWFLogger LOGGER;
-    private final FlyWithFoodAPI api;
-    public static FlyWithFood INSTANCE;
+    private static FlyWithFood INSTANCE;
+    private static final String PLUGIN_NOT_LOADED_MSG = "插件尚未加载完成 || Plugin is invalid";
+    private final FlyWithFoodAPI API;
 
-    public FlyWithFood(FlyWithFoodAPI api) {
+    public FlyWithFood(FlyWithFoodAPI API) {
         INSTANCE = this;
-        this.api = api;
-        LOGGER = api.getLogger();
+        this.API = API;
     }
 
     public FlyWithFoodAPI getAPI() {
-        if (Util.checkNull(api)) throw new IllegalStateException("插件尚未加载完成");
+        if (Util.checkNull(API)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
 
-        return api;
+        return API;
     }
 
     public static FlyWithFood getInstance() {
-        if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
+        if (Util.checkNull(INSTANCE)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
 
         return INSTANCE;
     }
 
-    public static void enable() {
-        LOGGER.info(" ");
+    public void enable() {
+        if (Util.checkNull(INSTANCE, API)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
 
-        LOGGER.info("你使用的服务端核心: " + getInstance().getAPI().getServerSoftware());
-        LOGGER.info("You are using the server software: " + getInstance().getAPI().getServerSoftware());
-        LOGGER.info(" ");
+        getLogger().info(" ");
 
-        LOGGER.info("感谢使用FlyWithFood.");
-        LOGGER.info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
-        LOGGER.info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");
-        LOGGER.info(" ");
-        LOGGER.info("Thank you for using FlyWithFood");
-        LOGGER.info("The plugin has been open source in GitHub: https://github.com/0XPYEX0/FlyWithFood");
-        LOGGER.info("Have a nice trip with this plugin  :)");
-        LOGGER.info(" ");
+        getLogger().info("你使用的服务端核心: " + getInstance().getAPI().getServerSoftware());
+        getLogger().info("You are using the server software: " + getInstance().getAPI().getServerSoftware());
+        getLogger().info(" ");
+
+        getLogger().info("感谢使用FlyWithFood.");
+        getLogger().info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
+        getLogger().info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");
+        getLogger().info(" ");
+        getLogger().info("Thank you for using FlyWithFood");
+        getLogger().info("The plugin has been open source in GitHub: https://github.com/0XPYEX0/FlyWithFood");
+        getLogger().info("Have a nice trip with this plugin  :)");
+        getLogger().info(" ");
+
+        getAPI().registerEnergies();
+        getAPI().register_bStats();
+    }
+    
+    public static FWFLogger getLogger() {
+        return FlyWithFood.getInstance().getAPI().getLogger();
+        //
     }
 }
