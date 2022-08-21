@@ -1,6 +1,5 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementation;
 
-import me.xpyex.plugin.flywithfood.bukkit.tasks.RunCmd;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.bukkit.command.CommandSender;
@@ -41,8 +40,4 @@ public class BukkitSender implements FWFSender {
         //
     }
 
-    @Override
-    public void runCmd(String cmd) {
-        new RunCmd(sender, cmd).start();
-    }
 }

@@ -74,14 +74,14 @@ public class Metrics {
             config.addDefault("logResponseStatusText", false);
             // Inform the server owners about bStats
             config
-                    .options()
-                    .header(
-                            "bStats (https://bStats.org) collects some basic information for plugin authors, like how\n"
-                                    + "many people use their plugin and their total player count. It's recommended to keep bStats\n"
-                                    + "enabled, but if you're not comfortable with this, you can turn this setting off. There is no\n"
-                                    + "performance penalty associated with having metrics enabled, and data sent to bStats is fully\n"
-                                    + "anonymous.")
-                    .copyDefaults(true);
+                .options()
+                .header(
+                    "bStats (https://bStats.org) collects some basic information for plugin authors, like how\n"
+                        + "many people use their plugin and their total player count. It's recommended to keep bStats\n"
+                        + "enabled, but if you're not comfortable with this, you can turn this setting off. There is no\n"
+                        + "performance penalty associated with having metrics enabled, and data sent to bStats is fully\n"
+                        + "anonymous.")
+                .copyDefaults(true);
             try {
                 config.save(configFile);
             } catch (IOException ignored) {
@@ -94,20 +94,20 @@ public class Metrics {
         boolean logSentData = config.getBoolean("logSentData", false);
         boolean logResponseStatusText = config.getBoolean("logResponseStatusText", false);
         metricsBase =
-                new MetricsBase(
-                        "bukkit",
-                        serverUUID,
-                        serviceId,
-                        enabled,
-                        this::appendPlatformData,
-                        this::appendServiceData,
-                        submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask),
-                        plugin::isEnabled,
-                        (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
-                        (message) -> this.plugin.getLogger().log(Level.INFO, message),
-                        logErrors,
-                        logSentData,
-                        logResponseStatusText);
+            new MetricsBase(
+                "bukkit",
+                serverUUID,
+                serviceId,
+                enabled,
+                this::appendPlatformData,
+                this::appendServiceData,
+                submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask),
+                plugin::isEnabled,
+                (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
+                (message) -> this.plugin.getLogger().log(Level.INFO, message),
+                logErrors,
+                logSentData,
+                logResponseStatusText);
     }
 
     /**
@@ -249,18 +249,18 @@ public class Metrics {
 
         private void startSubmitting() {
             final Runnable submitTask =
-                    () -> {
-                        if (!enabled || !checkServiceEnabledSupplier.get()) {
-                            // Submitting data or service is disabled
-                            scheduler.shutdown();
-                            return;
-                        }
-                        if (submitTaskConsumer != null) {
-                            submitTaskConsumer.accept(this::submitData);
-                        } else {
-                            this.submitData();
-                        }
-                    };
+                () -> {
+                    if (!enabled || !checkServiceEnabledSupplier.get()) {
+                        // Submitting data or service is disabled
+                        scheduler.shutdown();
+                        return;
+                    }
+                    if (submitTaskConsumer != null) {
+                        submitTaskConsumer.accept(this::submitData);
+                    } else {
+                        this.submitData();
+                    }
+                };
             // Many servers tend to restart at a fixed time at xx:00 which causes an uneven distribution
             // of requests on the
             // bStats backend. To circumvent this problem, we introduce some randomness into the initial
@@ -272,7 +272,7 @@ public class Metrics {
             long secondDelay = (long) (1000 * 60 * (Math.random() * 30));
             scheduler.schedule(submitTask, initialDelay, TimeUnit.MILLISECONDS);
             scheduler.scheduleAtFixedRate(
-                    submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
+                submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
         }
 
         private void submitData() {
@@ -736,9 +736,9 @@ public class Metrics {
                 throw new IllegalArgumentException("JSON values must not be null");
             }
             String escapedValues =
-                    Arrays.stream(values)
-                            .map(value -> "\"" + escape(value) + "\"")
-                            .collect(Collectors.joining(","));
+                Arrays.stream(values)
+                    .map(value -> "\"" + escape(value) + "\"")
+                    .collect(Collectors.joining(","));
             appendFieldUnescaped(key, "[" + escapedValues + "]");
             return this;
         }

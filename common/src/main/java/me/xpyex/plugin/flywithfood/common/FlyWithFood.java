@@ -46,6 +46,10 @@ public class FlyWithFood {
 
         getAPI().registerEnergies();
         getAPI().register_bStats();
+    
+        FlyWithFood.getInstance().getAPI().startCheck();
+    
+        FlyWithFood.getLogger().info("已成功加载");
     }
     
     public static FWFLogger getLogger() {

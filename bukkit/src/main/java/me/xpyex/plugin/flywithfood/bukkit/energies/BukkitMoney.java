@@ -5,7 +5,6 @@ import me.xpyex.plugin.flywithfood.common.flyenergy.energies.MoneyEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +29,7 @@ public class BukkitMoney extends MoneyEnergy {
 
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
-        return getEcon().getBalance((OfflinePlayer) user.getPlayer());
+        return getEcon().getBalance(user.<Player>getPlayer());
         //
     }
 

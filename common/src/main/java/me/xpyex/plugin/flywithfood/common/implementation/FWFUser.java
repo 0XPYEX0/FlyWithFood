@@ -59,4 +59,26 @@ public interface FWFUser extends FWFSender {
         return FWFConfig.CONFIG.functionWL.get("Enabled").getAsBoolean() && !GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
         //
     }
+    
+    public default boolean inNoCost() {
+        return FWFConfig.CONFIG.noCostWL.get("Enabled").getAsBoolean() && GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
+    }
+    
+    public String getGameModeName();
+    
+    public boolean isFlying();
+    
+    public default boolean needCheck() {
+        if (this.hasNoCostPerm()) return false;  //如果玩家有权限无视扣除，不处理
+        
+        if (this.inNoFunction()) return false;  //如果玩家所在的世界不启用插件功能，不处理
+        
+        if (this.inNoCost()) return false;  //如果玩家所在的世界不扣除点数，不处理
+        
+        if (!this.isFlying()) return false;  //如果玩家不在飞行，不处理
+        
+        if ("CREATIVE, SPECTATOR".contains(this.getGameModeName())) return false;  //如果玩家是创造/旁观者模式，不处理
+        
+        return true;
+    }
 }

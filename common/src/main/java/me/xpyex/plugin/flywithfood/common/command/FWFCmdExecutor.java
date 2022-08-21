@@ -89,7 +89,7 @@ public class FWFCmdExecutor {
                 }
                 return;
             }
-            sender.runCmd(label + " " + args[0] + " " + sender.getName());
+            onCmd(sender, label, args[0], sender.getName());
             return;  //令命令重新执行，定义目标
         }
         if (CHECK_ARGS.contains(args[0].toLowerCase())) {  //如果是调整飞行模式
@@ -172,13 +172,13 @@ public class FWFCmdExecutor {
             }
             if (args[0].equalsIgnoreCase("toggle")) {
                 if (target.canFly()) {
-                    sender.runCmd(label + " off " + args[1]);
+                    onCmd(sender, label, "off", args[1]);
                 } else {
-                    sender.runCmd(label + " on " + args[1]);
+                    onCmd(sender, label, "on", args[1]);
                 }
                 return;  //你妈的，下面会执行help啊，不要再删这个了
             }
         }
-        sender.runCmd(label);
+        onCmd(sender, label);
     }
 }

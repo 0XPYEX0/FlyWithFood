@@ -7,7 +7,7 @@ plugins {
 allprojects {
     apply plugin: 'java'
 
-    group = 'me.xpyex'
+    group = 'me.xpyex.plugin.flywithfood'
     version = '2.0.0'
 
     sourceCompatibility = '1.8'

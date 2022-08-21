@@ -85,11 +85,24 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     @Override
     public void protectFromFall() {
         new ProtectFromFall(this).start();
+        //
     }
 
     @Override
     public String getWorldName() {
         return player.getLocation().getWorld().getName();
+        //
+    }
+    
+    @Override
+    public String getGameModeName() {
+        return player.getGameMode().toString();
+        //
+    }
+    
+    @Override
+    public boolean isFlying() {
+        return player.isFlying();
         //
     }
 }

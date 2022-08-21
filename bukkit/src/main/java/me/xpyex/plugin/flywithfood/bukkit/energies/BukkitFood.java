@@ -15,12 +15,12 @@ public class BukkitFood extends FoodEnergy {
         }
         Player target = user.getPlayer();
         Bukkit.getScheduler().runTask(FlyWithFoodBukkit.INSTANCE, () ->
-                target.setFoodLevel(Math.max(target.getFoodLevel() - value.intValue(), 0))
+                target.setFoodLevel(Math.max(getNow(user) - value.intValue(), 0))
         );
     }
 
     @Override
-    public @NotNull Number getNow(@NotNull FWFUser user) {
+    public @NotNull Integer getNow(@NotNull FWFUser user) {
         return user.<Player>getPlayer().getFoodLevel();
         //
     }

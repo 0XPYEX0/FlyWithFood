@@ -1,7 +1,11 @@
 package me.xpyex.plugin.flywithfood.bukkit.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit;
+import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitExpLevel;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitFood;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitMoney;
@@ -9,6 +13,7 @@ import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitSender;
 import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitUser;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
+import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import net.milkbowl.vault.economy.Economy;
@@ -18,8 +23,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     private static final String SERVER_SOFTWARE;
-    private final FWFLogger logger;
     private static final int SERVER_MAIN_VERSION;
+    private final FWFLogger logger;
 
     static {
         String softwareResult;
@@ -36,7 +41,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             versionResult = 0;
-            softwareResult = "Unknown-" + Bukkit.getBukkitVersion();
+            softwareResult = "Unknown-" + Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
         }
         SERVER_SOFTWARE = softwareResult;
         SERVER_MAIN_VERSION = versionResult;
@@ -44,6 +49,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     public FlyWithFoodAPIBK() {
         logger = new FWFLogger(new BukkitSender(Bukkit.getConsoleSender()));
+        //
     }
 
     @Override
@@ -54,8 +60,8 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public List<FWFUser> getOnlineUsers() {
-        ArrayList<FWFUser> list = new ArrayList<>();
-        for(Player p : Bukkit.getOnlinePlayers()) {
+        List<FWFUser> list = new ArrayList<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
             list.add(new BukkitUser(p));
         }
         return list;
@@ -106,6 +112,53 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public void register_bStats() {
-
+        try {
+            Metrics metrics = new Metrics(FlyWithFoodBukkit.INSTANCE, 15311);
+            metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
+                Map<String, Map<String, Integer>> map = new HashMap<>();
+                Map<String, Integer> entry = new HashMap<>();
+                try {
+                    entry.put(getServerSoftware(), 1);
+                    map.put(getServerSoftware(), entry);
+                    if (FWFConfig.CONFIG.isChinese) {
+                        FlyWithFood.getLogger().info("与bStats挂钩成功");
+                    } else {
+                        FlyWithFood.getLogger().info("Hooked with bStats successfully");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (FWFConfig.CONFIG.isChinese) {
+                        FlyWithFood.getLogger().warning("添加饼状图失败");
+                    } else {
+                        FlyWithFood.getLogger().warning("Failed to load bStats");
+                    }
+                    entry.put(Bukkit.getName() + "-" + Bukkit.getBukkitVersion(), 1);
+                    map.put(Bukkit.getName() + "-" + Bukkit.getBukkitVersion(), entry);
+                }
+                return map;
+            }));
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (FWFConfig.CONFIG.isChinese) {
+                FlyWithFood.getLogger().warning("与bStats挂钩失败");
+            } else {
+                FlyWithFood.getLogger().warning("Failed to hook with bStats");
+            }
+        }
+    }
+    
+    @Override
+    public void startCheck() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(FlyWithFoodBukkit.INSTANCE,
+            getCheckTask(),
+            0L,
+            FWFConfig.CONFIG.howLongCheck * 20L
+        );
+    }
+    
+    @Override
+    public void stopTasks() {
+        Bukkit.getScheduler().cancelTasks(FlyWithFoodBukkit.INSTANCE);
+        //
     }
 }

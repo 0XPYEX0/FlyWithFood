@@ -101,5 +101,4 @@ public interface FWFSender {
         }
     }
 
-    public void runCmd(String cmd);
 }
