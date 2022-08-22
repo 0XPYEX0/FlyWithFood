@@ -36,7 +36,7 @@ public class FlyWithFoodBukkit extends JavaPlugin {
     }
     
     public static FlyWithFoodBukkit getInstance() {
-        if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
+        if (Util.checkNull(INSTANCE)) throw new IllegalStateException(FlyWithFood.PLUGIN_NOT_LOADED_MSG);
         
         return INSTANCE;
     }

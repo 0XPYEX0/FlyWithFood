@@ -7,7 +7,7 @@ import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FlyWithFood {
     private static FlyWithFood INSTANCE;
-    private static final String PLUGIN_NOT_LOADED_MSG = "插件尚未加载完成 || Plugin is invalid";
+    public static final String PLUGIN_NOT_LOADED_MSG = "插件尚未加载完成 || Plugin is invalid";
     private final FlyWithFoodAPI API;
 
     public FlyWithFood(FlyWithFoodAPI API) {
@@ -46,9 +46,19 @@ public class FlyWithFood {
         getLogger().info(" ");
 
         getAPI().registerEnergies();
-        getAPI().runTaskAsync(getAPI()::register_bStats);
 
-        FWFConfig.reload();
+        if (!FWFConfig.reload()) {
+            getLogger().severe("载入配置文件出错!插件加载已终止,请检查配置文件，如无法解决请查看后台报错并报告开发者. QQ:1723275529");
+            getLogger().severe("若确认是由配置文件错误导致加载出错，可在修改完毕后使用 /fly reload 重载以恢复");
+            getLogger().severe(" ");
+            getLogger().severe("ERROR!! The plugin loading has been terminated. Please check your config file.");
+            getLogger().severe("If you can not solve this problem, please check error messages in console and open a Issue to my GitHub.");
+            getLogger().severe("If you are sure that the config file has something wrong, you can use '/fly reload' after you fix that problem.");
+            getLogger().severe(" ");
+            return;
+        }
+
+        getAPI().runTaskAsync(getAPI()::register_bStats);
 
         FlyWithFood.getInstance().getAPI().startCheck();
 

@@ -1,7 +1,7 @@
 package me.xpyex.plugin.flywithfood.sponge7;
 
 import com.google.inject.Inject;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
@@ -9,7 +9,6 @@ import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.api.FlyWithFoodAPISponge7;
 import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
-import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeMoney;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,6 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -59,40 +57,50 @@ public class FlyWithFoodSponge7 {
         Sponge.getCommandManager().register(INSTANCE, new CommandCallable() {
             @Override
             public @NotNull CommandResult process(@NotNull CommandSource source, @NotNull String arguments) throws CommandException {
-                System.out.println(arguments);
-                FWFCmdExecutor.onCmd(new SpongeSender(source), "fly", arguments);
+                String[] args;
+                if (arguments.trim().isEmpty()) {
+                    args = new String[0];
+                } else {
+                    args = arguments.split(" ");
+                }
+                FWFCmdExecutor.onCmd(new SpongeSender(source), "fly", args);
                 return CommandResult.success();
             }
 
             @Override
             public @NotNull List<String> getSuggestions(@NotNull CommandSource source, @NotNull String arguments, @Nullable Location<World> targetPosition) throws CommandException {
-                return new ArrayList<>();
+                return Collections.emptyList();
+                //
             }
 
             @Override
             public boolean testPermission(@NotNull CommandSource source) {
                 return true;
+                //
             }
 
             @Override
             public @NotNull Optional<Text> getShortDescription(@NotNull CommandSource source) {
                 return Optional.of(Text.of("FlyWithFood的基础命令"));
+                //
             }
 
             @Override
             public @NotNull Optional<Text> getHelp(@NotNull CommandSource source) {
                 return Optional.of(Text.of("这是可以帮助的吗"));
+                //
             }
 
             @Override
             public @NotNull Text getUsage(@NotNull CommandSource source) {
                 return Text.of("没有Usage");
+                //
             }
         }, "flywithfood", "fly", "fwf");
     }
 
     public static FlyWithFoodSponge7 getInstance() {
-        if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
+        if (Util.checkNull(INSTANCE)) throw new IllegalStateException(FlyWithFood.PLUGIN_NOT_LOADED_MSG);
         
         return INSTANCE;
     }

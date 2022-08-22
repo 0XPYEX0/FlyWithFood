@@ -26,7 +26,6 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     private final FWFLogger logger;
     private static final String SERVER_SOFTWARE = "Sponge-1.12";
     private static final int SERVER_MAIN_VERSION = 12;
-    private static final Task.Builder SCHEDULER = Task.builder();
     
     public FlyWithFoodAPISponge7() {
         this.logger = new FWFLogger(new SpongeSender(Sponge.getServer().getConsole()));
@@ -120,7 +119,7 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     }
 
     public Task.Builder getScheduler() {
-        return SCHEDULER;
+        return Task.builder();
         //
     }
     

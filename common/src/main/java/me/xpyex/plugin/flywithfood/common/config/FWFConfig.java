@@ -19,7 +19,7 @@ public class FWFConfig {
     public static File ROOT;
     public static File CONFIG_FILE;
     public static File BAK_FOLDER;
-    public static final int CONFIG_VERSION = 6;
+    public static final int CONFIG_VERSION = 5;
     public static FWFConfig CONFIG;
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()

@@ -75,7 +75,7 @@ public class FWFCmdExecutor {
                     sender.sendFWFMsg(FWFMsgType.NoPermission);
                     return;
                 }
-                if (FWFConfig.CONFIG.reload()) {
+                if (FWFConfig.reload()) {
                     if (FWFConfig.CONFIG.isChinese) {
                         sender.autoSendMsg("&a重载成功");
                     } else {

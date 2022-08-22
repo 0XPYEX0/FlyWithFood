@@ -1,8 +1,10 @@
 package me.xpyex.plugin.flywithfood.common.implementation;
 
+import java.util.Arrays;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
+import me.xpyex.plugin.flywithfood.common.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
 
 public interface FWFUser extends FWFSender {
@@ -27,6 +29,11 @@ public interface FWFUser extends FWFSender {
                 mode = FWFConfig.CONFIG.groups.get(groupName).getAsJsonObject().get("CostMode").getAsString();  //重新分配分组中的值
                 break;
             }
+        }
+        if (!EnergyManager.hasEnergy(mode)) {
+            FlyWithFood.getLogger().error("玩家 " + getName() + " 的CostMode错误！CostMode只应为 " + Arrays.toString(EnergyManager.getEnergies()) + " 中的一种. -> " + mode);
+            FlyWithFood.getLogger().error("ERROR!! CostMode does not exists! You can use these: " + Arrays.toString(EnergyManager.getEnergies()) + ". -> " + mode);
+            throw new IllegalStateException();
         }
         return new FWFInfo(cost, disable, mode);
     }
