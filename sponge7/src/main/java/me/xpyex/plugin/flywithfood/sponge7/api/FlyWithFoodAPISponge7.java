@@ -1,8 +1,8 @@
 package me.xpyex.plugin.flywithfood.sponge7.api;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
@@ -13,7 +13,6 @@ import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeFood;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeUser;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 
 public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
@@ -34,11 +33,8 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
 
     @Override
     public List<FWFUser> getOnlineUsers() {
-        List<FWFUser> list = new ArrayList<>();
-        for (Player p : Sponge.getServer().getOnlinePlayers()) {
-            list.add(new SpongeUser(p));
-        }
-        return list;
+        return Sponge.getServer().getOnlinePlayers().stream().map(SpongeUser::new).collect(Collectors.toList());
+        //
     }
 
     @Override

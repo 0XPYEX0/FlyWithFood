@@ -1,9 +1,9 @@
 package me.xpyex.plugin.flywithfood.bukkit.api;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit;
 import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitExpLevel;
@@ -18,7 +18,6 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
@@ -60,11 +59,8 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public List<FWFUser> getOnlineUsers() {
-        List<FWFUser> list = new ArrayList<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            list.add(new BukkitUser(p));
-        }
-        return list;
+        return Bukkit.getOnlinePlayers().stream().map(BukkitUser::new).collect(Collectors.toList());
+        //
     }
 
     @Override
