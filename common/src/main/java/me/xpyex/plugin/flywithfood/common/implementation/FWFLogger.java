@@ -48,6 +48,11 @@ public class FWFLogger {
         //
     }
 
+    public void warn(String... messages) {
+        log(LoggerInfoType.WARNING, messages);
+        //
+    }
+
     public void error(String... messages) {
         log(LoggerInfoType.ERROR, messages);
         //

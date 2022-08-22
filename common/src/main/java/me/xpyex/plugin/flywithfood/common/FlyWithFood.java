@@ -1,6 +1,7 @@
 package me.xpyex.plugin.flywithfood.common;
 
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
+import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
@@ -46,6 +47,8 @@ public class FlyWithFood {
 
         getAPI().registerEnergies();
         getAPI().register_bStats();
+
+        FWFConfig.reload();
     
         FlyWithFood.getInstance().getAPI().startCheck();
     

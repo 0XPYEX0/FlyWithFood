@@ -1,6 +1,9 @@
 package me.xpyex.plugin.flywithfood.common.api;
 
+import java.io.File;
 import java.util.List;
+import java.util.function.Consumer;
+import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
@@ -22,13 +25,13 @@ public interface FlyWithFoodAPI {
 
     public void register_bStats();
     
-    public default Runnable getCheckTask() {
-        return () -> {
+    public default void startCheck() {
+        runTaskTimerAsync(() -> {
             for (FWFUser user : this.getOnlineUsers()) {
                 if (!user.needCheck()) continue;  //玩家是否需要被计算飞行
-    
+        
                 FWFInfo info = user.getInfo();  //直接存起来稍微节省一点性能?
-                
+        
                 if (info.getEnergy() instanceof FoodEnergy) {
                     if (user.hasSaturationEff()) {  //若玩家拥有饱和Buff，则禁止飞行
                         user.disableFly();  //关闭玩家的飞行
@@ -46,10 +49,18 @@ public interface FlyWithFoodAPI {
                     user.protectFromFall();  //为玩家免疫掉落伤害
                 }
             }
-        };
+        }, 0L, FWFConfig.CONFIG.howLongCheck);
     }
     
-    public void startCheck();
-    
     public void stopTasks();
+    
+    public void runTask(Runnable r);
+    
+    public void runTaskAsync(Runnable r);
+    
+    public void runTaskTimerAsync(Runnable r, long waitSeconds, long periodSeconds);
+
+    public void runTask(Consumer<?> c);
+
+    public File getDataFolder();
 }

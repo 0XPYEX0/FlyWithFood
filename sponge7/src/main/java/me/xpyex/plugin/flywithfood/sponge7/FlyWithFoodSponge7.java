@@ -1,8 +1,10 @@
 package me.xpyex.plugin.flywithfood.sponge7;
 
+import com.google.inject.Inject;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.api.FlyWithFoodAPISponge7;
+import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
@@ -15,10 +17,18 @@ import org.spongepowered.api.plugin.Plugin;
     authors = {
         "XPYEX"
     },
-    version = "1.4.8"
+    version = "2.0.0"
 )
 public class FlyWithFoodSponge7 {
     private static FlyWithFoodSponge7 INSTANCE;
+    public final Metrics metrics;
+
+    @Inject
+    public FlyWithFoodSponge7(Metrics.Factory metricsFactory) {
+        int pluginId = 15311;
+        metrics = metricsFactory.make(pluginId);
+    }
+
     @Listener
     public void onGameStart(GameStartedServerEvent event) {
         INSTANCE = this;

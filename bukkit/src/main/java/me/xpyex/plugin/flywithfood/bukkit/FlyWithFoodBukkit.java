@@ -5,10 +5,11 @@ import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitSender;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
+import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FlyWithFoodBukkit extends JavaPlugin {
-    public static FlyWithFoodBukkit INSTANCE;
+    private static FlyWithFoodBukkit INSTANCE;
 
     @Override
     public void onEnable() {
@@ -23,5 +24,11 @@ public class FlyWithFoodBukkit extends JavaPlugin {
             FWFCmdExecutor.onCmd(new BukkitSender(sender), label, args);
             return true;
         });
+    }
+    
+    public static FlyWithFoodBukkit getInstance() {
+        if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
+        
+        return INSTANCE;
     }
 }

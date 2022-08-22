@@ -1,8 +1,10 @@
 package me.xpyex.plugin.flywithfood.bukkit.api;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit;
 import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
@@ -109,7 +111,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     @Override
     public void register_bStats() {
         try {
-            Metrics metrics = new Metrics(FlyWithFoodBukkit.INSTANCE, 15311);
+            Metrics metrics = new Metrics(FlyWithFoodBukkit.getInstance(), 15311);
             metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
                 Map<String, Map<String, Integer>> map = new HashMap<>();
                 Map<String, Integer> entry = new HashMap<>();
@@ -144,17 +146,37 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     }
     
     @Override
-    public void startCheck() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(FlyWithFoodBukkit.INSTANCE,
-            getCheckTask(),
-            0L,
-            FWFConfig.CONFIG.howLongCheck * 20L
-        );
+    public void stopTasks() {
+        Bukkit.getScheduler().cancelTasks(FlyWithFoodBukkit.getInstance());
+        //
     }
     
     @Override
-    public void stopTasks() {
-        Bukkit.getScheduler().cancelTasks(FlyWithFoodBukkit.INSTANCE);
+    public void runTask(Runnable r) {
+        Bukkit.getScheduler().runTask(FlyWithFoodBukkit.getInstance(), r);
+        //
+    }
+    
+    @Override
+    public void runTaskAsync(Runnable r) {
+        Bukkit.getScheduler().runTaskAsynchronously(FlyWithFoodBukkit.getInstance(), r);
+        //
+    }
+    
+    @Override
+    public void runTaskTimerAsync(Runnable r, long waitSeconds, long periodSeconds) {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(FlyWithFoodBukkit.getInstance(), r, waitSeconds * 20L, periodSeconds * 20L);
+        //
+    }
+
+    @Override
+    public void runTask(Consumer<?> c) {
+        //该方法为Sponge方法，Bukkit侧不实现
+    }
+
+    @Override
+    public File getDataFolder() {
+        return FlyWithFoodBukkit.getInstance().getDataFolder();
         //
     }
 }

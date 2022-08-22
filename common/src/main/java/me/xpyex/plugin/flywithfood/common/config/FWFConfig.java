@@ -210,8 +210,16 @@ public class FWFConfig {
         //
     }
 
-    public boolean reload() {
-        if (Util.checkNull(ROOT, CONFIG_FILE)) return false;
+    /**
+     * 重载配置文件
+     * @return 是否重载成功
+     */
+    public static boolean reload() {
+        if (Util.checkNull(ROOT, CONFIG_FILE, BAK_FOLDER)) {
+            ROOT = FlyWithFood.getInstance().getAPI().getDataFolder();
+            CONFIG_FILE = new File(ROOT, "config.json");
+            BAK_FOLDER = new File(ROOT, "bakConfigs");
+        }
 
         try {
             if (!ROOT.exists()) {
@@ -234,9 +242,14 @@ public class FWFConfig {
                 return false;
             }
 
-            enableRawMsg = FWFConfig.CONFIG.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableTitle = FWFConfig.CONFIG.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
-            enableAction = FWFConfig.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            CONFIG.enableRawMsg = FWFConfig.CONFIG.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            CONFIG.enableTitle = FWFConfig.CONFIG.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
+            CONFIG.enableAction = FWFConfig.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
+
+            if (needUpdate()) {
+                updateConfigFile();
+                return reload();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -244,12 +257,9 @@ public class FWFConfig {
         return CONFIG != null;
     }
 
-    public boolean updateConfig() {
-        return reload();
-    }
-
     public static void createConfigFile() throws Exception {
         createConfigFile(getNewConfig());
+        //
     }
 
     public static void createConfigFile(JsonObject json) throws Exception {
@@ -258,7 +268,7 @@ public class FWFConfig {
         }
         CONFIG_FILE.createNewFile();
 
-        FileUtil.writeFile(CONFIG_FILE, FWFConfig.GSON.toJson(json));
+        FileUtil.writeFile(CONFIG_FILE, GSON.toJson(json));
     }
 
     public static void updateConfigFile() {
@@ -275,20 +285,20 @@ public class FWFConfig {
             File targetFile = new File(BAK_FOLDER, "config_" + time + ".json");
             CONFIG_FILE.renameTo(targetFile);
             JsonObject newJO = getNewConfig();
-            for (String value : GsonUtil.getKeysOfJsonObject(FWFConfig.CONFIG.languages)) {
-                newJO.get("Languages").getAsJsonObject().add(value, FWFConfig.CONFIG.languages.get(value));
+            for (String value : GsonUtil.getKeysOfJsonObject(CONFIG.languages)) {
+                newJO.get("Languages").getAsJsonObject().add(value, CONFIG.languages.get(value));
             }
-            for (String value : GsonUtil.getKeysOfJsonObject(FWFConfig.CONFIG.config)) {
+            for (String value : GsonUtil.getKeysOfJsonObject(CONFIG.config)) {
                 if (value.equals("Languages")) {  //在上文处理了
                     continue;
                 }
                 if (value.contains("Food")) {
-                    newJO.add(value.replace("Food", ""), FWFConfig.CONFIG.config.get(value));  //更名
+                    newJO.add(value.replace("Food", ""), CONFIG.config.get(value));  //更名
                     continue;
                 }
-                newJO.add(value, FWFConfig.CONFIG.config.get(value));
+                newJO.add(value, CONFIG.config.get(value));
             }
-            newJO.addProperty("ConfigVersion", FWFConfig.getPluginConfigVersion());
+            newJO.addProperty("ConfigVersion", getPluginConfigVersion());
             createConfigFile(newJO);
 
         } catch (Exception e) {

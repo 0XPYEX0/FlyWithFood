@@ -5,6 +5,7 @@ import me.xpyex.plugin.flywithfood.common.utils.MsgUtil;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
@@ -71,6 +72,18 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     @Override
     public String getWorldName() {
         return player.getWorld().getName();
+        //
+    }
+
+    @Override
+    public String getGameModeName() {
+        return player.get(Keys.GAME_MODE).orElse(GameModes.NOT_SET).getName();
+        //
+    }
+
+    @Override
+    public boolean isFlying() {
+        return player.get(Keys.IS_FLYING).orElse(false);
         //
     }
 }
