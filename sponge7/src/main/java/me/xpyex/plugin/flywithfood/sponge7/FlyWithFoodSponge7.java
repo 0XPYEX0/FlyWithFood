@@ -1,14 +1,32 @@
 package me.xpyex.plugin.flywithfood.sponge7;
 
 import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
+import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.api.FlyWithFoodAPISponge7;
 import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
+import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeMoney;
+import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandCallable;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.service.economy.EconomyService;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 @Plugin(
     id = "flywithfood-sponge",
@@ -21,6 +39,8 @@ import org.spongepowered.api.plugin.Plugin;
 )
 public class FlyWithFoodSponge7 {
     private static FlyWithFoodSponge7 INSTANCE;
+    @Inject
+    private PluginContainer plugin;
     public final Metrics metrics;
 
     @Inject
@@ -35,7 +55,42 @@ public class FlyWithFoodSponge7 {
         new FlyWithFood(new FlyWithFoodAPISponge7());
         
         FlyWithFood.getInstance().enable();
+
+        Sponge.getCommandManager().register(INSTANCE, new CommandCallable() {
+            @Override
+            public @NotNull CommandResult process(@NotNull CommandSource source, @NotNull String arguments) throws CommandException {
+                System.out.println(arguments);
+                FWFCmdExecutor.onCmd(new SpongeSender(source), "fly", arguments);
+                return CommandResult.success();
+            }
+
+            @Override
+            public @NotNull List<String> getSuggestions(@NotNull CommandSource source, @NotNull String arguments, @Nullable Location<World> targetPosition) throws CommandException {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public boolean testPermission(@NotNull CommandSource source) {
+                return true;
+            }
+
+            @Override
+            public @NotNull Optional<Text> getShortDescription(@NotNull CommandSource source) {
+                return Optional.of(Text.of("FlyWithFood的基础命令"));
+            }
+
+            @Override
+            public @NotNull Optional<Text> getHelp(@NotNull CommandSource source) {
+                return Optional.of(Text.of("这是可以帮助的吗"));
+            }
+
+            @Override
+            public @NotNull Text getUsage(@NotNull CommandSource source) {
+                return Text.of("没有Usage");
+            }
+        }, "flywithfood", "fly", "fwf");
     }
+
     public static FlyWithFoodSponge7 getInstance() {
         if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
         
@@ -47,5 +102,10 @@ public class FlyWithFoodSponge7 {
         FlyWithFood.getInstance().getAPI().stopTasks();
         FlyWithFood.getLogger().info("已取消所有任务");
         FlyWithFood.getLogger().info("插件已卸载");
+    }
+
+    public static PluginContainer getPlugin() {
+        return getInstance().plugin;
+        //
     }
 }

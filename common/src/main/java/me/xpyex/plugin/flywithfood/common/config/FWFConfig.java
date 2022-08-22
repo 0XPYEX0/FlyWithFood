@@ -215,6 +215,8 @@ public class FWFConfig {
      * @return 是否重载成功
      */
     public static boolean reload() {
+        FlyWithFood.getInstance().getAPI().stopTasks();  //暂停检查
+
         if (Util.checkNull(ROOT, CONFIG_FILE, BAK_FOLDER)) {
             ROOT = FlyWithFood.getInstance().getAPI().getDataFolder();
             CONFIG_FILE = new File(ROOT, "config.json");
@@ -250,6 +252,8 @@ public class FWFConfig {
                 updateConfigFile();
                 return reload();
             }
+
+            FlyWithFood.getInstance().getAPI().startCheck();  //重新开始任务
         } catch (Exception e) {
             e.printStackTrace();
             return false;

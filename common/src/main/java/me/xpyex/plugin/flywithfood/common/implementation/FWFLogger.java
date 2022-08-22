@@ -1,6 +1,6 @@
 package me.xpyex.plugin.flywithfood.common.implementation;
 
-import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
+import java.util.Locale;
 import me.xpyex.plugin.flywithfood.common.types.LoggerInfoType;
 
 public class FWFLogger {
@@ -12,10 +12,21 @@ public class FWFLogger {
 
     public FWFLogger(FWFSender consoleSender) {
         this.consoleSender = consoleSender;
-        prefixInfo = FWFConfig.CONFIG.isChinese ? "[信息]" : "[INFO]";
-        prefixWarning = FWFConfig.CONFIG.isChinese ? "[警告]" : "[WARNING]";
-        prefixError = FWFConfig.CONFIG.isChinese ? "[错误]" : "[ERROR]";
-        //
+        Locale locale = Locale.getDefault();
+
+        if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
+            prefixInfo = "[信息]";
+            prefixWarning = "[警告]";
+            prefixError = "[错误]";
+        } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
+            prefixInfo = "[信息]";
+            prefixWarning = "[警告]";
+            prefixError = "[錯誤]";
+        } else {
+            prefixInfo = "[INFO]";
+            prefixWarning = "[WARNING]";
+            prefixError = "[ERROR]";
+        }
     }
 
     private void log(LoggerInfoType type, String... messages) {

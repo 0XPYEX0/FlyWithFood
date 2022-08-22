@@ -8,9 +8,8 @@ public class BukkitSender implements FWFSender {
     private final CommandSender sender;
 
     public BukkitSender(CommandSender sender) {
-        if (Util.checkNull(sender)) {
-            throw new IllegalArgumentException("参数为空，无法创建FWFSender实例");
-        }
+        if (Util.checkNull(sender)) throw new IllegalArgumentException("sender为空，无法创建FWFSender实例");
+
         this.sender = sender;
         //
     }

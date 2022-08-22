@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
+import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.sponge7.FlyWithFoodSponge7;
@@ -19,6 +20,7 @@ import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeUser;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.service.economy.EconomyService;
 
 public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     private final FWFLogger logger;
@@ -33,8 +35,11 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     
     @Override
     public FWFUser getUser(String name) {
-        return new SpongeUser(Sponge.getServer().getPlayer(name).isPresent() ? Sponge.getServer().getPlayer(name).get() : null);
-        //
+        try {
+            return new SpongeUser(Sponge.getServer().getPlayer(name).isPresent() ? Sponge.getServer().getPlayer(name).get() : null);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 
     @Override
@@ -65,7 +70,13 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     public void registerEnergies() {
         new SpongeFood().register();
         new SpongeExpLevel().register();
-        new SpongeMoney().register();
+
+        if (Sponge.getServiceManager().provide(EconomyService.class).isPresent()) {
+            SpongeMoney.setEconomyService(Sponge.getServiceManager().provide(EconomyService.class).get());
+            new SpongeMoney().register();
+            getLogger().info("已与经济模块挂钩");
+            getLogger().info("Hooked with Economy Service successfully");
+        }
     }
 
     @Override
@@ -79,14 +90,26 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
                     map.put(getServerSoftware(), entry);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    getLogger().warning("添加饼状图失败");
+                    if (FWFConfig.CONFIG.isChinese) {
+                        getLogger().warning("添加饼状图失败");
+                    } else {
+                        getLogger().warning("Failed to load bStats");
+                    }
                 }
                 return map;
             }));
-            getLogger().info("与bStats挂钩成功");
+            if (FWFConfig.CONFIG.isChinese) {
+                getLogger().info("与bStats挂钩成功");
+            } else {
+                getLogger().info("Hooked with bStats successfully");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            getLogger().warn("与bStats挂钩失败");
+            if (FWFConfig.CONFIG.isChinese) {
+                getLogger().warn("与bStats挂钩失败");
+            } else {
+                getLogger().warn("Failed to hook with bStats");
+            }
         }
     }
     

@@ -9,7 +9,7 @@ public class SpongeSender implements FWFSender {
     private final CommandSource sender;
 
     public SpongeSender(CommandSource sender) {
-        if (Util.checkNull(sender)) throw new IllegalArgumentException("CommandSource为空");
+        if (Util.checkNull(sender)) throw new IllegalArgumentException("sender为空，无法创建FWFSender实例");
 
         this.sender = sender;
     }
@@ -39,5 +39,4 @@ public class SpongeSender implements FWFSender {
         return sender.getName();
         //
     }
-
 }

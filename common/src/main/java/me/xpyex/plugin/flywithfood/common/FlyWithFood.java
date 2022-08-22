@@ -46,12 +46,12 @@ public class FlyWithFood {
         getLogger().info(" ");
 
         getAPI().registerEnergies();
-        getAPI().register_bStats();
+        getAPI().runTaskAsync(getAPI()::register_bStats);
 
         FWFConfig.reload();
-    
+
         FlyWithFood.getInstance().getAPI().startCheck();
-    
+
         FlyWithFood.getLogger().info("已成功加载");
     }
     

@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'me.xpyex.plugin.flywithfood'
+version '2.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":common")
+    compile project(":bukkit")
+    compile project(":sponge7")
+}

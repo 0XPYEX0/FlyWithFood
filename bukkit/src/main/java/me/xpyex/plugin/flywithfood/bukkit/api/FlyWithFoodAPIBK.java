@@ -55,8 +55,11 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public FWFUser getUser(String name) {
-        return new BukkitUser(name);
-        //
+        try {
+            return new BukkitUser(name);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 
     @Override

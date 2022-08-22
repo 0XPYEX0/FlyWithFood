@@ -3,8 +3,8 @@ package me.xpyex.plugin.flywithfood.sponge7.energies;
 import java.math.BigDecimal;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.MoneyEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
+import me.xpyex.plugin.flywithfood.sponge7.FlyWithFoodSponge7;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
@@ -15,13 +15,11 @@ import org.spongepowered.api.service.economy.account.UniqueAccount;
 public class SpongeMoney extends MoneyEnergy {
     private final static Cause CAUSE = Cause.of(EventContext.builder()
                                                     .add(EventContextKeys.PLUGIN,
-                                                        Sponge.getPluginManager().getPlugin("flywithfood-sponge").get()
+                                                        FlyWithFoodSponge7.getPlugin()
                                                     ).build(),
-        Sponge.getPluginManager().getPlugin("flywithfood-sponge")
+        FlyWithFoodSponge7.getPlugin()
     );
-    
-    @SuppressWarnings("all")  //这个Optional内必非空，故忽略该常量所有警告
-    private static final EconomyService ECONOMY_SERVICE = Sponge.getServiceManager().provide(EconomyService.class).get();
+    private static EconomyService ECONOMY_SERVICE;
     
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
@@ -32,6 +30,11 @@ public class SpongeMoney extends MoneyEnergy {
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
         return ECONOMY_SERVICE.getOrCreateAccount(user.<Player>getPlayer().getUniqueId()).get().getBalance(ECONOMY_SERVICE.getDefaultCurrency());
+        //
+    }
+
+    public static void setEconomyService(EconomyService economyService) {
+        ECONOMY_SERVICE = economyService;
         //
     }
 }

@@ -25,6 +25,15 @@ public class FlyWithFoodBukkit extends JavaPlugin {
             return true;
         });
     }
+
+    @Override
+    public void onDisable() {
+        INSTANCE = null;
+
+        FlyWithFood.getInstance().getAPI().stopTasks();
+        FlyWithFood.getLogger().info("已取消所有任务");
+        FlyWithFood.getLogger().info("已卸载");
+    }
     
     public static FlyWithFoodBukkit getInstance() {
         if (Util.checkNull(INSTANCE)) throw new IllegalStateException("插件尚未加载完成");
