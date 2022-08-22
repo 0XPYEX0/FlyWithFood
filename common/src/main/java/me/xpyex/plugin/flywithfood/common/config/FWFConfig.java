@@ -249,6 +249,9 @@ public class FWFConfig {
             CONFIG.enableAction = FWFConfig.CONFIG.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();
 
             if (needUpdate()) {
+                FlyWithFood.getLogger().info("本次插件更新修改了配置文件格式，正在备份原文件并转化新文件");
+                FlyWithFood.getLogger().info("The configuration file is modified in this update, and the original file is being backed up and a new file is being generated.");
+                FlyWithFood.getLogger().info(" ");
                 updateConfigFile();
                 return reload();
             }
