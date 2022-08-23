@@ -10,7 +10,7 @@ public class MsgUtil {
 
     public static String getColorMsg(String msg) {
         if (msg == null) {
-            throw new NullPointerException("获取彩色字符串出现空，请联系开发者 QQ1723275529");
+            throw new IllegalArgumentException("获取彩色字符串出现空，请联系开发者 QQ1723275529");
         }
         if (msg.isEmpty()) {
             return msg;
@@ -23,6 +23,9 @@ public class MsgUtil {
     }
 
     public static String formatMsg(FWFSender target, String msg) {
+        if (Util.checkNull(target, msg)) {
+            throw new IllegalArgumentException("参数出现空");
+        }
         if (target.hasPermission("op")) {
             return msg.replace("%mode%", "点数");
         }

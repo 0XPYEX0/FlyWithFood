@@ -4,6 +4,7 @@ import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 import me.xpyex.plugin.flywithfood.common.utils.MsgUtil;
+import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public interface FWFSender {
 
@@ -70,8 +71,8 @@ public interface FWFSender {
                 return;
         }
         if (FWFConfig.CONFIG.enableRawMsg) {
-            String rawMsg = FWFConfig.CONFIG.languages.get("RawMsg").getAsJsonObject().get(msgType.getValue()).getAsString();
-            if (!rawMsg.isEmpty()) {
+            String rawMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("RawMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
+            if (!Util.checkNull(rawMsg)) {
                 autoSendMsg(rawMsg);
             }
         }
@@ -80,13 +81,13 @@ public interface FWFSender {
         }
         if (FWFConfig.CONFIG.enableAction) {
             String actionMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("ActionMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
-            if (!actionMsg.isEmpty()) {
+            if (!Util.checkNull(actionMsg)) {
                 ((FWFUser) this).sendActionBar(actionMsg);
             }
         }
         if (FWFConfig.CONFIG.enableTitle) {
             String titleMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("TitleMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
-            if (!titleMsg.isEmpty()) {
+            if (!Util.checkNull(titleMsg)) {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     if (FWFConfig.CONFIG.language.equalsIgnoreCase("Chinese")) {
