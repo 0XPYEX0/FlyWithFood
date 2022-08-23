@@ -107,9 +107,9 @@ public class FlyWithFoodSponge7 {
     
     @Listener
     public void onGameStop(GameStoppingServerEvent event) {
-        FlyWithFood.getInstance().getAPI().stopTasks();
-        FlyWithFood.getLogger().info("已取消所有任务");
-        FlyWithFood.getLogger().info("插件已卸载");
+        INSTANCE = null;
+
+        FlyWithFood.disable();
     }
 
     public static PluginContainer getPlugin() {

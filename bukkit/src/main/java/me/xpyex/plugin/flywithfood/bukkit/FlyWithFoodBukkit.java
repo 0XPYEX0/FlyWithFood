@@ -30,9 +30,7 @@ public class FlyWithFoodBukkit extends JavaPlugin {
     public void onDisable() {
         INSTANCE = null;
 
-        FlyWithFood.getInstance().getAPI().stopTasks();
-        FlyWithFood.getLogger().info("已取消所有任务");
-        FlyWithFood.getLogger().info("已卸载");
+        FlyWithFood.disable();
     }
     
     public static FlyWithFoodBukkit getInstance() {

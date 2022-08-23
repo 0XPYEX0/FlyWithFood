@@ -69,4 +69,10 @@ public class FlyWithFood {
         return FlyWithFood.getInstance().getAPI().getLogger();
         //
     }
+
+    public static void disable() {
+        getInstance().getAPI().stopTasks();
+        getLogger().info("已取消所有任务");
+        getLogger().info("已卸载");
+    }
 }
