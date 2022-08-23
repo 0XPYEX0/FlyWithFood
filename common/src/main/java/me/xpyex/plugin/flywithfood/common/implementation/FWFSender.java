@@ -11,7 +11,7 @@ public interface FWFSender {
     /**
      * 获取该类包装的Sender实例
      *
-     * @param <T> 泛型T为CommandSender类型
+     * @param <T> 泛型T为Bukkit的CommandSender类型，或为Sponge的CommandSource类型
      * @return 获取该类包装的Sender实例
      */
     public <T> T getSender();
@@ -44,23 +44,54 @@ public interface FWFSender {
         return false;
     }
 
+    /**
+     * 检查Sender是否拥有单个权限
+     *
+     * @param perm 需检查的权限
+     * @return 是否拥有
+     */
     public boolean hasPermission(String perm);
 
+    /**
+     * 检查Sender是否拥有无需计算点数的权限
+     *
+     * @return 是否拥有
+     */
     @SuppressWarnings("all")
     public default boolean hasNoCostPerm() {
         return hasPermissionOr("fly.nohunger", "fly.nocost");
         //
     }
 
+    /**
+     * 给Sender发送文本信息
+     *
+     * @param messages 文本信息
+     */
     public void sendMessage(String... messages);
 
+    /**
+     * 给Sender发送染色过后的信息
+     *
+     * @param messages 文本信息
+     */
     public default void autoSendMsg(String... messages) {
         for (String s : messages)
             sendMessage(MsgUtil.getColorMsg(s));
     }
 
+    /**
+     * 获取Sender实例的名字
+     *
+     * @return 名字
+     */
     public String getName();
 
+    /**
+     * 发送FlyWithFood的信息，自动从配置文件中获取并转换
+     *
+     * @param msgType 需要发送的消息类型
+     */
     public default void sendFWFMsg(FWFMsgType msgType) {
         switch (msgType) {
             case DisableInThisWorld:

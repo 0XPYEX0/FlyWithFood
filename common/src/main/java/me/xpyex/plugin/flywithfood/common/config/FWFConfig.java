@@ -212,6 +212,7 @@ public class FWFConfig {
 
     /**
      * 重载配置文件
+     *
      * @return 是否重载成功
      */
     public static boolean reload() {
@@ -264,11 +265,20 @@ public class FWFConfig {
         return CONFIG != null;
     }
 
+    /**
+     * 创建配置文件
+     *
+     */
     public static void createConfigFile() throws Exception {
         createConfigFile(getNewConfig());
         //
     }
 
+    /**
+     * 创建配置文件
+     *
+     * @param json 要写出的配置文件，为JSON
+     */
     public static void createConfigFile(JsonObject json) throws Exception {
         if (!ROOT.exists()) {
             ROOT.mkdirs();
@@ -278,6 +288,9 @@ public class FWFConfig {
         FileUtil.writeFile(CONFIG_FILE, GSON.toJson(json));
     }
 
+    /**
+     * 更新配置文件
+     */
     public static void updateConfigFile() {
         try {
             if (!CONFIG_FILE.exists()) {

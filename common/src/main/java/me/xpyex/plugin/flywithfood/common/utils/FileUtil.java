@@ -10,6 +10,7 @@ import java.nio.file.Files;
 public class FileUtil {
     /**
      * 读取目标文本文件
+     *
      * @param target 目标文本文件
      * @return 目标文件的文本
      * @throws Exception 文件异常
@@ -31,6 +32,7 @@ public class FileUtil {
 
     /**
      * 向目标文件写出文本
+     *
      * @param target 目标文本
      * @param content 要写出的内容
      * @param attend 是否在原文本的内容基础续写新文本，否则覆写整个文件
@@ -49,6 +51,7 @@ public class FileUtil {
 
     /**
      * 覆写目标文件
+     *
      * @param target 目标文件
      * @param content 覆写的内容
      * @throws Exception 文件异常

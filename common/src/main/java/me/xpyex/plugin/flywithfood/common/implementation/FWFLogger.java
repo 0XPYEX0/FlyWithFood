@@ -49,26 +49,51 @@ public class FWFLogger {
         }
     }
 
+    /**
+     * 向后台输出普通信息
+     *
+     * @param messages 文本信息
+     */
     public void info(String... messages) {
         log(LoggerInfoType.INFO, messages);
         //
     }
 
+    /**
+     * 向后台输出警告信息
+     *
+     * @param messages 文本信息
+     */
     public void warning(String... messages) {
         log(LoggerInfoType.WARNING, messages);
         //
     }
 
+    /**
+     * 向后台输出警告信息
+     *
+     * @param messages 文本信息
+     */
     public void warn(String... messages) {
         log(LoggerInfoType.WARNING, messages);
         //
     }
 
+    /**
+     * 向后台输出错误信息
+     *
+     * @param messages 文本信息
+     */
     public void error(String... messages) {
         log(LoggerInfoType.ERROR, messages);
         //
     }
 
+    /**
+     * 向后台输出错误信息
+     *
+     * @param messages 文本信息
+     */
     public void severe(String... messages) {
         log(LoggerInfoType.ERROR, messages);
         //
