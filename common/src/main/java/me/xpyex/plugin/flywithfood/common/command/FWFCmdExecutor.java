@@ -19,6 +19,9 @@ public class FWFCmdExecutor {
     }  //写成常量节省一丢丢性能
 
     public static void onCmd(FWFSender sender, String label, String... args) {
+        if (Util.checkNull(sender, label, args)) {
+            return;
+        }
         if (Util.checkNull(FWFConfig.CONFIG, FWFConfig.CONFIG.config)) {  //未雨绸缪一下
             if (!sender.hasPermission("fly.admin")) {
                 sender.autoSendMsg(

@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
+import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.FlyWithFoodSponge7;
 import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeExpLevel;
@@ -19,6 +21,8 @@ import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeMoney;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeUser;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.economy.EconomyService;
 
@@ -31,7 +35,20 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
         this.logger = new FWFLogger(new SpongeSender(Sponge.getServer().getConsole()));
         //
     }
-    
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T, S extends FWFSender> S getSender(T sender) {
+        if (!Util.checkNull(sender)) {
+            if (sender instanceof Player) {
+                return (S) new SpongeUser((Player) sender);
+            } else if (sender instanceof CommandSource) {
+                return (S) new SpongeSender((CommandSource) sender);
+            }
+        }
+        return null;
+    }
+
     @Override
     public FWFUser getUser(String name) {
         try {

@@ -17,9 +17,13 @@ import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
+import me.xpyex.plugin.flywithfood.common.utils.Util;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
@@ -51,6 +55,19 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     public FlyWithFoodAPIBK() {
         logger = new FWFLogger(new BukkitSender(Bukkit.getConsoleSender()));
         //
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T, S extends FWFSender> S getSender(T sender) {
+        if (!Util.checkNull(sender)) {
+            if (sender instanceof Player) {
+                return (S) new BukkitUser((Player) sender);
+            } else if (sender instanceof CommandSender) {
+                return (S) new BukkitSender((CommandSender) sender);
+            }
+        }
+        return null;
     }
 
     @Override

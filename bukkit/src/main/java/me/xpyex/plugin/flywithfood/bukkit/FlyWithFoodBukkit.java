@@ -1,10 +1,10 @@
 package me.xpyex.plugin.flywithfood.bukkit;
 
 import me.xpyex.plugin.flywithfood.bukkit.api.FlyWithFoodAPIBK;
-import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitSender;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,7 +21,7 @@ public class FlyWithFoodBukkit extends JavaPlugin {
         FlyWithFood.getInstance().enable();
     
         INSTANCE.getCommand("FlyWithFood").setExecutor((sender, cmd, label, args) -> {
-            FWFCmdExecutor.onCmd(new BukkitSender(sender), label, args);
+            FWFCmdExecutor.onCmd(FWFSender.of(sender), label, args);
             return true;
         });
     }

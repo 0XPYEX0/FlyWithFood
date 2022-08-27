@@ -7,10 +7,13 @@ import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 
 public interface FlyWithFoodAPI {
+    public <T, S extends FWFSender> S getSender(T sender);
+
     public FWFUser getUser(String name);
 
     public List<FWFUser> getOnlineUsers();

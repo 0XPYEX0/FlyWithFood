@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
+import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.api.FlyWithFoodAPISponge7;
 import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
-import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.Sponge;
@@ -63,7 +63,7 @@ public class FlyWithFoodSponge7 {
                 } else {
                     args = arguments.split(" ");
                 }
-                FWFCmdExecutor.onCmd(new SpongeSender(source), "fly", args);
+                FWFCmdExecutor.onCmd(FWFSender.of(source), "fly", args);
                 return CommandResult.success();
             }
 
