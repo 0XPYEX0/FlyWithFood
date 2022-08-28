@@ -4,7 +4,6 @@ plugins {
 }
 
 group 'me.xpyex.plugin.flywithfood'
-version '2.0.0'
 
 repositories {
     mavenCentral()

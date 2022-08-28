@@ -107,9 +107,9 @@ public class FlyWithFoodSponge7 {
     
     @Listener
     public void onGameStop(GameStoppingServerEvent event) {
-        INSTANCE = null;
-
         FlyWithFood.disable();
+
+        INSTANCE = null;
     }
 
     public static PluginContainer getPlugin() {

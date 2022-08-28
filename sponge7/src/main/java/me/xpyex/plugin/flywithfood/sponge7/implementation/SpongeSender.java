@@ -1,11 +1,11 @@
 package me.xpyex.plugin.flywithfood.sponge7.implementation;
 
-import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
+import me.xpyex.plugin.flywithfood.common.implementation.AbstractFWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 
-public class SpongeSender implements FWFSender {
+public class SpongeSender extends AbstractFWFSender {
     private final CommandSource sender;
 
     public SpongeSender(CommandSource sender) {

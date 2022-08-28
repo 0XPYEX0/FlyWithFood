@@ -3,7 +3,6 @@ package me.xpyex.plugin.flywithfood.bukkit;
 import me.xpyex.plugin.flywithfood.bukkit.api.FlyWithFoodAPIBK;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
-import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,8 +14,6 @@ public class FlyWithFoodBukkit extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         new FlyWithFood(new FlyWithFoodAPIBK());
-    
-        FWFConfig.ROOT = FlyWithFoodBukkit.INSTANCE.getDataFolder();
 
         FlyWithFood.getInstance().enable();
     
@@ -28,9 +25,9 @@ public class FlyWithFoodBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        INSTANCE = null;
-
         FlyWithFood.disable();
+
+        INSTANCE = null;
     }
     
     public static FlyWithFoodBukkit getInstance() {

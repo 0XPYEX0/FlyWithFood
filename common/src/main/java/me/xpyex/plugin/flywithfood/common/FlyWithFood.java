@@ -58,6 +58,7 @@ public class FlyWithFood {
             return;
         }
 
+        getLogger().info("正在尝试访问bStats");
         getAPI().runTaskAsync(getAPI()::register_bStats);
 
         FlyWithFood.getInstance().getAPI().startCheck();

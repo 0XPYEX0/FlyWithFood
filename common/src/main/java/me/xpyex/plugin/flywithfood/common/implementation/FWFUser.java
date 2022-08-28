@@ -63,12 +63,12 @@ public interface FWFUser extends FWFSender {
     public String getWorldName();
 
     public default boolean inNoFunction() {
-        return FWFConfig.CONFIG.functionWL.get("Enabled").getAsBoolean() && !GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
+        return FWFConfig.CONFIG.functionWL.get("Enable").getAsBoolean() && !GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
         //
     }
     
     public default boolean inNoCost() {
-        return FWFConfig.CONFIG.noCostWL.get("Enabled").getAsBoolean() && GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
+        return FWFConfig.CONFIG.noCostWL.get("Enable").getAsBoolean() && GsonUtil.jsonArrayContains(FWFConfig.CONFIG.functionWL.get("Worlds").getAsJsonArray(), getWorldName());
     }
     
     public String getGameModeName();

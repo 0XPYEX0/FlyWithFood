@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 public class BukkitUser extends BukkitSender implements FWFUser {
+
     private final Player player;
 
     public BukkitUser(Player player) {

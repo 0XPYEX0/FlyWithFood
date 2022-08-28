@@ -1,10 +1,10 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementation;
 
-import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
+import me.xpyex.plugin.flywithfood.common.implementation.AbstractFWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import org.bukkit.command.CommandSender;
 
-public class BukkitSender implements FWFSender {
+public class BukkitSender extends AbstractFWFSender {
     private final CommandSender sender;
 
     public BukkitSender(CommandSender sender) {
@@ -38,5 +38,4 @@ public class BukkitSender implements FWFSender {
         return sender.getName();
         //
     }
-
 }

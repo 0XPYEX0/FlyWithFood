@@ -130,6 +130,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public void register_bStats() {
+        long now = System.currentTimeMillis();
         try {
             Metrics metrics = new Metrics(FlyWithFoodBukkit.getInstance(), 15311);
             metrics.addCustomChart(new Metrics.DrilldownPie("game_version", () -> {
@@ -139,9 +140,9 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
                     entry.put(getServerSoftware(), 1);
                     map.put(getServerSoftware(), entry);
                     if (FWFConfig.CONFIG.isChinese) {
-                        FlyWithFood.getLogger().info("与bStats挂钩成功");
+                        FlyWithFood.getLogger().info("与bStats挂钩成功", "共消耗 " + (System.currentTimeMillis() - now) + "ms");
                     } else {
-                        FlyWithFood.getLogger().info("Hooked with bStats successfully");
+                        FlyWithFood.getLogger().info("Hooked with bStats successfully", "It spent " + (System.currentTimeMillis() - now) + "ms");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
