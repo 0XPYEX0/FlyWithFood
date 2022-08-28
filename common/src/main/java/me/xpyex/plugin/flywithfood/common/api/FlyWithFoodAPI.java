@@ -1,6 +1,11 @@
 package me.xpyex.plugin.flywithfood.common.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.function.Consumer;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
@@ -66,4 +71,45 @@ public interface FlyWithFoodAPI {
     public void runTask(Consumer<?> c);
 
     public File getDataFolder();
+
+    public String getPluginVersion();
+
+    public default void checkUpdate() {
+        try {
+            HttpURLConnection huc = (HttpURLConnection) new URL("https://gitee.com/api/v5/repos/xpyex/FlyWithFood/tags").openConnection();
+            huc.setRequestMethod("GET");
+            huc.connect();
+            ByteArrayOutputStream ba = new ByteArrayOutputStream(16384);
+            int nRead;
+            byte[] data = new byte[4096];
+            while ((nRead = huc.getInputStream().read(data, 0, data.length)) != -1) {
+                ba.write(data, 0, nRead);
+            }
+            JsonArray array = FWFConfig.GSON.fromJson(ba.toString("UTF-8"), JsonArray.class);
+            JsonObject latestVer = array.get(0).getAsJsonObject();
+            String name = latestVer.get("name").getAsString();
+            if (!name.equals("v" + getPluginVersion())) {
+                getLogger().info("");
+                if (FWFConfig.CONFIG.isChinese) {
+                    getLogger().info("你当前运行的版本为 v" + getPluginVersion());
+                    getLogger().info("找到一个更新的版本: " + name);
+                    getLogger().info("前往 https://gitee.com/xpyex/FlyWithFood/releases 下载");
+                } else {
+                    getLogger().info("You are running FlyWithFood v" + getPluginVersion());
+                    getLogger().info("There is a newer version: " + name);
+                    getLogger().info("Download it at: https://github.com/0XPYEX0/FlyWithFood/releases");
+                }
+            } else {
+                if (FWFConfig.CONFIG.isChinese) {
+                    getLogger().info("当前已是最新版本");
+                } else {
+                    getLogger().info("You are running the newest FlyWithFood");
+                }
+            }
+
+        } catch (Exception e) {
+            getLogger().error("检查更新失败");
+            e.printStackTrace();
+        }
+    }
 }

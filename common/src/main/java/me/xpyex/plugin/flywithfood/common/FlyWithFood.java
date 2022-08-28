@@ -61,6 +61,9 @@ public class FlyWithFood {
         getLogger().info("正在尝试访问bStats");
         getAPI().runTaskAsync(getAPI()::register_bStats);
 
+        getLogger().info("正在检查更新");
+        getAPI().runTaskAsync(getAPI()::checkUpdate);
+
         FlyWithFood.getInstance().getAPI().startCheck();
 
         FlyWithFood.getLogger().info("已成功加载");

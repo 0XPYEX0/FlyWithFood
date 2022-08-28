@@ -200,4 +200,10 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
         return FlyWithFoodBukkit.getInstance().getDataFolder();
         //
     }
+
+    @Override
+    public String getPluginVersion() {
+        return FlyWithFoodBukkit.getInstance().getDescription().getVersion();
+        //
+    }
 }

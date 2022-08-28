@@ -169,4 +169,10 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
         return new File("config/FlyWithFood");
         //
     }
+
+    @Override
+    public String getPluginVersion() {
+        return Sponge.getPluginManager().getPlugin("FlyWithFood-Sponge".toLowerCase()).get().getVersion().orElse("Unknown");
+        //
+    }
 }
