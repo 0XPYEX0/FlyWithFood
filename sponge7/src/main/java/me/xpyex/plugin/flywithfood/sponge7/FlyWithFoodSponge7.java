@@ -33,7 +33,7 @@ import org.spongepowered.api.world.World;
     authors = {
         "XPYEX"
     },
-    version = "2.0.0"
+    version = "2.0.1"
 )
 public class FlyWithFoodSponge7 {
     private static FlyWithFoodSponge7 INSTANCE;
