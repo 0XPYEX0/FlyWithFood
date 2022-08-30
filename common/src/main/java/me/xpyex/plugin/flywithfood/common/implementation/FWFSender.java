@@ -11,9 +11,8 @@ public interface FWFSender {
      * 运用FlyWithFoodAPI获取FWFSender或FWFUser实例
      * @param sender Bukkit的CommandSender或Sponge的CommandSource对象
      * @return 基于FWFSender的实例
-     * @param <T> Bukkit的CommandSender或Sponge的CommandSource对象
      */
-    public static <T, S extends FWFSender> S of(T sender) {
+    public static FWFSender of(Object sender) {
         return FlyWithFood.getInstance().getAPI().getSender(sender);
         //
     }

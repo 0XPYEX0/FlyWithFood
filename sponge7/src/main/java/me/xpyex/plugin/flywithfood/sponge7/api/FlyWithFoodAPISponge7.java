@@ -37,13 +37,12 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T, S extends FWFSender> S getSender(T sender) {
+    public FWFSender getSender(Object sender) {
         if (!Util.checkNull(sender)) {
             if (sender instanceof Player) {
-                return (S) new SpongeUser((Player) sender);
+                return new SpongeUser((Player) sender);
             } else if (sender instanceof CommandSource) {
-                return (S) new SpongeSender((CommandSource) sender);
+                return new SpongeSender((CommandSource) sender);
             }
         }
         return null;

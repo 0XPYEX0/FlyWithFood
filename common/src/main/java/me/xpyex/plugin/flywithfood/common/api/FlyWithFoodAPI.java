@@ -17,7 +17,7 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 
 public interface FlyWithFoodAPI {
-    public <T, S extends FWFSender> S getSender(T sender);
+    public FWFSender getSender(Object sender);
 
     public FWFUser getUser(String name);
 

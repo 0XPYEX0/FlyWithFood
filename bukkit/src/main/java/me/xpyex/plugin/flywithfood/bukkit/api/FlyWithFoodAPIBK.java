@@ -58,13 +58,12 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T, S extends FWFSender> S getSender(T sender) {
+    public FWFSender getSender(Object sender) {
         if (!Util.checkNull(sender)) {
             if (sender instanceof Player) {
-                return (S) new BukkitUser((Player) sender);
+                return new BukkitUser((Player) sender);
             } else if (sender instanceof CommandSender) {
-                return (S) new BukkitSender((CommandSender) sender);
+                return new BukkitSender((CommandSender) sender);
             }
         }
         return null;
