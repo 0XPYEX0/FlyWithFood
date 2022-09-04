@@ -50,11 +50,14 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
 
     @Override
     public FWFUser getUser(String name) {
-        try {
-            return new SpongeUser(Sponge.getServer().getPlayer(name).isPresent() ? Sponge.getServer().getPlayer(name).get() : null);
-        } catch (IllegalArgumentException ignored) {
-            return null;
+        if (!USER_MAP.containsKey(name)) {
+            try {
+                USER_MAP.put(name, new SpongeUser(name));
+            } catch (IllegalArgumentException ignored) {
+                return null;
+            }
         }
+        return USER_MAP.get(name);
     }
 
     @Override
@@ -127,7 +130,13 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
             }
         }
     }
-    
+
+    @Override
+    public boolean callEventThenCancelled(FWFUser user, double cost) {
+        return false;
+        //这是Bukkit侧的用法，Sponge侧无需实现
+    }
+
     @Override
     public void stopTasks() {
         Sponge.getScheduler().getScheduledTasks(FlyWithFoodSponge7.getInstance()).forEach(Task::cancel);

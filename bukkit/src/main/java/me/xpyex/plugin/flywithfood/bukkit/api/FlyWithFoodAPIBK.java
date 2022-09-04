@@ -11,6 +11,7 @@ import me.xpyex.plugin.flywithfood.bukkit.bstats.Metrics;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitExpLevel;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitFood;
 import me.xpyex.plugin.flywithfood.bukkit.energies.BukkitMoney;
+import me.xpyex.plugin.flywithfood.bukkit.event.EnergyCostEvent;
 import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitSender;
 import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitUser;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
@@ -24,12 +25,16 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     private static final String SERVER_SOFTWARE;
     private static final int SERVER_MAIN_VERSION;
-    private final FWFLogger logger;
+    private final FWFLogger LOGGER;
 
     static {
         String softwareResult;
@@ -50,10 +55,24 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
         }
         SERVER_SOFTWARE = softwareResult;
         SERVER_MAIN_VERSION = versionResult;
+
+        Bukkit.getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onQuit(PlayerQuitEvent event) {
+                USER_MAP.remove(event.getPlayer().getName());
+                //
+            }
+
+            @EventHandler
+            public void onRespawn(PlayerRespawnEvent event) {  //玩家从末地门回主世界也算重生，这样方便
+                USER_MAP.remove(event.getPlayer().getName());
+                //
+            }
+        }, FlyWithFoodBukkit.getInstance());
     }
 
     public FlyWithFoodAPIBK() {
-        logger = new FWFLogger(new BukkitSender(Bukkit.getConsoleSender()));
+        LOGGER = new FWFLogger(new BukkitSender(Bukkit.getConsoleSender()));
         //
     }
 
@@ -71,11 +90,14 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public FWFUser getUser(String name) {
-        try {
-            return new BukkitUser(name);
-        } catch (IllegalArgumentException ignored) {
-            return null;
+        if (!USER_MAP.containsKey(name)) {
+            try {
+                USER_MAP.put(name, new BukkitUser(name));
+            } catch (IllegalArgumentException ignored) {
+                return null;
+            }
         }
+        return USER_MAP.get(name);
     }
 
     @Override
@@ -86,7 +108,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     @Override
     public FWFLogger getLogger() {
-        return logger;
+        return LOGGER;
         //
     }
 
@@ -164,7 +186,14 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
             }
         }
     }
-    
+
+    @Override
+    public boolean callEventThenCancelled(FWFUser user, double cost) {
+        EnergyCostEvent event = new EnergyCostEvent(user, cost);
+        Bukkit.getPluginManager().callEvent(event);
+        return event.isCancelled();
+    }
+
     @Override
     public void stopTasks() {
         Bukkit.getScheduler().cancelTasks(FlyWithFoodBukkit.getInstance());

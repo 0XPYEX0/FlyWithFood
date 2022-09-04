@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.sponge7.implementation;
 
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.utils.MsgUtil;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -12,9 +13,13 @@ import org.spongepowered.api.text.title.Title;
 public class SpongeUser extends SpongeSender implements FWFUser {
     private final Player player;
 
-    public SpongeUser(Player player) {
+    public SpongeUser(Player player) throws IllegalArgumentException {
         super(player);
         this.player = player;
+    }
+
+    public SpongeUser(String name) throws IllegalArgumentException {
+        this(Sponge.getServer().getPlayer(name).orElse(null));
     }
 
     @Override

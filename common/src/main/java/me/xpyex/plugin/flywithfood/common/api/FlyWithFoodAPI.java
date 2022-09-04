@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
@@ -17,6 +18,8 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 
 public interface FlyWithFoodAPI {
+    public static final HashMap<String, FWFUser> USER_MAP = new HashMap<>();
+
     public FWFSender getSender(Object sender);
 
     public FWFUser getUser(String name);
@@ -32,25 +35,32 @@ public interface FlyWithFoodAPI {
     public void registerEnergies();
 
     public void register_bStats();
+
+    public boolean callEventThenCancelled(FWFUser user, double cost);
     
     public default void startCheck() {
         runTaskTimerAsync(() -> {
             for (FWFUser user : this.getOnlineUsers()) {
                 if (!user.needCheck()) continue;  //玩家是否需要被计算飞行
-        
+
                 FWFInfo info = user.getInfo();  //直接存起来稍微节省一点性能?
-        
-                if (info.getEnergy() instanceof FoodEnergy) {
-                    if (user.hasSaturationEff()) {  //若玩家拥有饱和Buff，则禁止飞行
-                        user.disableFly();  //关闭玩家的飞行
-                        user.sendFWFMsg(FWFMsgType.HasEffect);
-                        continue;
+
+                if (FWFConfig.CONFIG.checkSaturation) {  //如果要检查“饱和”Buff的话
+                    if (info.getEnergy() instanceof FoodEnergy) {
+                        if (user.hasSaturationEff()) {  //若玩家拥有“饱和”Buff，则禁止飞行
+                            user.disableFly();  //关闭玩家的飞行
+                            user.sendFWFMsg(FWFMsgType.HasEffect);
+                            continue;
+                        }
                     }
                 }
                 double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
                 double disable = info.getDisable(); //消耗至多少关闭飞行
                 double now = info.getEnergy().getNow(user).doubleValue();  //玩家现在的点数
                 user.cost(cost);  //扣除数值
+                if (callEventThenCancelled(user, cost)) {
+                    continue;
+                }
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
                     user.disableFly();  //关闭玩家的飞行

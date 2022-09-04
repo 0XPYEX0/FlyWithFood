@@ -8,7 +8,7 @@ import org.spongepowered.api.text.Text;
 public class SpongeSender extends AbstractFWFSender {
     private final CommandSource sender;
 
-    public SpongeSender(CommandSource sender) {
+    public SpongeSender(CommandSource sender) throws IllegalArgumentException {
         if (Util.checkNull(sender)) throw new IllegalArgumentException("sender为空，无法创建FWFSender实例");
 
         this.sender = sender;

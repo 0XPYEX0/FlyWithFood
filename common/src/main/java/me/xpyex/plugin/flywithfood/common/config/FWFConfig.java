@@ -19,7 +19,7 @@ public class FWFConfig {
     public static File ROOT;
     public static File CONFIG_FILE;
     public static File BAK_FOLDER;
-    public static final int CONFIG_VERSION = 5;
+    public static final int CONFIG_VERSION = 6;
     public static FWFConfig CONFIG;
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
@@ -42,21 +42,23 @@ public class FWFConfig {
     public boolean enableRawMsg;
     public boolean enableTitle;
     public boolean enableAction;
+    public final boolean checkSaturation;
 
     public FWFConfig(JsonObject config) {
         this.config = config;
         this.groups = this.config.get("Groups").getAsJsonObject();  //分组
         this.version = this.config.get("ConfigVersion").getAsInt();  //配置文件的版本
-        this.cost = this.config.get("Cost").getAsDouble(); //每秒消耗的数值，可为饥饿值或经验值
-        this.disable = this.config.get("Disable").getAsDouble(); //消耗至多少关闭飞行
-        this.languages = this.config.get("Languages").getAsJsonObject();
-        this.language = this.config.get("Language").getAsString();
-        this.mode = this.config.get("CostMode").getAsString();
-        this.functionWL = this.config.get("FunctionsWhitelist").getAsJsonObject();
-        this.noCostWL = this.config.get("NoCostWhitelist").getAsJsonObject();
-        this.howLongCheck = this.config.get("CheckSeconds").getAsInt();
-        this.isChinese = this.language.equalsIgnoreCase("Chinese");
-        this.isEnglish = this.language.equalsIgnoreCase("English");
+        this.cost = this.config.get("Cost").getAsDouble();  //每秒消耗的数值，可为饥饿值或经验值
+        this.disable = this.config.get("Disable").getAsDouble();  //消耗至多少关闭飞行
+        this.languages = this.config.get("Languages").getAsJsonObject();  //语言文件
+        this.language = this.config.get("Language").getAsString();  //默认语言，支持Chinese与English
+        this.mode = this.config.get("CostMode").getAsString();  //未在分组内时默认使用的扣除模式
+        this.functionWL = this.config.get("FunctionsWhitelist").getAsJsonObject();  //是否开启功能的世界名单
+        this.noCostWL = this.config.get("NoCostWhitelist").getAsJsonObject();  //是否不消耗能量的世界名单
+        this.howLongCheck = this.config.get("CheckSeconds").getAsInt();  //间隔多久检查一次
+        this.isChinese = this.language.equalsIgnoreCase("Chinese");  //默认语言是否是中文
+        this.isEnglish = this.language.equalsIgnoreCase("English");  //默认语言是否是英文
+        this.checkSaturation = this.config.get("CheckSaturation").getAsBoolean();  //是否检查“饱和”Buff
         enableRawMsg = this.languages.get("RawMsg").getAsJsonObject().get("Enable").getAsBoolean();
         enableTitle = this.languages.get("TitleMsg").getAsJsonObject().get("Enable").getAsBoolean();
         enableAction = this.languages.get("ActionMsg").getAsJsonObject().get("Enable").getAsBoolean();

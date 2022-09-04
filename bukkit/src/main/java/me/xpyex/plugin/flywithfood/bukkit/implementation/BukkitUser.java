@@ -16,12 +16,12 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     private final Player player;
 
-    public BukkitUser(Player player) {
+    public BukkitUser(Player player) throws IllegalArgumentException {
         super(player);
         this.player = player;
     }
 
-    public BukkitUser(String name) {
+    public BukkitUser(String name) throws IllegalArgumentException {
         this(Bukkit.getPlayerExact(name));
         //
     }

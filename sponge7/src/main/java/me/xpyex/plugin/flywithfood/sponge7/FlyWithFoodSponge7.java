@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
+import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
@@ -18,8 +19,10 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
@@ -33,7 +36,7 @@ import org.spongepowered.api.world.World;
     authors = {
         "XPYEX"
     },
-    version = "2.0.1"
+    version = "2.0.2"
 )
 public class FlyWithFoodSponge7 {
     private static FlyWithFoodSponge7 INSTANCE;
@@ -110,6 +113,18 @@ public class FlyWithFoodSponge7 {
         FlyWithFood.disable();
 
         INSTANCE = null;
+    }
+
+    @Listener
+    public void onQuit(ClientConnectionEvent.Disconnect event) {
+        FlyWithFoodAPI.USER_MAP.remove(event.getTargetEntity().getName());
+        //
+    }
+
+    @Listener
+    public void onRespawn(RespawnPlayerEvent event) {
+        FlyWithFoodAPI.USER_MAP.remove(event.getTargetEntity().getName());
+        //
     }
 
     public static PluginContainer getPlugin() {

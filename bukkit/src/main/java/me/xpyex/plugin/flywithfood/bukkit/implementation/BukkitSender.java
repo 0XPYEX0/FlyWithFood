@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public class BukkitSender extends AbstractFWFSender {
     private final CommandSender sender;
 
-    public BukkitSender(CommandSender sender) {
+    public BukkitSender(CommandSender sender) throws IllegalArgumentException {
         if (Util.checkNull(sender)) throw new IllegalArgumentException("sender为空，无法创建FWFSender实例");
 
         this.sender = sender;
