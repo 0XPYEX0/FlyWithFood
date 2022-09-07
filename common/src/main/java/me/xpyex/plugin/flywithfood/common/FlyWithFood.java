@@ -32,7 +32,7 @@ public class FlyWithFood {
 
         getLogger().info(" ");
 
-        if (getInstance().getAPI().getServerSoftware().startsWith("Unknown-")) {
+        if (getAPI().getServerSoftware().startsWith("Unknown-")) {
             getLogger().error("无法自动解析服务端版本，使用默认版本信息",
                 "Failed to get Server Version... Using default version info");
         }
@@ -61,6 +61,7 @@ public class FlyWithFood {
             getLogger().severe(" ");
             return;
         }
+        getLogger().info("成功加载配置文件");
 
         getLogger().info("正在尝试访问bStats");
         getAPI().runTaskAsync(getAPI()::register_bStats);
@@ -68,9 +69,7 @@ public class FlyWithFood {
         getLogger().info("正在检查更新");
         getAPI().runTaskAsync(getAPI()::checkUpdate);
 
-        FlyWithFood.getInstance().getAPI().startCheck();
-
-        FlyWithFood.getLogger().info("已成功加载");
+        getLogger().info("已成功加载");
     }
     
     public static FWFLogger getLogger() {
@@ -82,5 +81,7 @@ public class FlyWithFood {
         getInstance().getAPI().stopTasks();
         getLogger().info("已取消所有任务");
         getLogger().info("已卸载");
+
+        INSTANCE = null;
     }
 }
