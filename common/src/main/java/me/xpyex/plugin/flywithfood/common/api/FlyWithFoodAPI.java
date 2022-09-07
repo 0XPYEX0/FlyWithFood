@@ -36,8 +36,6 @@ public interface FlyWithFoodAPI {
 
     public void register_bStats();
 
-    public boolean callEventThenCancelled(FWFUser user, double cost);
-    
     public default void startCheck() {
         runTaskTimerAsync(() -> {
             for (FWFUser user : this.getOnlineUsers()) {
@@ -58,9 +56,6 @@ public interface FlyWithFoodAPI {
                 double disable = info.getDisable(); //消耗至多少关闭飞行
                 double now = info.getEnergy().getNow(user).doubleValue();  //玩家现在的点数
                 user.cost(cost);  //扣除数值
-                if (callEventThenCancelled(user, cost)) {
-                    continue;
-                }
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
                     user.disableFly();  //关闭玩家的飞行

@@ -2,28 +2,33 @@ package me.xpyex.plugin.flywithfood.bukkit.event;
 
 import me.xpyex.plugin.flywithfood.bukkit.implementation.BukkitUser;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class EnergyCostEvent extends PlayerEvent implements Cancellable {
+public class EnergyCostEvent extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private final FWFUser user;
+    private final Player player;
     private boolean cancelled = false;
     private final Number cost;
 
-    public EnergyCostEvent(Player who, @NotNull Number cost) {
-        super(who);
-        user = new BukkitUser(who);
+    public EnergyCostEvent(Player player, @NotNull Number cost) {
+        super(!Bukkit.isPrimaryThread());
+        this.player = player;
+        this.user = new BukkitUser(player);
         this.cost = cost;
     }
 
-    public EnergyCostEvent(FWFUser who, @NotNull Number cost) {
-        this(who.<Player>getPlayer(), cost);
-        //
+    public EnergyCostEvent(FWFUser user, @NotNull Number cost) {
+        super(!Bukkit.isPrimaryThread());
+        this.user = user;
+        this.cost = cost;
+        this.player = user.getPlayer();
     }
 
     @Override
@@ -32,6 +37,19 @@ public class EnergyCostEvent extends PlayerEvent implements Cancellable {
         //
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+        //
+    }
+
+    /**
+     * 获取被扣除能量的玩家
+     * @return 被扣除能量的玩家
+     */
+    public Player getPlayer() {
+        return player;
+        //
+    }
 
     /**
      * 获取被扣除能量的用户

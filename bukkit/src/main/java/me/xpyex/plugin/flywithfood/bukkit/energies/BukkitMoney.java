@@ -1,10 +1,12 @@
 package me.xpyex.plugin.flywithfood.bukkit.energies;
 
+import me.xpyex.plugin.flywithfood.bukkit.event.EnergyCostEvent;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.MoneyEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +16,11 @@ public class BukkitMoney extends MoneyEnergy {
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         if (value.doubleValue() == 0) {  //+-0没有变化
+            return;
+        }
+        EnergyCostEvent event = new EnergyCostEvent(user, value);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             return;
         }
         if (ECON != null) {

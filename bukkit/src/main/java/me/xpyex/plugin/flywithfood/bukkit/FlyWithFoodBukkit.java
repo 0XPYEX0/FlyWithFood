@@ -2,9 +2,14 @@ package me.xpyex.plugin.flywithfood.bukkit;
 
 import me.xpyex.plugin.flywithfood.bukkit.api.FlyWithFoodAPIBK;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
+import me.xpyex.plugin.flywithfood.common.api.FlyWithFoodAPI;
 import me.xpyex.plugin.flywithfood.common.command.FWFCmdExecutor;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FlyWithFoodBukkit extends JavaPlugin {
@@ -21,6 +26,20 @@ public class FlyWithFoodBukkit extends JavaPlugin {
             FWFCmdExecutor.onCmd(FWFSender.of(sender), label, args);
             return true;
         });
+
+        this.getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onQuit(PlayerQuitEvent event) {
+                FlyWithFoodAPI.USER_MAP.remove(event.getPlayer().getName());
+                //
+            }
+
+            @EventHandler
+            public void onRespawn(PlayerRespawnEvent event) {  //玩家从末地门回主世界也算重生，这样方便
+                FlyWithFoodAPI.USER_MAP.remove(event.getPlayer().getName());
+                //
+            }
+        }, FlyWithFoodBukkit.getInstance());
     }
 
     @Override

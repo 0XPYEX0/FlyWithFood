@@ -132,12 +132,6 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     }
 
     @Override
-    public boolean callEventThenCancelled(FWFUser user, double cost) {
-        return false;
-        //这是Bukkit侧的用法，Sponge侧无需实现
-    }
-
-    @Override
     public void stopTasks() {
         Sponge.getScheduler().getScheduledTasks(FlyWithFoodSponge7.getInstance()).forEach(Task::cancel);
         //
