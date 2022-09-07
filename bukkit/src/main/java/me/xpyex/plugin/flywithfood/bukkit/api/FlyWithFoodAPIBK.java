@@ -47,8 +47,6 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
             e.printStackTrace();
             versionResult = 0;
             softwareResult = "Unknown-" + Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
-            FlyWithFood.getLogger().error("无法自动解析服务端版本，使用默认版本信息",
-                "Failed to get Server Version... Using default version info");
         }
         SERVER_SOFTWARE = softwareResult;
         SERVER_MAIN_VERSION = versionResult;

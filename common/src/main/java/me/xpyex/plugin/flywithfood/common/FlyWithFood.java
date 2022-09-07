@@ -32,6 +32,10 @@ public class FlyWithFood {
 
         getLogger().info(" ");
 
+        if (getInstance().getAPI().getServerSoftware().startsWith("Unknown-")) {
+            getLogger().error("无法自动解析服务端版本，使用默认版本信息",
+                "Failed to get Server Version... Using default version info");
+        }
         getLogger().info("你使用的服务端核心: " + getInstance().getAPI().getServerSoftware());
         getLogger().info("You are using the server software: " + getInstance().getAPI().getServerSoftware());
         getLogger().info(" ");
