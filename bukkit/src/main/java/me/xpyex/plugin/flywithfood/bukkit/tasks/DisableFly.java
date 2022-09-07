@@ -17,7 +17,7 @@ public class DisableFly extends BukkitRunnable {
     }
 
     public DisableFly(FWFUser user) {
-        this.player = user.getPlayer();
+        this(user.<Player>getPlayer());
         //
     }
 

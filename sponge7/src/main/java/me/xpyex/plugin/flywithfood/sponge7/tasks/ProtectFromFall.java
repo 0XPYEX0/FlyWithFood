@@ -11,6 +11,7 @@ public class ProtectFromFall implements Consumer<Task> {
 
     public ProtectFromFall(Player player) {
         this.player = player;
+        //
     }
 
     @Override

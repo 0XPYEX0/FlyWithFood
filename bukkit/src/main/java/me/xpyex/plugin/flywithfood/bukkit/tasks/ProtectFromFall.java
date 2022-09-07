@@ -15,7 +15,7 @@ public class ProtectFromFall extends BukkitRunnable {
     }
 
     public ProtectFromFall(FWFUser user) {
-        this.player = user.getPlayer();
+        this(user.<Player>getPlayer());
         //
     }
 
