@@ -113,8 +113,8 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
                 BukkitMoney.setEcon(rsp.getProvider());
                 //new BukkitMoney().register();
                 FlyWithFood.getLogger().info("已与Vault挂钩");
-                FlyWithFood.getLogger().info(" ");
                 FlyWithFood.getLogger().info("Hooked with Vault successfully");
+                FlyWithFood.getLogger().info(" ");
             } else {
                 FlyWithFood.getLogger().error("你的Vault貌似出了点问题？无法与Vault挂钩");
                 FlyWithFood.getLogger().error("或许是你没有安装任何经济插件！Vault并非经济插件，仅作为桥的功能出现！");

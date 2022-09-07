@@ -112,7 +112,7 @@ public interface FWFSender {
         }
         if (FWFConfig.CONFIG.enableRawMsg) {
             String rawMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("RawMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
-            if (!Util.checkNull(rawMsg)) {
+            if (!Util.checkEmpty(rawMsg)) {
                 autoSendMsg(rawMsg);
             }
         }
@@ -121,13 +121,13 @@ public interface FWFSender {
         }
         if (FWFConfig.CONFIG.enableAction) {
             String actionMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("ActionMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
-            if (!Util.checkNull(actionMsg)) {
+            if (!Util.checkEmpty(actionMsg)) {
                 ((FWFUser) this).sendActionBar(actionMsg);
             }
         }
         if (FWFConfig.CONFIG.enableTitle) {
             String titleMsg = MsgUtil.formatMsg(this, FWFConfig.CONFIG.languages.get("TitleMsg").getAsJsonObject().get(msgType.getValue()).getAsString());
-            if (!Util.checkNull(titleMsg)) {
+            if (!Util.checkEmpty(titleMsg)) {
                 String[] titles = titleMsg.split("\\u005c\\u006e");
                 if (titles.length > 2) {
                     if (FWFConfig.CONFIG.language.equalsIgnoreCase("Chinese")) {

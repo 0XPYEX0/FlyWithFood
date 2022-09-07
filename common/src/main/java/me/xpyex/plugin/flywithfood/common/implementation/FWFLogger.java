@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.common.implementation;
 
 import java.util.Locale;
 import me.xpyex.plugin.flywithfood.common.types.LoggerInfoType;
+import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FWFLogger {
     private final FWFSender consoleSender;
@@ -30,6 +31,8 @@ public class FWFLogger {
     }
 
     private void log(LoggerInfoType type, String... messages) {
+        if (Util.checkNull(type, messages)) return;
+
         for (String s : messages) {
             String out;
             switch (type) {

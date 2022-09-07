@@ -23,7 +23,7 @@ public class MsgUtil {
     }
 
     public static String formatMsg(FWFSender target, String msg) {
-        if (Util.checkNull(target, msg)) {
+        if (Util.checkEmpty(target, msg)) {
             throw new IllegalArgumentException("参数出现空");
         }
         if (target.hasPermission("op")) {

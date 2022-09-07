@@ -41,7 +41,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     public void sendTitle(String title, String subTitle) {
-        if (Util.checkNull(title, subTitle)) return;
+        if (Util.checkEmpty(title + subTitle)) return;
 
         try {
             player.sendTitle(title, subTitle, 10, 70, 20);
@@ -56,7 +56,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     public void sendActionBar(String actionBar) {
-        if (Util.checkNull(actionBar)) return;
+        if (Util.checkEmpty(actionBar)) return;
 
         try {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBar));
