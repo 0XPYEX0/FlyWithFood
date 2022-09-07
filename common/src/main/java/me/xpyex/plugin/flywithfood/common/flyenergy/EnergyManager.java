@@ -6,8 +6,7 @@ import org.jetbrains.annotations.Nullable;
 public class EnergyManager {
     private static final HashMap<String, FlyEnergy> ENERGIES = new HashMap<>();
 
-    @Nullable
-    public static FlyEnergy getEnergy(String type) {
+    public static @Nullable FlyEnergy getEnergy(String type) {
         return ENERGIES.get(type);
         //
     }

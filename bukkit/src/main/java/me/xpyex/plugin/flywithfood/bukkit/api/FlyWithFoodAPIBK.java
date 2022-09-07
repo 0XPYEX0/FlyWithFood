@@ -33,7 +33,6 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
 
     static {
         String softwareResult;
-        int versionResult;
         try {
             Object MinecraftServer = Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());  //此时取到MCServer实例
             String serverName = (String) MinecraftServer.getClass().getMethod("getServerModName").invoke(MinecraftServer);  //调用MCServer类的实例方法getServerModName -> Spigot
@@ -42,14 +41,12 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
             //该方法CraftBukkit也包含，不会出错罢
             //项目使用SpigotAPI，里面没有MinecraftServer的方法，使用反射获取方法
 
-            versionResult = Integer.parseInt(serverVersion.split("\\.")[1]);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
-            versionResult = 0;
             softwareResult = "Unknown-" + Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
         }
         SERVER_SOFTWARE = softwareResult;
-        SERVER_MAIN_VERSION = versionResult;
+        SERVER_MAIN_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1]);
     }
 
     public FlyWithFoodAPIBK() {
