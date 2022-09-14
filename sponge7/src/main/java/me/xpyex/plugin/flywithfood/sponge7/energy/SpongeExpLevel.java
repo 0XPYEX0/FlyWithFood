@@ -1,4 +1,4 @@
-package me.xpyex.plugin.flywithfood.sponge7.energies;
+package me.xpyex.plugin.flywithfood.sponge7.energy;
 
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.ExpLevelEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;

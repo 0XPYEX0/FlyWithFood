@@ -15,9 +15,10 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 import me.xpyex.plugin.flywithfood.sponge7.FlyWithFoodSponge7;
 import me.xpyex.plugin.flywithfood.sponge7.bstats.Metrics;
-import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeExpLevel;
-import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeFood;
-import me.xpyex.plugin.flywithfood.sponge7.energies.SpongeMoney;
+import me.xpyex.plugin.flywithfood.sponge7.energy.SpongeDurability;
+import me.xpyex.plugin.flywithfood.sponge7.energy.SpongeExpLevel;
+import me.xpyex.plugin.flywithfood.sponge7.energy.SpongeFood;
+import me.xpyex.plugin.flywithfood.sponge7.energy.SpongeMoney;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeSender;
 import me.xpyex.plugin.flywithfood.sponge7.implementation.SpongeUser;
 import org.spongepowered.api.Sponge;
@@ -88,6 +89,7 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     public void registerEnergies() {
         new SpongeFood().register();
         new SpongeExpLevel().register();
+        new SpongeDurability().register();
 
         if (Sponge.getServiceManager().provide(EconomyService.class).isPresent()) {
             SpongeMoney.setEconomyService(Sponge.getServiceManager().provide(EconomyService.class).get());
@@ -176,5 +178,41 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     public String getPluginVersion() {
         return Sponge.getPluginManager().getPlugin("FlyWithFood-Sponge".toLowerCase()).get().getVersion().orElse("Unknown");
         //
+    }
+
+    @Override
+    public <P> void setTotalExperience(P p, int exp) {
+        //Sponge侧无法实现
+        //
+    }
+
+    @Override
+    public <P> int getExpAtLevel(P p) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public int getExpAtLevel(int level) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public int getExpToLevel(int level) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public <P> int getTotalExperience(P p) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public <P> int getExpUntilNextLevel(P p) {
+        return 0;
+        //Sponge侧无法实现
     }
 }

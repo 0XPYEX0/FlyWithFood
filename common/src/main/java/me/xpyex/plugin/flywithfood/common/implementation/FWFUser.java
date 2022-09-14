@@ -88,4 +88,6 @@ public interface FWFUser extends FWFSender {
         
         return true;
     }
+
+    public boolean isWearingElytra();
 }

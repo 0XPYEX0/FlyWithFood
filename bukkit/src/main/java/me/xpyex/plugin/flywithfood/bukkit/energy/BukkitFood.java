@@ -1,4 +1,4 @@
-package me.xpyex.plugin.flywithfood.bukkit.energies;
+package me.xpyex.plugin.flywithfood.bukkit.energy;
 
 import me.xpyex.plugin.flywithfood.bukkit.event.EnergyCostEvent;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;

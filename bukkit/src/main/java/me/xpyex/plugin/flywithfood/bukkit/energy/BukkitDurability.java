@@ -1,14 +1,15 @@
-package me.xpyex.plugin.flywithfood.bukkit.energies;
+package me.xpyex.plugin.flywithfood.bukkit.energy;
 
 import me.xpyex.plugin.flywithfood.bukkit.event.EnergyCostEvent;
 import me.xpyex.plugin.flywithfood.common.FlyWithFood;
-import me.xpyex.plugin.flywithfood.common.flyenergy.energies.ExpLevelEnergy;
+import me.xpyex.plugin.flywithfood.common.flyenergy.energies.DurabilityEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BukkitExpLevel extends ExpLevelEnergy {
+public class BukkitDurability extends DurabilityEnergy {
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         if (value.intValue() == 0) {
@@ -20,14 +21,19 @@ public class BukkitExpLevel extends ExpLevelEnergy {
             return;
         }
         Player target = user.getPlayer();
+        if (target.getInventory().getChestplate().getType() != Material.ELYTRA) {
+            return;
+        }
         FlyWithFood.getInstance().getAPI().runTask(() ->
-                target.setLevel(Math.max(target.getLevel() - value.intValue(), 0))
+            target.getInventory().getChestplate().setDurability((short) (getNow(user).shortValue() - value.shortValue()))
         );
     }
 
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
-        return user.<Player>getPlayer().getLevel();
-        //
+        if (user.<Player>getPlayer().getInventory().getChestplate().getType() != Material.ELYTRA) {
+            return -1;
+        }
+        return user.<Player>getPlayer().getInventory().getChestplate().getDurability();
     }
 }

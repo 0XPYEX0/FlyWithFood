@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
+import me.xpyex.plugin.flywithfood.common.flyenergy.energies.DurabilityEnergy;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
@@ -52,6 +53,15 @@ public interface FlyWithFoodAPI {
                         }
                     }
                 }
+
+                if (info.getEnergy() instanceof DurabilityEnergy) {
+                    if (!user.isWearingElytra()) {  //若玩家没有穿着鞘翅，则禁止飞行
+                        user.disableFly();
+                        user.sendFWFMsg(FWFMsgType.CanNotFly);
+                        continue;
+                    }
+                }
+
                 double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
                 double disable = info.getDisable(); //消耗至多少关闭飞行
                 double now = info.getEnergy().getNow(user).doubleValue();  //玩家现在的点数
@@ -117,4 +127,16 @@ public interface FlyWithFoodAPI {
             e.printStackTrace();
         }
     }
+
+    public <P> void setTotalExperience(P player, int exp);
+
+    public <P> int getExpAtLevel(P player);
+
+    public int getExpAtLevel(int level);
+
+    public int getExpToLevel(int level);
+
+    public <P> int getTotalExperience(P player);
+
+    public <P> int getExpUntilNextLevel(P player);
 }

@@ -1,4 +1,4 @@
-package me.xpyex.plugin.flywithfood.sponge7.energies;
+package me.xpyex.plugin.flywithfood.sponge7.energy;
 
 import java.math.BigDecimal;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.MoneyEnergy;

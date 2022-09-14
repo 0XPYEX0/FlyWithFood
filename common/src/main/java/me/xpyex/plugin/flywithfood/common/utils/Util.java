@@ -20,6 +20,18 @@ public class Util {
                 for (String s : ((String[]) o))
                     if (s.trim().isEmpty())
                         return true;
+            /*
+            危险代码，尚未测试
+
+            if (o instanceof Iterator) {
+                while (((Iterator<?>) o).hasNext()) {
+                    boolean result = checkEmpty(((Iterator<?>) o).next());
+                    if (result)
+                        return true;
+                }
+            }
+
+             */
         }
         return false;
     }

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import java.util.HashSet;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
+import me.xpyex.plugin.flywithfood.common.flyenergy.energies.DurabilityEnergy;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.FoodEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFSender;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
@@ -124,20 +125,38 @@ public class FWFCmdExecutor {
                 return;
             }
             if (args[0].equalsIgnoreCase("on")) {
-                if (target.getInfo().getEnergy() instanceof FoodEnergy) {
-                    if (target.hasSaturationEff() && !target.hasNoCostPerm()) {
+                if (FWFConfig.CONFIG.checkSaturation) {
+                    if (target.getInfo().getEnergy() instanceof FoodEnergy) {
+                        if (target.hasSaturationEff() && !target.hasNoCostPerm()) {
+                            if (!target.equals(sender)) {
+                                if (FWFConfig.CONFIG.isChinese) {
+                                    sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
+                                } else {
+                                    sender.autoSendMsg("&cUnable to turn flight for player &f" + target.getName() + " &c because: The player has Saturation Effect");
+                                }
+                                return;
+                            }
+                            target.sendFWFMsg(FWFMsgType.HasEffect);
+                            return;
+                        }
+                    }
+                }
+
+                if (target.getInfo().getEnergy() instanceof DurabilityEnergy) {
+                    if (!target.hasNoCostPerm()) {
                         if (!target.equals(sender)) {
                             if (FWFConfig.CONFIG.isChinese) {
-                                sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家拥有饱和Buff");
+                                sender.autoSendMsg("&c无法为玩家 &f" + target.getName() + " &c开启飞行: 玩家没有穿着鞘翅");
                             } else {
-                                sender.autoSendMsg("&cUnable to turn flight for player &f" + target.getName() + " &c because: The player has Saturation Effect");
+                                sender.autoSendMsg("&cUnable to turn flight for player &f" + target.getName() + " &c because: The player does not wear a Elytra");
                             }
                             return;
                         }
-                        target.sendFWFMsg(FWFMsgType.HasEffect);
+                        target.sendFWFMsg(FWFMsgType.CanNotEnable);
                         return;
                     }
                 }
+
                 if ((target.getNow().doubleValue() < target.getInfo().getDisable()) && !target.hasNoCostPerm()) {
                     if (!target.equals(sender)) {
                         if (FWFConfig.CONFIG.isChinese) {
