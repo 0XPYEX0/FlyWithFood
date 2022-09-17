@@ -7,6 +7,8 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
@@ -89,6 +91,12 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     @Override
     public boolean isFlying() {
         return player.get(Keys.IS_FLYING).orElse(false);
+        //
+    }
+
+    @Override
+    public boolean isWearingElytra() {
+        return player.getChestplate().orElse(ItemStack.empty()).getType() == ItemTypes.ELYTRA;
         //
     }
 }

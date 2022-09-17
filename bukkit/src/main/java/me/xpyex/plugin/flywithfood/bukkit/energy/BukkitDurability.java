@@ -5,7 +5,6 @@ import me.xpyex.plugin.flywithfood.common.FlyWithFood;
 import me.xpyex.plugin.flywithfood.common.flyenergy.energies.DurabilityEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +20,7 @@ public class BukkitDurability extends DurabilityEnergy {
             return;
         }
         Player target = user.getPlayer();
-        if (target.getInventory().getChestplate().getType() != Material.ELYTRA) {
+        if (!user.isWearingElytra()) {
             return;
         }
         FlyWithFood.getInstance().getAPI().runTask(() ->
@@ -31,7 +30,7 @@ public class BukkitDurability extends DurabilityEnergy {
 
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
-        if (user.<Player>getPlayer().getInventory().getChestplate().getType() != Material.ELYTRA) {
+        if (!user.isWearingElytra()) {
             return -1;
         }
         return user.<Player>getPlayer().getInventory().getChestplate().getDurability();
