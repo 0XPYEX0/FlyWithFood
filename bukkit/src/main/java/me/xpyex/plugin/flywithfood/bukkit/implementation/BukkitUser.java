@@ -48,7 +48,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
             player.sendTitle(title, subTitle, 10, 70, 20);
         } catch (NoSuchMethodError ignored) {
             try {
-                player.sendTitle(title, subTitle);  //该方法已弃用
+                player.sendTitle(title, subTitle);  //该方法已被Bukkit标记为过时方法
             } catch (Exception ignored2) {
                 FlyWithFood.getInstance().getAPI().getLogger().error("你的服务器不支持发送Title信息，请在配置文件中关闭它");
             }
