@@ -9,6 +9,7 @@ import me.xpyex.plugin.flywithfood.common.utils.Util;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -105,5 +106,11 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     public boolean isFlying() {
         return player.isFlying();
         //
+    }
+
+    @Override
+    public boolean isWearingElytra() {
+        return player.getInventory().getChestplate().getType() == Material.ELYTRA;
+        //不用害怕NullPointerException，因为getType必非空，会返回AIR
     }
 }
