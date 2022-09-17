@@ -9,8 +9,12 @@ import me.xpyex.plugin.flywithfood.common.utils.Util;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Optional;
 
 public class BukkitUser extends BukkitSender implements FWFUser {
 
@@ -106,4 +110,14 @@ public class BukkitUser extends BukkitSender implements FWFUser {
         return player.isFlying();
         //
     }
+
+    @Override
+    public boolean isWearingElytra() {
+        return Optional.ofNullable(player.getInventory().getChestplate())
+                .map(ItemStack::getType)
+                .map(type -> type == Material.ELYTRA)
+                .orElse(false);
+    }
+    
+    
 }
