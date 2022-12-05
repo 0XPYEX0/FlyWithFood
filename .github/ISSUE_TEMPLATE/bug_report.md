@@ -1,7 +1,7 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: "[Bug Report] "
+name: Report Bug
+about: Create an issue about a bug to help us improve
+title: "[Bug] "
 labels: Bug, 尚未测试
 assignees: ''
 
@@ -27,7 +27,7 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Windows]
  - Minecraft [e.g. 1.16.5]
  - Server Core [e.g. Paper-git-111]
- - FlyWithFood [e.g. 1.4.3]
+ - FlyWithFood [e.g. 2.0.3]
 
 **Additional context**
 Add any other context about the problem here.
