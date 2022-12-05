@@ -111,6 +111,6 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     @Override
     public boolean isWearingElytra() {
         return player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA;
-        //不用害怕NullPointerException，因为getType必非空，会返回AIR
+        //getChestplate可为空 getType必非空
     }
 }
