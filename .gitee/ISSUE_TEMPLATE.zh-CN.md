@@ -1,12 +1,3 @@
----
-name: 提交Bug
-about: 提交某个Bug的有关信息，以得到修复
-title: "[Bug] "
-labels: Bug, 尚未测试
-assignees: ''
-
----
-
 **描述**
 使用简洁的语言描述，帮助我修复这个Bug
 
