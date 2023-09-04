@@ -6,8 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
@@ -19,7 +19,7 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.types.FWFMsgType;
 
 public interface FlyWithFoodAPI {
-    public static final HashMap<String, FWFUser> USER_MAP = new HashMap<>();
+    public static final WeakHashMap<String, FWFUser> USER_MAP = new WeakHashMap<>();
 
     public FWFSender getSender(Object sender);
 

@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.Nullable;
 
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     private static final String SERVER_SOFTWARE;
@@ -44,8 +45,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
             //项目使用SpigotAPI，里面没有MinecraftServer的方法，使用反射获取方法
 
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            softwareResult = "Unknown-" + Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
+            softwareResult = Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
         }
         SERVER_SOFTWARE = softwareResult;
         SERVER_MAIN_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1]);
@@ -57,6 +57,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     }
 
     @Override
+    @Nullable
     public FWFSender getSender(Object sender) {
         if (!Util.checkNull(sender)) {
             if (sender instanceof Player) {
@@ -69,6 +70,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     }
 
     @Override
+    @Nullable
     public FWFUser getUser(String name) {
         if (!USER_MAP.containsKey(name)) {
             try {

@@ -1,5 +1,6 @@
 package me.xpyex.plugin.flywithfood.bukkit.implementation;
 
+import me.xpyex.plugin.flywithfood.bukkit.extra.ResidenceHook;
 import me.xpyex.plugin.flywithfood.bukkit.tasks.DisableFly;
 import me.xpyex.plugin.flywithfood.bukkit.tasks.EnableFly;
 import me.xpyex.plugin.flywithfood.bukkit.tasks.ProtectFromFall;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 public class BukkitUser extends BukkitSender implements FWFUser {
 
@@ -29,7 +31,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getPlayer() {
+    public <T> @NotNull T getPlayer() {
         return (T) player;
         //
     }
@@ -91,12 +93,14 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     }
 
     @Override
+    @NotNull
     public String getWorldName() {
         return player.getLocation().getWorld().getName();
         //
     }
     
     @Override
+    @NotNull
     public String getGameModeName() {
         return player.getGameMode().toString();
         //
@@ -112,5 +116,14 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     public boolean isWearingElytra() {
         return player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA;
         //getChestplate可为空 getType必非空
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public boolean hasAdditionalExempt() {
+        if (player.hasPermission("fly.noCost.inLand") && ResidenceHook.isInResidence(player)) {
+            return true;  //在领地内飞行，且拥有权限，不扣除
+        }
+        return false;
     }
 }

@@ -6,6 +6,7 @@ import me.xpyex.plugin.flywithfood.common.config.FWFConfig;
 import me.xpyex.plugin.flywithfood.common.config.FWFInfo;
 import me.xpyex.plugin.flywithfood.common.flyenergy.EnergyManager;
 import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
+import org.jetbrains.annotations.NotNull;
 
 public interface FWFUser extends FWFSender {
 
@@ -14,6 +15,7 @@ public interface FWFUser extends FWFSender {
         //
     }
 
+    @NotNull
     public <T> T getPlayer();
 
     public boolean hasSaturationEff();
@@ -85,8 +87,20 @@ public interface FWFUser extends FWFSender {
         if (!this.isFlying()) return false;  //如果玩家不在飞行，不处理
         
         if ("CREATIVE, SPECTATOR".contains(this.getGameModeName())) return false;  //如果玩家是创造/旁观者模式，不处理
+
+        if (this.hasAdditionalExempt()) return false;  //如果有额外免除的情况，不处理
         
         return true;
+    }
+
+    /**
+     * 是否有额外免除的情况
+     *
+     * @return 返回true，则免除扣除；反之正常扣除
+     */
+    public default boolean hasAdditionalExempt() {
+        return false;
+        //
     }
 
     public boolean isWearingElytra();

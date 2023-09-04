@@ -2,6 +2,7 @@ package me.xpyex.plugin.flywithfood.sponge7.implementation;
 
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import me.xpyex.plugin.flywithfood.common.utils.MsgUtil;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -26,7 +27,7 @@ public class SpongeUser extends SpongeSender implements FWFUser {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getPlayer() {
+    public <T> @NotNull T getPlayer() {
         return (T) player;
         //
     }

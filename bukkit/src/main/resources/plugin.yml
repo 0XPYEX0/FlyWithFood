@@ -9,4 +9,5 @@ commands:
       - fwf
       - fly
 softdepend:
+  - Residence
   - Vault

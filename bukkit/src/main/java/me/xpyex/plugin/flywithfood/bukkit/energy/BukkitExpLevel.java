@@ -6,6 +6,7 @@ import me.xpyex.plugin.flywithfood.common.flyenergy.energies.ExpLevelEnergy;
 import me.xpyex.plugin.flywithfood.common.implementation.FWFUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class BukkitExpLevel extends ExpLevelEnergy {
@@ -14,15 +15,19 @@ public class BukkitExpLevel extends ExpLevelEnergy {
         if (value.intValue() == 0) {
             return;
         }
-        EnergyCostEvent event = new EnergyCostEvent(user, value);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return;
+        {
+            EnergyCostEvent event = new EnergyCostEvent(user, value);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
         }
         Player target = user.getPlayer();
-        FlyWithFood.getInstance().getAPI().runTask(() ->
-                target.setLevel(Math.max(target.getLevel() - value.intValue(), 0))
-        );
+        FlyWithFood.getInstance().getAPI().runTask(() -> {
+            PlayerLevelChangeEvent event = new PlayerLevelChangeEvent(target, target.getLevel(), Math.max(target.getLevel() - value.intValue(), 0));
+            Bukkit.getPluginManager().callEvent(event);  //有变化call一下
+            target.setLevel(event.getNewLevel());
+        });
     }
 
     @Override

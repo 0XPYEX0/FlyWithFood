@@ -11,7 +11,6 @@ public class BukkitSender extends AbstractFWFSender {
         if (Util.checkNull(sender)) throw new IllegalArgumentException("sender为空，无法创建FWFSender实例");
 
         this.sender = sender;
-        //
     }
 
     @Override
