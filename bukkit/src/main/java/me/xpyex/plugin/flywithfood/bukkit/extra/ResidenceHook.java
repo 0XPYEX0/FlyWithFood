@@ -15,9 +15,12 @@ public class ResidenceHook {
     }
 
     public static boolean isInResidence(Player p) {
+        if (RES_MANAGER == null || GET_RES_METHOD == null) {
+            return false;
+        }
         try {
             return GET_RES_METHOD.invoke(RES_MANAGER, p.getLocation()) != null;
-        } catch (ReflectiveOperationException | NullPointerException ignored) {
+        } catch (ReflectiveOperationException ignored) {
             return false;
         }
     }
