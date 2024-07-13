@@ -10,9 +10,6 @@ allprojects {
     group = 'me.xpyex.plugin.flywithfood'
     version = '2.0.6'
 
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
-
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
@@ -28,11 +25,20 @@ allprojects {
             filter ReplaceTokens, tokens: [version: version]
         }
     }
+
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
 
     tasks.withType(Javadoc) {
         options.encoding = "UTF-8"
+    }
+
+    tasks.withType(Copy) {
+        duplicatesStrategy 'exclude'
+    }
+
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(8))
     }
 }

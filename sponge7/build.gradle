@@ -3,7 +3,7 @@ repositories {
 }
 
 dependencies {
-    compile project(":common")
+    compileOnly project(":common")
 
     compileOnly 'com.google.guava:guava:23.0'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
