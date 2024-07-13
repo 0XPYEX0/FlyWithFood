@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public class ResidenceHook {
     private static Method GET_RES_METHOD = null;
     private static Object RES_MANAGER = null;
+
     static {
         try {
             RES_MANAGER = Class.forName("com.bekvon.bukkit.residence.api.ResidenceApi").getMethod("getResidenceManager").invoke(null);

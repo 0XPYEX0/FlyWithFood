@@ -24,7 +24,7 @@ public class BukkitDurability extends DurabilityEnergy {
             return;
         }
         FlyWithFood.getInstance().getAPI().runTask(() ->
-            target.getInventory().getChestplate().setDurability((short) (getNow(user).shortValue() - value.shortValue()))
+                                                       target.getInventory().getChestplate().setDurability((short) (getNow(user).shortValue() - value.shortValue()))
         );
     }
 

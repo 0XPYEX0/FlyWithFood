@@ -1,0 +1,13 @@
+repositories {
+    maven {
+        name 'papermc'
+        url 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation project(":bukkit")
+    implementation project(":common")
+
+    compileOnly 'dev.folia:folia-api:1.20.2-R0.1-20231125.035057-3'
+}

@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
     private static final String SERVER_SOFTWARE;
     private static final int SERVER_MAIN_VERSION;
-    private final FWFLogger LOGGER;
 
     static {
         String softwareResult;
@@ -50,6 +49,8 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
         SERVER_SOFTWARE = softwareResult;
         SERVER_MAIN_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1]);
     }
+
+    private final FWFLogger LOGGER;
 
     public FlyWithFoodAPIBK() {
         LOGGER = new FWFLogger(new BukkitSender(Bukkit.getConsoleSender()));
@@ -179,19 +180,19 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
         Bukkit.getScheduler().cancelTasks(FlyWithFoodBukkit.getInstance());
         //
     }
-    
+
     @Override
     public void runTask(Runnable r) {
         Bukkit.getScheduler().runTask(FlyWithFoodBukkit.getInstance(), r);
         //
     }
-    
+
     @Override
     public void runTaskAsync(Runnable r) {
         Bukkit.getScheduler().runTaskAsynchronously(FlyWithFoodBukkit.getInstance(), r);
         //
     }
-    
+
     @Override
     public void runTaskTimerAsync(Runnable r, long waitSeconds, long periodSeconds) {
         Bukkit.getScheduler().runTaskTimerAsynchronously(FlyWithFoodBukkit.getInstance(), r, waitSeconds * 20L, periodSeconds * 20L);

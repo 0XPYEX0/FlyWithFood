@@ -35,25 +35,25 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     @Override
     public boolean hasSaturationEff() {
         return (player.get(Keys.POTION_EFFECTS).isPresent() && player.get(Keys.POTION_EFFECTS).get().stream().noneMatch(potionEffect ->
-                potionEffect.getType() == PotionEffectTypes.SATURATION));
+                                                                                                                            potionEffect.getType() == PotionEffectTypes.SATURATION));
     }
 
     @Override
     public void sendTitle(String title, String subTitle) {
         player.sendTitle(
-                Title.of(
-                        Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, title))),
-                        Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, subTitle)))
-                )
+            Title.of(
+                Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, title))),
+                Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, subTitle)))
+            )
         );
     }
 
     @Override
     public void sendActionBar(String actionBar) {
         player.sendTitle(
-                Title.builder().actionBar(
-                        Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, actionBar)))
-                ).build());
+            Title.builder().actionBar(
+                Text.of(MsgUtil.getColorMsg(MsgUtil.formatMsg(this, actionBar)))
+            ).build());
     }
 
     @Override

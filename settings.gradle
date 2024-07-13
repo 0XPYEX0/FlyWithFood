@@ -3,4 +3,5 @@ include 'bukkit'
 include 'common'
 include 'sponge7'
 include 'FlyWithFood'
+include 'folia'
 

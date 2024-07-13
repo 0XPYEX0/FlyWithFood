@@ -14,8 +14,8 @@ public class EnergyCostEvent extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private final FWFUser user;
     private final Player player;
-    private boolean cancelled = false;
     private final Number cost;
+    private boolean cancelled = false;
 
     public EnergyCostEvent(Player player, @NotNull Number cost) {
         super(!Bukkit.isPrimaryThread());
@@ -31,19 +31,20 @@ public class EnergyCostEvent extends Event implements Cancellable {
         this.player = user.getPlayer();
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+        //
+    }
+
     @Override
     public HandlerList getHandlers() {
         return HANDLER_LIST;
         //
     }
 
-    public static HandlerList getHandlerList() {
-        return HANDLER_LIST;
-        //
-    }
-
     /**
      * 获取被扣除能量的玩家
+     *
      * @return 被扣除能量的玩家
      */
     public Player getPlayer() {
@@ -53,6 +54,7 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 获取被扣除能量的用户
+     *
      * @return 被扣除能量的用户
      */
     public FWFUser getUser() {
@@ -62,6 +64,7 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 获取扣除能量之前，玩家剩余的能量
+     *
      * @return 扣除能量之前，玩家剩余的能量
      */
     public @NotNull Number getBefore() {
@@ -71,6 +74,7 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 获取扣除能量之后，玩家剩余的能量
+     *
      * @return 扣除能量之后，玩家剩余的能量
      */
     public @NotNull Number getAfter() {
@@ -80,6 +84,7 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 获取用户将被扣除多少能量
+     *
      * @return 用户将被扣除多少能量
      */
     public @NotNull Number getCost() {
@@ -89,7 +94,8 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 事件是否被取消，如被取消则不往下执行
-     * @return  是否被取消
+     *
+     * @return 是否被取消
      */
     @Override
     public boolean isCancelled() {
@@ -99,6 +105,7 @@ public class EnergyCostEvent extends Event implements Cancellable {
 
     /**
      * 是否取消事件，如被取消则不往下执行
+     *
      * @param cancel true if you wish to cancel this event <br> 若为true则取消事件
      */
     @Override

@@ -22,13 +22,13 @@ public class ProtectFromFall extends BukkitRunnable {
     @Override
     public void run() {
         if (
-                !player.isOnline()
-                        ||
-                        player.getAllowFlight()
-                        ||
-                        player.isOnGround()
-                        ||
-                        (FlyWithFood.getInstance().getAPI().getServerMainVer() >= 9 && player.isGliding())
+            !player.isOnline()
+                ||
+                player.getAllowFlight()
+                ||
+                player.isOnGround()
+                ||
+                (FlyWithFood.getInstance().getAPI().getServerMainVer() >= 9 && player.isGliding())
         ) {
             cancel();
             return;

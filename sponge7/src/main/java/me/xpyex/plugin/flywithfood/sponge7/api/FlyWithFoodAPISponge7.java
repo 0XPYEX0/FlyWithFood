@@ -28,10 +28,10 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.economy.EconomyService;
 
 public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
-    private final FWFLogger logger;
     private static final String SERVER_SOFTWARE = "Sponge-1.12";
     private static final int SERVER_MAIN_VERSION = 12;
-    
+    private final FWFLogger logger;
+
     public FlyWithFoodAPISponge7() {
         this.logger = new FWFLogger(new SpongeSender(Sponge.getServer().getConsole()));
         //
@@ -139,23 +139,18 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
         //
     }
 
-    public Task.Builder getScheduler() {
-        return Task.builder();
-        //
-    }
-    
     @Override
     public void runTask(Runnable r) {
         getScheduler().execute(r).submit(FlyWithFoodSponge7.getInstance());
         //
     }
-    
+
     @Override
     public void runTaskAsync(Runnable r) {
         getScheduler().execute(r).async().submit(FlyWithFoodSponge7.getInstance());
         //
     }
-    
+
     @Override
     public void runTaskTimerAsync(Runnable r, long waitSeconds, long periodSeconds) {
         getScheduler().execute(r).interval(periodSeconds, TimeUnit.SECONDS)
@@ -214,5 +209,10 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
     public <P> int getExpUntilNextLevel(P p) {
         return 0;
         //Sponge侧无法实现
+    }
+
+    public Task.Builder getScheduler() {
+        return Task.builder();
+        //
     }
 }

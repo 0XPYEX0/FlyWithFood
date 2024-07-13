@@ -74,13 +74,13 @@ public interface FlyWithFoodAPI {
             }
         }, 0L, FWFConfig.CONFIG.howLongCheck);
     }
-    
+
     public void stopTasks();
-    
+
     public void runTask(Runnable r);
-    
+
     public void runTaskAsync(Runnable r);
-    
+
     public void runTaskTimerAsync(Runnable r, long waitSeconds, long periodSeconds);
 
     public void runTask(Consumer<?> c);

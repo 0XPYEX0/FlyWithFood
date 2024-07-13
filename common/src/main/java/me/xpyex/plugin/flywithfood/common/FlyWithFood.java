@@ -6,8 +6,8 @@ import me.xpyex.plugin.flywithfood.common.implementation.FWFLogger;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FlyWithFood {
-    private static FlyWithFood INSTANCE;
     public static final String PLUGIN_NOT_LOADED_MSG = "插件尚未加载完成 || Plugin is invalid";
+    private static FlyWithFood INSTANCE;
     private final FlyWithFoodAPI API;
 
     public FlyWithFood(FlyWithFoodAPI API) {
@@ -15,16 +15,29 @@ public class FlyWithFood {
         this.API = API;
     }
 
-    public FlyWithFoodAPI getAPI() {
-        if (Util.checkNull(API)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
-
-        return API;
-    }
-
     public static FlyWithFood getInstance() {
         if (Util.checkNull(INSTANCE)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
 
         return INSTANCE;
+    }
+
+    public static FWFLogger getLogger() {
+        return FlyWithFood.getInstance().getAPI().getLogger();
+        //
+    }
+
+    public static void disable() {
+        getInstance().getAPI().stopTasks();
+        getLogger().info("已取消所有任务");
+        getLogger().info("已卸载");
+
+        INSTANCE = null;
+    }
+
+    public FlyWithFoodAPI getAPI() {
+        if (Util.checkNull(API)) throw new IllegalStateException(PLUGIN_NOT_LOADED_MSG);
+
+        return API;
     }
 
     public void enable() {
@@ -70,18 +83,5 @@ public class FlyWithFood {
         getAPI().runTaskAsync(getAPI()::checkUpdate);
 
         getLogger().info("已成功加载");
-    }
-    
-    public static FWFLogger getLogger() {
-        return FlyWithFood.getInstance().getAPI().getLogger();
-        //
-    }
-
-    public static void disable() {
-        getInstance().getAPI().stopTasks();
-        getLogger().info("已取消所有任务");
-        getLogger().info("已卸载");
-
-        INSTANCE = null;
     }
 }

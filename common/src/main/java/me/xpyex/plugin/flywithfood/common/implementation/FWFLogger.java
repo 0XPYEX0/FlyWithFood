@@ -5,11 +5,11 @@ import me.xpyex.plugin.flywithfood.common.types.LoggerInfoType;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FWFLogger {
+    private static final String PLUGIN_PREFIX = " &b[FlyWithFood] &f";
     private final FWFSender consoleSender;
     private final String prefixInfo;
     private final String prefixWarning;
     private final String prefixError;
-    private static final String PLUGIN_PREFIX = " &b[FlyWithFood] &f";
 
     public FWFLogger(FWFSender consoleSender) {
         this.consoleSender = consoleSender;

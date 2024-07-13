@@ -40,9 +40,9 @@ import org.spongepowered.api.world.World;
 )
 public class FlyWithFoodSponge7 {
     private static FlyWithFoodSponge7 INSTANCE;
+    public final Metrics metrics;
     @Inject
     private PluginContainer plugin;
-    public final Metrics metrics;
 
     @Inject
     public FlyWithFoodSponge7(Metrics.Factory metricsFactory) {
@@ -50,11 +50,22 @@ public class FlyWithFoodSponge7 {
         metrics = metricsFactory.make(pluginId);
     }
 
+    public static FlyWithFoodSponge7 getInstance() {
+        if (Util.checkNull(INSTANCE)) throw new IllegalStateException(FlyWithFood.PLUGIN_NOT_LOADED_MSG);
+
+        return INSTANCE;
+    }
+
+    public static PluginContainer getPlugin() {
+        return getInstance().plugin;
+        //
+    }
+
     @Listener
     public void onGameStart(GameStartedServerEvent event) {
         INSTANCE = this;
         new FlyWithFood(new FlyWithFoodAPISponge7());
-        
+
         FlyWithFood.getInstance().enable();
 
         Sponge.getCommandManager().register(INSTANCE, new CommandCallable() {
@@ -102,12 +113,6 @@ public class FlyWithFoodSponge7 {
         }, "flywithfood", "fly", "fwf");
     }
 
-    public static FlyWithFoodSponge7 getInstance() {
-        if (Util.checkNull(INSTANCE)) throw new IllegalStateException(FlyWithFood.PLUGIN_NOT_LOADED_MSG);
-        
-        return INSTANCE;
-    }
-    
     @Listener
     public void onGameStop(GameStoppingServerEvent event) {
         FlyWithFood.disable();
@@ -124,11 +129,6 @@ public class FlyWithFoodSponge7 {
     @Listener
     public void onRespawn(RespawnPlayerEvent event) {
         FlyWithFoodAPI.USER_MAP.remove(event.getTargetEntity().getName());
-        //
-    }
-
-    public static PluginContainer getPlugin() {
-        return getInstance().plugin;
         //
     }
 }

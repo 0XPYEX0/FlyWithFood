@@ -69,12 +69,6 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     }
 
     @Override
-    public boolean canFly() {
-        return player.getAllowFlight();
-        //
-    }
-
-    @Override
     public void enableFly() {
         new EnableFly(this).start();
         //
@@ -93,29 +87,29 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     }
 
     @Override
+    public boolean canFly() {
+        return player.getAllowFlight();
+        //
+    }
+
+    @Override
     @NotNull
     public String getWorldName() {
         return player.getLocation().getWorld().getName();
         //
     }
-    
+
     @Override
     @NotNull
     public String getGameModeName() {
         return player.getGameMode().toString();
         //
     }
-    
+
     @Override
     public boolean isFlying() {
         return player.isFlying();
         //
-    }
-
-    @Override
-    public boolean isWearingElytra() {
-        return player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA;
-        //getChestplate可为空 getType必非空
     }
 
     @Override
@@ -125,5 +119,11 @@ public class BukkitUser extends BukkitSender implements FWFUser {
             return true;  //在领地内飞行，且拥有权限，不扣除
         }
         return false;
+    }
+
+    @Override
+    public boolean isWearingElytra() {
+        return player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.ELYTRA;
+        //getChestplate可为空 getType必非空
     }
 }

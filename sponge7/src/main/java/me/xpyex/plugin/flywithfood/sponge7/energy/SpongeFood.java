@@ -19,9 +19,9 @@ public class SpongeFood extends FoodEnergy {
             Player target = user.getPlayer();
             target.offer(Keys.FOOD_LEVEL, Math.max((getNow(user) - value.intValue()), 0));
         }).submit(FlyWithFoodSponge7.getInstance());
-        
+
     }
-    
+
     @Override
     public @NotNull Integer getNow(@NotNull FWFUser user) {
         return user.<Player>getPlayer().get(Keys.FOOD_LEVEL).orElse(0);

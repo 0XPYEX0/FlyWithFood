@@ -16,16 +16,15 @@ import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FWFConfig {
+    public static final int CONFIG_VERSION = 6;
+    public static final Gson GSON = new GsonBuilder()
+                                        .setPrettyPrinting()
+                                        .disableHtmlEscaping()
+                                        .create();
     public static File ROOT;
     public static File CONFIG_FILE;
     public static File BAK_FOLDER;
-    public static final int CONFIG_VERSION = 6;
     public static FWFConfig CONFIG;
-    public static final Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .disableHtmlEscaping()
-            .create();
-
     public final JsonObject config;
     public final JsonObject groups;
     public final int version;
@@ -34,15 +33,15 @@ public class FWFConfig {
     public final JsonObject languages;
     public final String language;
     public final String mode;
-    public JsonObject functionWL;
-    public JsonObject noCostWL;
     public final int howLongCheck;
     public final boolean isChinese;
     public final boolean isEnglish;
+    public final boolean checkSaturation;
+    public JsonObject functionWL;
+    public JsonObject noCostWL;
     public boolean enableRawMsg;
     public boolean enableTitle;
     public boolean enableAction;
-    public final boolean checkSaturation;
 
     public FWFConfig(JsonObject config) {
         this.config = config;
@@ -269,7 +268,6 @@ public class FWFConfig {
 
     /**
      * 创建配置文件
-     *
      */
     public static void createConfigFile() throws Exception {
         createConfigFile(getNewConfig());

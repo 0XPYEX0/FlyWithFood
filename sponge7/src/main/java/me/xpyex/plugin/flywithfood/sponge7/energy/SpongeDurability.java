@@ -20,7 +20,7 @@ public class SpongeDurability extends DurabilityEnergy {
             return;
         }
         FlyWithFood.getInstance().getAPI().runTask(() ->
-             target.getChestplate().orElse(ItemStack.empty()).offer(Keys.ITEM_DURABILITY, getNow(user).shortValue() - value.shortValue())
+                                                       target.getChestplate().orElse(ItemStack.empty()).offer(Keys.ITEM_DURABILITY, getNow(user).shortValue() - value.shortValue())
         );
     }
 

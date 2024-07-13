@@ -9,6 +9,7 @@ import me.xpyex.plugin.flywithfood.common.utils.Util;
 public interface FWFSender {
     /**
      * 运用FlyWithFoodAPI获取FWFSender或FWFUser实例
+     *
      * @param sender Bukkit的CommandSender或Sponge的CommandSource对象
      * @return 基于FWFSender的实例
      */

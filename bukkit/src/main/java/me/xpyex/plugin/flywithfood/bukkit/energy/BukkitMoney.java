@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
 public class BukkitMoney extends MoneyEnergy {
     private static Economy ECON;
 
+    public static void setEcon(Economy econ) {
+        ECON = econ;
+        //
+    }
+
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         if (value.doubleValue() == 0) {  //+-0没有变化
@@ -26,8 +31,8 @@ public class BukkitMoney extends MoneyEnergy {
         if (ECON != null) {
             Player target = user.getPlayer();
             EconomyResponse result = value.doubleValue() > 0 ?
-                    ECON.withdrawPlayer(target, value.doubleValue()) :  //Ess不允许存入负数的钱款
-                    ECON.depositPlayer(target, -value.doubleValue());  //存款
+                                         ECON.withdrawPlayer(target, value.doubleValue()) :  //Ess不允许存入负数的钱款
+                                         ECON.depositPlayer(target, -value.doubleValue());  //存款
             if (!result.transactionSuccess()) {
                 FlyWithFood.getLogger().severe("处理玩家 " + target.getName() + " 的游戏币时出现错误: " + result.errorMessage);
             }
@@ -37,11 +42,6 @@ public class BukkitMoney extends MoneyEnergy {
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
         return ECON.getBalance(user.<Player>getPlayer());
-        //
-    }
-
-    public static void setEcon(Economy econ) {
-        ECON = econ;
         //
     }
 

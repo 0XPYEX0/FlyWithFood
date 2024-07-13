@@ -13,6 +13,7 @@ import me.xpyex.plugin.flywithfood.common.utils.Util;
 
 public class FWFCmdExecutor {
     private static final HashSet<String> CHECK_ARGS = new HashSet<>();
+
     static {
         CHECK_ARGS.add("on");
         CHECK_ARGS.add("off");
@@ -26,17 +27,17 @@ public class FWFCmdExecutor {
         if (Util.checkNull(FWFConfig.CONFIG, FWFConfig.CONFIG.config)) {  //未雨绸缪一下
             if (!sender.hasPermission("fly.admin")) {
                 sender.autoSendMsg(
-                        "&c插件载入时出错，无法使用，请联系管理员处理",
-                        "&cThere is something wrong with the plugin. Please ask admin of this server for help");
+                    "&c插件载入时出错，无法使用，请联系管理员处理",
+                    "&cThere is something wrong with the plugin. Please ask admin of this server for help");
                 return;
             }
             sender.autoSendMsg(
-                    "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件",
-                    "&9你目前可用的命令: ",
-                    "&a/" + label + " &breload &f- &e重载配置",
-                    "&eYou can execute &a/fly &e, &a/fwf &eor &a/flywithfood",
-                    "&9Valid commands: ",
-                    "&a/" + label + " &breload &f- &eReload config");
+                "&e你可以执行 &a/fly &e, &a/fwf &e或 &a/flywithfood &e来使用本插件",
+                "&9你目前可用的命令: ",
+                "&a/" + label + " &breload &f- &e重载配置",
+                "&eYou can execute &a/fly &e, &a/fwf &eor &a/flywithfood",
+                "&9Valid commands: ",
+                "&a/" + label + " &breload &f- &eReload config");
             return;
         }
         if (args.length == 0) {
@@ -87,9 +88,9 @@ public class FWFCmdExecutor {
                     }
                 } else {
                     sender.autoSendMsg(
-                            "&c重载失败!请检查配置文件!无法解决请报告开发者.&f QQ:1723275529",
-                            "&cFailed to reload! Please check your config file!",
-                            "&cIf you can not solve this problem, please open a issue in my GitHub");
+                        "&c重载失败!请检查配置文件!无法解决请报告开发者.&f QQ:1723275529",
+                        "&cFailed to reload! Please check your config file!",
+                        "&cIf you can not solve this problem, please open a issue in my GitHub");
                 }
                 return;
             }

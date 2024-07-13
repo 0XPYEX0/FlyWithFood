@@ -20,21 +20,21 @@ public class SpongeMoney extends MoneyEnergy {
         FlyWithFoodSponge7.getPlugin()
     );
     private static EconomyService ECONOMY_SERVICE;
-    
+
+    public static void setEconomyService(EconomyService economyService) {
+        ECONOMY_SERVICE = economyService;
+        //
+    }
+
     @Override
     public void cost(@NotNull FWFUser user, @NotNull Number value) {
         UniqueAccount account = ECONOMY_SERVICE.getOrCreateAccount(user.<Player>getPlayer().getUniqueId()).get();
         account.deposit(ECONOMY_SERVICE.getDefaultCurrency(), BigDecimal.valueOf(value.doubleValue()), CAUSE);
     }
-    
+
     @Override
     public @NotNull Number getNow(@NotNull FWFUser user) {
         return ECONOMY_SERVICE.getOrCreateAccount(user.<Player>getPlayer().getUniqueId()).get().getBalance(ECONOMY_SERVICE.getDefaultCurrency());
-        //
-    }
-
-    public static void setEconomyService(EconomyService economyService) {
-        ECONOMY_SERVICE = economyService;
         //
     }
 }
