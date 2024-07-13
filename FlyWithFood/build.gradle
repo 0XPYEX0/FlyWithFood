@@ -13,4 +13,5 @@ dependencies {
     compile project(":common")
     compile project(":bukkit")
     compile project(":sponge7")
+    compile project(":folia")
 }
