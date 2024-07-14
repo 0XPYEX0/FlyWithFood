@@ -101,7 +101,7 @@ public interface FlyWithFoodAPI {
                 ba.write(data, 0, nRead);
             }
             JsonArray array = FWFConfig.GSON.fromJson(ba.toString("UTF-8"), JsonArray.class);
-            JsonObject latestVer = array.get(0).getAsJsonObject();
+            JsonObject latestVer = array.get(array.size() - 1).getAsJsonObject();
             String name = latestVer.get("name").getAsString();
             if (!name.equals("v" + getPluginVersion())) {
                 getLogger().info("");

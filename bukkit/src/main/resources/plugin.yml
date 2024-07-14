@@ -1,5 +1,5 @@
 name: FlyWithFood
-version: @version@
+version: '${version}'
 main: me.xpyex.plugin.flywithfood.bukkit.FlyWithFoodBukkit
 authors: [ XPYEX ]
 description: FlyWithFood
