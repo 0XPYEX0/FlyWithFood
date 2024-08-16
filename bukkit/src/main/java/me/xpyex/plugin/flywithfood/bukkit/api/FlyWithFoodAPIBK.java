@@ -47,7 +47,7 @@ public class FlyWithFoodAPIBK implements FlyWithFoodAPI {
             softwareResult = Bukkit.getName() + "-" + Bukkit.getBukkitVersion();
         }
         SERVER_SOFTWARE = softwareResult;
-        SERVER_MAIN_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1]);
+        SERVER_MAIN_VERSION = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1].split("-")[0]);
     }
 
     private final FWFLogger LOGGER;
