@@ -12,6 +12,6 @@ https://www.spigotmc.org/resources/flywithfood.99676/ <br>
 <img src="https://github.com/0XPYEX0/FlyWithFood/blob/master/pictures/Enabled.png" />
 <img src="https://github.com/0XPYEX0/FlyWithFood/blob/master/pictures/CommandHelp.png" />
 
-Thank you (@Amunak)[https://github.com/Amunak] for your idea, to make FlyWithFood great again! <br>
+Thank you [@Amunak](https://github.com/Amunak) for your idea, to make FlyWithFood great again! <br>
 The original project: https://github.com/Amunak/FlyWithFood <br>
 原项目: https://github.com/Amunak/FlyWithFood 。当前FlyWithFood灵感来源于此
