@@ -54,11 +54,11 @@ public class FlyWithFood {
         getLogger().info(" ");
 
         getLogger().info("感谢使用FlyWithFood.");
-        getLogger().info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");
-        getLogger().info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");
+        getLogger().info("本项目在GitHub开源: https://github.com/0XPYEX0/FlyWithFood");  //TODO 迁移XPPlugins
+        getLogger().info("本项目在Gitee开源: https://gitee.com/xpyex/FlyWithFood");  //TODO 移除Gitee
         getLogger().info(" ");
         getLogger().info("Thank you for using FlyWithFood");
-        getLogger().info("The plugin has been open source in GitHub: https://github.com/0XPYEX0/FlyWithFood");
+        getLogger().info("The plugin has been open source in GitHub: https://github.com/0XPYEX0/FlyWithFood");  //TODO 迁移XPPlugins
         getLogger().info("Have a nice trip with this plugin  :)");
         getLogger().info(" ");
 

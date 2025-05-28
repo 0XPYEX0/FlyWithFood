@@ -15,6 +15,9 @@ import me.xpyex.plugin.flywithfood.common.utils.FileUtil;
 import me.xpyex.plugin.flywithfood.common.utils.GsonUtil;
 import me.xpyex.plugin.flywithfood.common.utils.Util;
 
+/**
+ * TODO 这坨有时间要重构，三四年前写的什么玩意
+ */
 public class FWFConfig {
     public static final int CONFIG_VERSION = 6;
     public static final Gson GSON = new GsonBuilder()
