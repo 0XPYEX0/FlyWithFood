@@ -163,7 +163,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     }
 
     @Override
-    public <P> int getExpAtLevel() {
+    public int getExpAtLevel() {
         Player player = getPlayer();
         return getExpAtLevel(player.getLevel());
     }
@@ -199,7 +199,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     //This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
     //Without this people would be able to use exp and then still sell it.
     @Override
-    public <P> int getTotalExperience() {
+    public int getTotalExperience() {
         Player player = getPlayer();
         int exp = Math.round(getExpAtLevel(player.getLevel()) * player.getExp());
         int currentLevel = player.getLevel();
@@ -215,7 +215,7 @@ public class BukkitUser extends BukkitSender implements FWFUser {
     }
 
     @Override
-    public <P> int getExpUntilNextLevel() {
+    public int getExpUntilNextLevel() {
         Player player = getPlayer();
         final int exp = Math.round(getExpAtLevel(player.getLevel()) * player.getExp());
         final int nextLevel = player.getLevel();

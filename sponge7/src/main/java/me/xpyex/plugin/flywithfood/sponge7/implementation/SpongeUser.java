@@ -102,7 +102,7 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     }
 
     @Override
-    public <P> int getExpAtLevel() {
+    public int getExpAtLevel() {
         return 0;
         //Sponge侧无法实现
     }
@@ -120,19 +120,19 @@ public class SpongeUser extends SpongeSender implements FWFUser {
     }
 
     @Override
-    public <P> int getTotalExperience() {
+    public int getTotalExperience() {
         return 0;
         //Sponge侧无法实现
     }
 
     @Override
-    public <P> void setTotalExperience(int exp) {
+    public void setTotalExperience(int exp) {
         //Sponge侧无法实现
         //
     }
 
     @Override
-    public <P> int getExpUntilNextLevel() {
+    public int getExpUntilNextLevel() {
         return 0;
         //Sponge侧无法实现
     }
