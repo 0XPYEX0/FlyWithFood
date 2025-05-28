@@ -104,4 +104,16 @@ public interface FWFUser extends FWFSender {
     }
 
     public boolean isWearingElytra();
+
+    public <P> int getExpAtLevel();
+
+    public int getExpAtLevel(int level);
+
+    public int getExpToLevel(int level);
+
+    public <P> int getTotalExperience();
+
+    public <P> void setTotalExperience(int exp);
+
+    public <P> int getExpUntilNextLevel();
 }

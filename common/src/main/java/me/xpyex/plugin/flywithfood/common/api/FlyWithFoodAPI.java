@@ -127,16 +127,4 @@ public interface FlyWithFoodAPI {
             e.printStackTrace();
         }
     }
-
-    public <P> void setTotalExperience(P player, int exp);
-
-    public <P> int getExpAtLevel(P player);
-
-    public int getExpAtLevel(int level);
-
-    public int getExpToLevel(int level);
-
-    public <P> int getTotalExperience(P player);
-
-    public <P> int getExpUntilNextLevel(P player);
 }

@@ -100,4 +100,40 @@ public class SpongeUser extends SpongeSender implements FWFUser {
         return player.getChestplate().orElse(ItemStack.empty()).getType() == ItemTypes.ELYTRA;
         //
     }
+
+    @Override
+    public <P> int getExpAtLevel() {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public int getExpAtLevel(int level) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public int getExpToLevel(int level) {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public <P> int getTotalExperience() {
+        return 0;
+        //Sponge侧无法实现
+    }
+
+    @Override
+    public <P> void setTotalExperience(int exp) {
+        //Sponge侧无法实现
+        //
+    }
+
+    @Override
+    public <P> int getExpUntilNextLevel() {
+        return 0;
+        //Sponge侧无法实现
+    }
 }

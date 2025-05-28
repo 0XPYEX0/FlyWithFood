@@ -175,42 +175,6 @@ public class FlyWithFoodAPISponge7 implements FlyWithFoodAPI {
         //
     }
 
-    @Override
-    public <P> void setTotalExperience(P p, int exp) {
-        //Sponge侧无法实现
-        //
-    }
-
-    @Override
-    public <P> int getExpAtLevel(P p) {
-        return 0;
-        //Sponge侧无法实现
-    }
-
-    @Override
-    public int getExpAtLevel(int level) {
-        return 0;
-        //Sponge侧无法实现
-    }
-
-    @Override
-    public int getExpToLevel(int level) {
-        return 0;
-        //Sponge侧无法实现
-    }
-
-    @Override
-    public <P> int getTotalExperience(P p) {
-        return 0;
-        //Sponge侧无法实现
-    }
-
-    @Override
-    public <P> int getExpUntilNextLevel(P p) {
-        return 0;
-        //Sponge侧无法实现
-    }
-
     public Task.Builder getScheduler() {
         return Task.builder();
         //
