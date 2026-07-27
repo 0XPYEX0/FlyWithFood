@@ -64,12 +64,16 @@ public interface FlyWithFoodAPI {
 
                 double cost = info.getCost();  //每秒消耗的数值，可为饥饿值或经验值
                 double disable = info.getDisable(); //消耗至多少关闭飞行
+                double warning = disable + (cost * 5); // 预警阈值：剩余点数仅够飞行5秒时
                 double now = info.getEnergy().getNow(user).doubleValue();  //玩家现在的点数
                 user.cost(cost);  //扣除数值
                 if ((now - cost) < disable) {  //检查扣除后是否足够飞行，否则关闭
                     user.sendFWFMsg(FWFMsgType.CanNotFly);
                     user.disableFly();  //关闭玩家的飞行
                     user.protectFromFall();  //为玩家免疫掉落伤害
+                }
+                if ((now - cost) < warning && (now - cost) >= disable) { // 能量低于预警值但尚未关闭飞行
+                    user.sendActionBar("§c能量不足，即将坠落！");
                 }
             }
         }, 0L, FWFConfig.CONFIG.howLongCheck);
